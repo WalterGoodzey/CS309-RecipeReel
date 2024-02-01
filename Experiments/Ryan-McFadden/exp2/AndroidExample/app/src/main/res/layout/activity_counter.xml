@@ -46,4 +46,18 @@
 
     </Button>
 
+    <Button
+        android:id="@+id/counter_multi_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Multiply by 2" />
+
+    <TextView
+        android:id="@+id/lastNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-400dp"
+        android:text="No last count yet" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>
