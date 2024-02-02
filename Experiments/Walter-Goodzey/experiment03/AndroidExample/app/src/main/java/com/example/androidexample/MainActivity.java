@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             messageText.setText("Home Page");
             usernameText.setVisibility(View.INVISIBLE);             // set username text invisible initially
         } else {
-            messageText.setText("Welcome");
+            messageText.setText("Welcome Back");
             usernameText.setText(extras.getString("USERNAME")); // this will come from LoginActivity
             loginButton.setVisibility(View.INVISIBLE);              // set login button invisible
             signupButton.setVisibility(View.INVISIBLE);             // set signup button invisible
