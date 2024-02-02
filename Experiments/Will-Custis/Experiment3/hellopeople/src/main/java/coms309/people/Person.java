@@ -1,6 +1,8 @@
 package coms309.people;
 
 
+import java.util.Objects;
+
 /**
  * Provides the Definition/Structure for the people row
  *
@@ -17,15 +19,18 @@ public class Person {
 
     private String telephone;
 
+    private String password;
+
     public Person(){
         
     }
 
-    public Person(String firstName, String lastName, String address, String telephone){
+    public Person(String firstName, String lastName, String address, String telephone, String password){
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.telephone = telephone;
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -60,11 +65,20 @@ public class Person {
         this.telephone = telephone;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    //To string does not output the password
     @Override
     public String toString() {
         return firstName + " " 
                + lastName + " "
                + address + " "
-               + telephone;
+               + telephone + "\n";
     }
 }

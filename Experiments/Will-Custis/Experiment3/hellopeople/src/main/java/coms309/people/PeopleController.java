@@ -34,9 +34,18 @@ public class PeopleController {
     // Springboot automatically converts the list to JSON format 
     // in this case because of @ResponseBody
     // Note: To LIST, we use the GET method
+
     @GetMapping("/people")
-    public  HashMap<String,Person> getAllPersons() {
-        return peopleList;
+    public  String getAllPersons(@RequestBody String password) {
+        String out = "";
+        //Making this require an Admin password and not show users passwords
+        String adminPassword = "reallygoodpassword";
+        if(password.equals(adminPassword)){
+            out = peopleList.toString();
+        } else {
+            out = "Viewing all people requires an admin password";
+        }
+        return out;
     }
 
     // THIS IS THE CREATE OPERATION
@@ -46,8 +55,11 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To CREATE we use POST method
     @PostMapping("/people")
-    public  String createPerson(Person person) {
+    public  String createPerson(@RequestBody Person person) {
         System.out.println(person);
+        if(person.getPassword() == null){
+            person.setPassword("default");
+        }
         peopleList.put(person.getFirstName(), person);
         return "New person "+ person.getFirstName() + " Saved";
     }
@@ -58,10 +70,23 @@ public class PeopleController {
     // springboot automatically converts Person to JSON format when we return it
     // in this case because of @ResponseBody
     // Note: To READ we use GET method
+
+    //Adding a password system where the body of the request is the password
+    //The info for the user is only shown if the password matches
+    //Also making it return not just json but an easier to read string
     @GetMapping("/people/{firstName}")
-    public Person getPerson(@PathVariable String firstName) {
+    public String getPerson(@PathVariable String firstName, @RequestBody String password) {
+        String out = "";
         Person p = peopleList.get(firstName);
-        return p;
+        if(p.getPassword().equals(password)){
+            out = "First Name: " + p.getFirstName()
+                    + "\nLast Name: " + p.getLastName()
+                    + "\nAddress: " + p.getAddress()
+                    + "\nTelephone: " + p.getTelephone();
+        } else {
+            out = "Password is incorrect.";
+        }
+        return out;
     }
 
     // THIS IS THE UPDATE OPERATION
@@ -72,7 +97,7 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To UPDATE we use PUT method
     @PutMapping("/people/{firstName}")
-    public Person updatePerson(@PathVariable String firstName, Person p) {
+    public Person updatePerson(@PathVariable String firstName, @RequestBody Person p) {
         peopleList.replace(firstName, p);
         return peopleList.get(firstName);
     }
