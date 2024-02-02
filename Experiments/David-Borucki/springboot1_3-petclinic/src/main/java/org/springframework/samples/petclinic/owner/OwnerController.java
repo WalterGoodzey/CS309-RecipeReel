@@ -75,5 +75,12 @@ class OwnerController {
         Optional<Owners> results = ownersRepository.findById(id);
         return results;
     }
+    @RequestMapping(method = RequestMethod.DELETE, path = "/owners")
+    public String removeAllOwners() {
+        logger.info("Entered into Controller Layer");
+        ownersRepository.deleteAll();
+        return "removed all owners";
+    }
+
 
 }
