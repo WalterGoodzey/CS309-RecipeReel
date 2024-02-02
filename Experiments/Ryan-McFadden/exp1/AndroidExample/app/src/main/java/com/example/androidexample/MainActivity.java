@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView messageText;   // define message textview variable
 
-    private Button secondBtn;
+    private Button mainBtn;         // define button to go to SecondActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,13 +22,16 @@ public class MainActivity extends AppCompatActivity {
 
         /* initialize UI elements */
         messageText = findViewById(R.id.main_msg_txt);      // link to message textview in the Main activity XML
+        mainBtn = findViewById(R.id.main_move_btn);         // link to main button in the Main activity XML
         messageText.setText("Hello World");
 
-        /* when back btn is pressed, switch back to MainActivity */
-        secondBtn.setOnClickListener(new View.OnClickListener() {
+        /* click listener on main button pressed */
+        mainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+
+                /* when main button is pressed, use intent to switch to SecondActivity */
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 startActivity(intent);
             }
         });

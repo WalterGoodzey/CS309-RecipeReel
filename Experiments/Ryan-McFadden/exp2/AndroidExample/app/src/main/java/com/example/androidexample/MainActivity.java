@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
         /* extract data passed into this activity from another activity */
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
-            messageText.setText("Intent Example");
-            evenOddText.setText("No data to show");
+            messageText.setText("Simple Counter");
+            evenOddText.setText("yay math!");
         } else {
             String number = extras.getString("NUM");  // this will come from LoginActivity
             messageText.setText("The number was " + number);
@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 /* when counter button is pressed, use intent to switch to Counter Activity */
                 Intent intent = new Intent(MainActivity.this, CounterActivity.class);
 
-//                if(extras != null){
-//                    intent.putExtra("LASTNUM", extras.getString("NUM")); //key value to pass to Counter Activity - ADDED
-//                }
                 startActivity(intent);
             }
         });

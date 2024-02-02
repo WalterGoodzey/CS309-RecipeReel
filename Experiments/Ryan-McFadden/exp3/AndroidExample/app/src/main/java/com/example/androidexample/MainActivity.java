@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.main_logout_btn);  // link to logout button in the Main activity XML - ADDED
         subText = findViewById(R.id.main_sub_msg_txt);      // link to sub message textview in the Main activity XML
 
+        messageText.setText("EZ Recipes!");
         /* extract data passed into this activity from another activity */
         Bundle extras = getIntent().getExtras();
         if(extras == null) {

@@ -17,10 +17,7 @@ public class CounterActivity extends AppCompatActivity {
 
     private Button multiBtn;    // define multiplication by 2 button - ADDED
 
-    private TextView lastNumberTxt;
     private int counter = 0;    // counter variable
-
-    //private String lastCount;   // holds previous counter value - ADDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +30,9 @@ public class CounterActivity extends AppCompatActivity {
         decreaseBtn = findViewById(R.id.counter_decrease_btn);
         backBtn = findViewById(R.id.counter_back_btn);
         multiBtn = findViewById(R.id.counter_multi_btn);    //ADDED
-        lastNumberTxt = findViewById(R.id.lastNumber);
 
-//        Bundle extras = getIntent().getExtras();
-//        lastNumberTxt.setText("Last count: " + extras.getString("LASTNUM"));
+
+
         /* when increase btn is pressed, counter++, reset number textview */
         increaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override

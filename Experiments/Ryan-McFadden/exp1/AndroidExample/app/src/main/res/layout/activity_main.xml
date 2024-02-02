@@ -42,7 +42,7 @@
         android:textColor="#C30F03" />
 
     <Button
-        android:id="@+id/second_act_btn"
+        android:id="@+id/main_move_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Go to 2nd Activity"
