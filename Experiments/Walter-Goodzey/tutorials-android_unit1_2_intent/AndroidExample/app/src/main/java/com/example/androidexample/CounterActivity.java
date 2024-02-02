@@ -27,7 +27,7 @@ public class CounterActivity extends AppCompatActivity {
         numberTxt = findViewById(R.id.number);
         increaseBtn = findViewById(R.id.counter_increase_btn);
         decreaseBtn = findViewById(R.id.counter_decrease_btn);
-        squareBtn = findViewById(R.id.counter_square_btn);
+        squareBtn = findViewById(R.id.counting_square_btn);
         backBtn = findViewById(R.id.counter_back_btn);
 
         /* when increase btn is pressed, counter++, reset number textview */
@@ -46,7 +46,7 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
-        /* when square btn is pressed, math.pow(counter, 2), reset number textview*/
+        /* when square btn is pressed, math.pow(counter, 2), reset number textview */
         squareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {numberTxt.setText(String.valueOf(counter = (int) Math.pow(counter, 2)));

@@ -8,35 +8,40 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/main_msg_txt"
+        android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Intent Example"
         android:layout_gravity="center"
-        android:layout_marginTop="200dp"
-        android:textSize="30dp"
-        android:textColor="#3F51B5">
-    </TextView>
+        android:layout_marginTop="100dp"
+        android:rotationY="0"
+        android:text="0"
+        android:textColor="#E91E63"
+        android:textSize="150sp"></TextView>
 
     <Button
-        android:id="@+id/change_btn"
+        android:id="@+id/starting_change_btn"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:text="Change" />
+
+    <Button
+        android:id="@+id/starting_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Next" />
+
+    <Button
+        android:id="@+id/starting_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
-        android:text="Change Starting Number"
-        android:textColor="#ffffff"
-        android:textSize="20sp"></Button>
+        android:text="Back to Main">
 
-    <Button
-        android:id="@+id/main_counter_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center"
-        android:text="To the Counter Activity"
-        android:textSize="20sp"
-        android:textColor="#ffffff">
     </Button>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

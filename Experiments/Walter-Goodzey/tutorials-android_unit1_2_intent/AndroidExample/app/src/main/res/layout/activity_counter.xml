@@ -37,7 +37,7 @@
     </Button>
 
     <Button
-        android:id="@+id/counter_square_btn"
+        android:id="@+id/counting_square_btn"
         android:layout_width="250dp"
         android:layout_height="80dp"
         android:layout_gravity="center"

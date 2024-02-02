@@ -8,11 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class MainActivity extends AppCompatActivity {
 
     private TextView messageText;     // define message textview variable
+    private Button changeButton;
     private Button counterButton;     // define counter button variable
 
     @Override
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         /* initialize UI elements */
         messageText = findViewById(R.id.main_msg_txt);      // link to message textview in the Main activity XML
         counterButton = findViewById(R.id.main_counter_btn);// link to counter button in the Main activity XML
+        changeButton = findViewById(R.id.change_btn);
 
         /* extract data passed into this activity from another activity */
         Bundle extras = getIntent().getExtras();
@@ -32,6 +32,14 @@ public class MainActivity extends AppCompatActivity {
             String number = extras.getString("NUM");  // this will come from LoginActivity
             messageText.setText("The number was " + number);
         }
+
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserStartingNumActivity.class);
+                startActivity(intent);
+            }
+        });
 
         /* click listener on counter button pressed */
         counterButton.setOnClickListener(new View.OnClickListener() {
