@@ -71,10 +71,50 @@ public class PeopleController {
     // Here we are returning what we sent to the method
     // in this case because of @ResponseBody
     // Note: To UPDATE we use PUT method
+
+    //Changing put mappings to replace the entire object so it is named the new name
+    //Also implementing the ability to specify what part of the person object is being changed
+
+    //Replace entire person
     @PutMapping("/people/{firstName}")
     public Person updatePerson(@PathVariable String firstName, @RequestBody Person p) {
+        peopleList.remove(firstName);
+        peopleList.put(p.getFirstName(), p);
+        return p;
+    }
+
+    //Replace first name, also delete and recreate person object so the object is named the new first name
+    @PutMapping("/people/{firstName}/change/firstName")
+    public Person updateFirstName(@PathVariable String firstName, @RequestBody String name) {
+        Person p = peopleList.get(firstName);
+        peopleList.remove(firstName);
+        p.setFirstName(name);
+        peopleList.put(p.getFirstName(), p);
+        return p;
+    }
+
+    //Replace last name
+    @PutMapping("/people/{firstName}/change/lastName")
+    public Person updateLastName(@PathVariable String firstName, @RequestBody String lastName) {
+        Person p = new Person(peopleList.get(firstName).getFirstName(), lastName, peopleList.get(firstName).getAddress(), peopleList.get(firstName).getTelephone());
         peopleList.replace(firstName, p);
-        return peopleList.get(firstName);
+        return p;
+    }
+
+    //Replace Address
+    @PutMapping("/people/{firstName}/change/address")
+    public Person updateAddress(@PathVariable String firstName, @RequestBody String address) {
+        Person p = new Person(peopleList.get(firstName).getFirstName(), peopleList.get(firstName).getLastName(), address, peopleList.get(firstName).getTelephone());
+        peopleList.replace(firstName, p);
+        return p;
+    }
+
+    //Replace Telephone
+    @PutMapping("/people/{firstName}/change/telephone")
+    public Person updateTelephone(@PathVariable String firstName, @RequestBody String telephone) {
+        Person p = new Person(peopleList.get(firstName).getFirstName(), peopleList.get(firstName).getLastName(), peopleList.get(firstName).getAddress(), telephone);
+        peopleList.replace(firstName, p);
+        return p;
     }
 
     // THIS IS THE DELETE OPERATION
