@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* initialize UI elements */
         messageText = findViewById(R.id.main_msg_txt);      // link to message textview in the Main activity XML
-        messageText.setTextColor(Color.RED);
+        messageText.setTextColor(Color.RED);                // changed text color to red
         messageText.setText("Hello Hossain, this is a message from Walter :)");
 
     }
