@@ -15,6 +15,8 @@ public class CounterActivity extends AppCompatActivity {
     private Button decreaseBtn; // define decrease button variable
     private Button backBtn;     // define back button variable
 
+    private Button multiBtn;    // define multiplication by 2 button - ADDED
+
     private int counter = 0;    // counter variable
 
     @Override
@@ -27,6 +29,9 @@ public class CounterActivity extends AppCompatActivity {
         increaseBtn = findViewById(R.id.counter_increase_btn);
         decreaseBtn = findViewById(R.id.counter_decrease_btn);
         backBtn = findViewById(R.id.counter_back_btn);
+        multiBtn = findViewById(R.id.counter_multi_btn);    //ADDED
+
+
 
         /* when increase btn is pressed, counter++, reset number textview */
         increaseBtn.setOnClickListener(new View.OnClickListener() {
@@ -54,5 +59,12 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
+        /* when multiply btn is pressed, counter*=2, reset number textview */
+        multiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberTxt.setText(String.valueOf(counter*=2));
+            }
+        });
     }
 }
