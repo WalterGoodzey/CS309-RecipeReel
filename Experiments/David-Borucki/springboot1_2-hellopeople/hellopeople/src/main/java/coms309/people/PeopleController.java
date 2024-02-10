@@ -1,13 +1,6 @@
 package coms309.people;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.HashMap;
@@ -50,6 +43,21 @@ public class PeopleController {
         System.out.println(person);
         peopleList.put(person.getFirstName(), person);
         return "New person "+ person.getFirstName() + " Saved";
+    }
+
+    //THIS IS A GET OPERATION
+    //This creates dummy data for the program
+    @RequestMapping(method = RequestMethod.GET, path = "/people/create")
+    public HashMap<String, Person> createDummyData() {
+        Person p1 = new Person("Dave", "Borucki", "100 Cyclone Way", "515-555-1234");
+        Person p2 = new Person("Will", "Custis", "100 Cyclone Way", "515-555-1234");
+        Person p3 = new Person("Ryan", "McFadden", "100 Cyclone Way", "515-555-1234");
+        Person p4 = new Person("Walter", "Goodzey", "100 Cyclone Way", "515-555-1234");
+        createPerson(p1);
+        createPerson(p2);
+        createPerson(p3);
+        createPerson(p4);
+        return getAllPersons();
     }
 
     // THIS IS THE READ OPERATION
