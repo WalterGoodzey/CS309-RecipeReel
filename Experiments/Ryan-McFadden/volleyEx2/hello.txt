@@ -1,0 +1,2 @@
+This is the directory for my second set of volley experiments, which will focus on making activities to test out different volley commands (GET, PUT, etc.) first with a mock server in Postman then with our team's server
+
