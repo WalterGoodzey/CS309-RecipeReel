@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,16 +16,20 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JsonArrReqActivity extends AppCompatActivity {
 
     private Button btnJsonArrReq;
-    private TextView msgResponse;
+    private ListAdapter adapter;
+    private ListView listView;
 
-    private static final String URL_JSON_ARRAY = "https://jsonplaceholder.typicode.com/users";
+    private static final String URL_JSON_ARRAY = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/Array";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,11 @@ public class JsonArrReqActivity extends AppCompatActivity {
         setContentView(R.layout.activity_json_arr_req);
 
         btnJsonArrReq = findViewById(R.id.btnJsonArr);
-        msgResponse = findViewById(R.id.msgResponse);
+        listView = findViewById(R.id.listView);
+
+        // Initialize the adapter with an empty list (data will be added later)
+        adapter = new ListAdapter(this, new ArrayList<>());
+        listView.setAdapter(adapter);
 
         btnJsonArrReq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +63,22 @@ public class JsonArrReqActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
-                        msgResponse.setText(response.toString());
+
+                        // Parse the JSON array and add data to the adapter
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String name = jsonObject.getString("name");
+                                String email = jsonObject.getString("email");
+
+                                // Create a ListItemObject and add it to the adapter
+                                ListItemObject item = new ListItemObject(name, email);
+                                adapter.add(item);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 },
                 new Response.ErrorListener() {
