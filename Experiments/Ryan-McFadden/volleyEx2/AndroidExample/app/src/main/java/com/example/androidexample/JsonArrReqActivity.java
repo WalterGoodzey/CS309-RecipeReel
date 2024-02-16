@@ -30,7 +30,7 @@ public class JsonArrReqActivity extends AppCompatActivity {
     private ListView listView;
 
 //    private static final String URL_JSON_ARRAY = "https://jsonplaceholder.typicode.com/users";
-    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/users";
+    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipes";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +70,10 @@ public class JsonArrReqActivity extends AppCompatActivity {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
                                 String name = jsonObject.getString("name");
-                                String email = jsonObject.getString("email");
-
+//                                String email = jsonObject.getString("email");
+                                String description = jsonObject.getString("description");
                                 // Create a ListItemObject and add it to the adapter
-                                ListItemObject item = new ListItemObject(name, email);
+                                ListItemObject item = new ListItemObject(name, description);
                                 adapter.add(item);
 
                             } catch (JSONException e) {
