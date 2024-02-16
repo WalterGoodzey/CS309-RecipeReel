@@ -30,7 +30,7 @@ public class JsonArrReqActivity extends AppCompatActivity {
     private ListView listView;
 
 //    private static final String URL_JSON_ARRAY = "https://jsonplaceholder.typicode.com/users";
-    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipes";
+    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipestest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,20 @@ public class JsonArrReqActivity extends AppCompatActivity {
                 makeJsonArrayReq();
             }
         });
+
+        //Added to go to activity_view_recipe when an item in listview is clicked
+//        listView.setOnItemClickListener(new OnItemClickListener(){
+//            @Override
+//            public void onItemClick(AdapterView<?>adapter,View v, int position){
+//                ItemClicked item = adapter.getItemAtPosition(position);
+//
+//                Intent intent = new Intent(Activity.this,destinationActivity.class);
+//                //based on item add info to intent
+//                startActivity(intent);
+//            }
+//        });
+
+
     }
 
     /**
@@ -69,11 +83,11 @@ public class JsonArrReqActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                String name = jsonObject.getString("name");
+                                String title = jsonObject.getString("title");
 //                                String email = jsonObject.getString("email");
                                 String description = jsonObject.getString("description");
                                 // Create a ListItemObject and add it to the adapter
-                                ListItemObject item = new ListItemObject(name, description);
+                                ListItemObject item = new ListItemObject(title, description);
                                 adapter.add(item);
 
                             } catch (JSONException e) {

@@ -36,5 +36,10 @@ public class ListAdapter extends ArrayAdapter<ListItemObject> {
         // Return the completed view to render on screen
         return convertView;
     }
+
+//    @Override
+//    public ListItemObject getItem(int position){
+//        return items.get(position);
+//    }
 }
 
