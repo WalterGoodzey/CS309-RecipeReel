@@ -35,8 +35,8 @@ public class JsonArrReqActivity extends AppCompatActivity {
     private ListView listView;
 
 //    private static final String URL_JSON_ARRAY = "https://jsonplaceholder.typicode.com/users";
-    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipestest";
-
+//    private static final String URL_JSON_ARRAY = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipestest";
+    private static final String URL_JSON_ARRAY = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/recipes";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -13,6 +13,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="50dp"
         android:text="Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,10 +21,10 @@
         android:id="@+id/authorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="40dp"
         android:text="Author"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleText"
@@ -36,6 +37,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="30dp"
         android:text="Description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/authorText"
