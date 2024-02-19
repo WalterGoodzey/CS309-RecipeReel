@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+//added
+import android.content.Intent;
+
 
 public class JsonArrReqActivity extends AppCompatActivity {
 
@@ -52,18 +57,17 @@ public class JsonArrReqActivity extends AppCompatActivity {
         });
 
         //Added to go to activity_view_recipe when an item in listview is clicked
-//        listView.setOnItemClickListener(new OnItemClickListener(){
-//            @Override
-//            public void onItemClick(AdapterView<?>adapter,View v, int position){
-//                ItemClicked item = adapter.getItemAtPosition(position);
-//
-//                Intent intent = new Intent(Activity.this,destinationActivity.class);
-//                //based on item add info to intent
-//                startActivity(intent);
-//            }
-//        });
-
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //intent to view single recipe
+                Intent intent = new Intent(JsonArrReqActivity.this, ViewRecipeActivity.class);
+                //send full JSON recipe as a string to be used in recipe view Activity
+                intent.putExtra("RecipeJsonAsString", adapter.getItem(i).getFullRecipe().toString());
+                //start ViewRecipeActivity
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -86,8 +90,9 @@ public class JsonArrReqActivity extends AppCompatActivity {
                                 String title = jsonObject.getString("title");
 //                                String email = jsonObject.getString("email");
                                 String description = jsonObject.getString("description");
+
                                 // Create a ListItemObject and add it to the adapter
-                                ListItemObject item = new ListItemObject(title, description);
+                                ListItemObject item = new ListItemObject(title, description, jsonObject);
                                 adapter.add(item);
 
                             } catch (JSONException e) {

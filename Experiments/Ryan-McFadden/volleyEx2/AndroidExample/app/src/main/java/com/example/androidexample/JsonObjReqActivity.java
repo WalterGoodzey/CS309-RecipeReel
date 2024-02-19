@@ -26,7 +26,7 @@ public class JsonObjReqActivity extends AppCompatActivity {
     private Button btnJsonObjReq;
     private TextView tvName, tvEmail, tvPhone;
 
-    private static final String URL_JSON_OBJECT = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/users/2";
+    private static final String URL_JSON_OBJECT = "https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipestest/1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +60,9 @@ public class JsonObjReqActivity extends AppCompatActivity {
                         Log.d("Volley Response", response.toString());
                         try {
                             // Parse JSON object data
-                            String name = response.getString("name");
-                            String email = response.getString("email");
-                            String phone = response.getString("phone");
+                            String name = response.getString("title");
+                            String email = response.getString("author");
+                            String phone = response.getString("description");
 
                             // Populate text views with the parsed data
                             tvName.setText(name);

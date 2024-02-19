@@ -30,8 +30,8 @@ public class ListAdapter extends ArrayAdapter<ListItemObject> {
         TextView itemEmail = convertView.findViewById(R.id.itemEmail);
 
         // Populate the data into the template view using the data object
-        itemName.setText(item.getName());
-        itemEmail.setText(item.getEmail());
+        itemName.setText(item.getTitle());
+        itemEmail.setText(item.getDescription());
 
         // Return the completed view to render on screen
         return convertView;
