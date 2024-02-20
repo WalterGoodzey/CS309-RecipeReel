@@ -1,9 +1,8 @@
-package onetoone.Laptops;
+package recipeapp.Recipes;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import onetoone.Users.User;
-import onetoone.Users.UserRepository;
+import recipeapp.Users.User;
+import recipeapp.Users.UserRepository;
 
 /**
  * 
@@ -22,10 +21,10 @@ import onetoone.Users.UserRepository;
  */ 
 
 @RestController
-public class LaptopController {
+public class RecipeController {
 
     @Autowired
-    LaptopRepository laptopRepository;
+    RecipeRepository recipeRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -34,42 +33,42 @@ public class LaptopController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/laptops")
-    List<Laptop> getAllLaptops(){
-        return laptopRepository.findAll();
+    List<Recipe> getAllLaptops(){
+        return recipeRepository.findAll();
     }
 
     @GetMapping(path = "/laptops/{id}")
-    Laptop getLaptopById(@PathVariable int id){
-        return laptopRepository.findById(id);
+    Recipe getLaptopById(@PathVariable int id){
+        return recipeRepository.findById(id);
     }
 
     @PostMapping(path = "/laptops")
-    String createLaptop(@RequestBody Laptop Laptop){
-        if (Laptop == null)
+    String createLaptop(@RequestBody Recipe Recipe){
+        if (Recipe == null)
             return failure;
-        laptopRepository.save(Laptop);
+        recipeRepository.save(Recipe);
         return success;
     }
 
     @PutMapping(path = "/laptops/{id}")
-    Laptop updateLaptop(@PathVariable int id, @RequestBody Laptop request){
-        Laptop laptop = laptopRepository.findById(id);
-        if(laptop == null)
+    Recipe updateLaptop(@PathVariable int id, @RequestBody Recipe request){
+        Recipe recipe = recipeRepository.findById(id);
+        if(recipe == null)
             return null;
-        laptopRepository.save(request);
-        return laptopRepository.findById(id);
+        recipeRepository.save(request);
+        return recipeRepository.findById(id);
     }
 
-    @DeleteMapping(path = "/laptops/{id}")
-    String deleteLaptop(@PathVariable int id){
+    @DeleteMapping(path = "/recipes/{id}")
+    String deleteRecipe(@PathVariable int id){
 
         // Check if there is an object depending on user and then remove the dependency
-        User user = userRepository.findByLaptop_Id(id);
-        user.setLaptop(null);
+        User user = userRepository.findByRecipe_Id(id);
+        user.setRecipe(null);
         userRepository.save(user);
 
         // delete the laptop if the changes have not been reflected by the above statement
-        laptopRepository.deleteById(id);
+        recipeRepository.deleteById(id);
         return success;
     }
 }

@@ -1,4 +1,4 @@
-package onetoone.Laptops;
+package recipeapp.Recipes;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  */ 
 
-public interface LaptopRepository extends JpaRepository<Laptop, Long> {
-    Laptop findById(int id);
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+    Recipe findById(int id);
 
     @Transactional
     void deleteById(int id);

@@ -1,11 +1,10 @@
-package onetoone.Users;
+package recipeapp.Users;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author David Borucki
  * 
  */ 
 
@@ -15,5 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     void deleteById(int id);
 
-    User findByLaptop_Id(int id);
+    User findByRecipe_Id(int id);
 }
