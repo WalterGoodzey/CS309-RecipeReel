@@ -1,15 +1,12 @@
 package recipeapp.Users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import recipeapp.Recipes.Recipe;
+
+import java.util.List;
 
 /**
  * 
@@ -17,7 +14,7 @@ import recipeapp.Recipes.Recipe;
  * 
  */ 
 
-@Entity @AllArgsConstructor @NoArgsConstructor
+@Entity @RequiredArgsConstructor @NoArgsConstructor
 @Getter @Setter
 public class User {
 
@@ -28,12 +25,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NonNull
     private String username;
+    @NonNull
     private String emailAddress;
+    @NonNull
     private String password;
 
-    //I still need to figure out one to one, one to many which this is needed for
-//    public void setRecipe(Recipe recipe) {
-//        this.recipe = recipe;
-//    }
+    //Change to OneToMany
+    @OneToOne
+    @JsonIgnore
+    @Getter
+    @Setter
+    private Recipe recipe;
 }

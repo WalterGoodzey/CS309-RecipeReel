@@ -53,10 +53,10 @@ public class UserController {
     String createDummyUsers() {
         if (userRepository != null)
             return failure;
-        User user1 = new User(1,"daveb", "dave@iastate.edu", "password1");
-        User user2 = new User(2, "ryanm","ryan@iastate.edu", "password2");
-        User user3 = new User(3,"willc", "will@iastate.edu", "password3");
-        User user4 = new User(4, "walterg", "walter@iastate.edu", "password4");
+        User user1 = new User("daveb", "dave@iastate.edu", "password1");
+        User user2 = new User("ryanm","ryan@iastate.edu", "password2");
+        User user3 = new User("willc", "will@iastate.edu", "password3");
+        User user4 = new User("walterg", "walter@iastate.edu", "password4");
         userRepository.save(user1);
         userRepository.save(user2);
         userRepository.save(user3);

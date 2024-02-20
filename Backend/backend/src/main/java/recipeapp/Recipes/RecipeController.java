@@ -16,7 +16,7 @@ import recipeapp.Users.UserRepository;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author David Borucki
  * 
  */ 
 
@@ -32,26 +32,26 @@ public class RecipeController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/laptops")
-    List<Recipe> getAllLaptops(){
+    @GetMapping(path = "/recipes")
+    List<Recipe> getAllRecipes(){
         return recipeRepository.findAll();
     }
 
-    @GetMapping(path = "/laptops/{id}")
-    Recipe getLaptopById(@PathVariable int id){
+    @GetMapping(path = "/recipes/{id}")
+    Recipe getRecipeById(@PathVariable int id){
         return recipeRepository.findById(id);
     }
 
-    @PostMapping(path = "/laptops")
-    String createLaptop(@RequestBody Recipe Recipe){
+    @PostMapping(path = "/recipes")
+    String createRecipe(@RequestBody Recipe Recipe){
         if (Recipe == null)
             return failure;
         recipeRepository.save(Recipe);
         return success;
     }
 
-    @PutMapping(path = "/laptops/{id}")
-    Recipe updateLaptop(@PathVariable int id, @RequestBody Recipe request){
+    @PutMapping(path = "/recipes/{id}")
+    Recipe updateRecipe(@PathVariable int id, @RequestBody Recipe request){
         Recipe recipe = recipeRepository.findById(id);
         if(recipe == null)
             return null;
@@ -67,7 +67,7 @@ public class RecipeController {
         user.setRecipe(null);
         userRepository.save(user);
 
-        // delete the laptop if the changes have not been reflected by the above statement
+        // delete the recipe if the changes have not been reflected by the above statement
         recipeRepository.deleteById(id);
         return success;
     }
