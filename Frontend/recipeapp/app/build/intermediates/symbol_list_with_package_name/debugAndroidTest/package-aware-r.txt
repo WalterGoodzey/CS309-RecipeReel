@@ -1,3 +1,0 @@
-com.example.recipeapp.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
