@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-43:/layout/fragment_notifications.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-46:/layout/fragment_notifications.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-43:/layout/fragment_dashboard.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-46:/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-43:/layout/fragment_saved.xml",
+        "source": "com.example.recipeapp-main-46:/layout/fragment_saved.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-43:/layout/fragment_myaccount.xml",
+        "source": "com.example.recipeapp-main-46:/layout/fragment_myaccount.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-43:/layout/fragment_trending.xml",
+        "source": "com.example.recipeapp-main-46:/layout/fragment_trending.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-43:/layout/fragment_search.xml",
+        "source": "com.example.recipeapp-main-46:/layout/fragment_search.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-43:/layout/fragment_home.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-46:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-43:/layout/fragment_following.xml",
+        "source": "com.example.recipeapp-main-46:/layout/fragment_following.xml"
+    }
+]
