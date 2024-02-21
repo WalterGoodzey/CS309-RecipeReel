@@ -51,8 +51,6 @@ public class UserController {
     //ONLY USE THIS IF NO OTHER DATAS ARE IN DB. JUST FOR BACKEND TESTING
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
-        if (userRepository != null)
-            return failure;
         User user1 = new User("daveb", "dave@iastate.edu", "password1");
         User user2 = new User("ryanm","ryan@iastate.edu", "password2");
         User user3 = new User("willc", "will@iastate.edu", "password3");
