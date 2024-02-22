@@ -49,6 +49,9 @@ public class JsonArrReqActivity extends AppCompatActivity {
         adapter = new ListAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
+        //make JSON array request on opening
+        makeJsonArrayReq();
+
         btnJsonArrReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
