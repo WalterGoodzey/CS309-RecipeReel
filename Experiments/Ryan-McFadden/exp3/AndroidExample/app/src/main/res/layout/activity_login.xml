@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="false"
+    android:background="#90D1EF"
+    android:orientation="vertical"
+    android:textAlignment="center"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal"
+        android:translationY="350dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="username: "
+            android:textColor="#000000"
+            android:textSize="20dp"></TextView>
+
+        <EditText
+            android:id="@+id/login_username_edt"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:hint="Enter Username Here"
+            android:inputType="text"
+            android:maxLines="1"></EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:translationY="325dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="password: "
+            android:textColor="#000000"
+            android:textSize="20dp"></TextView>
+
+        <EditText
+            android:id="@+id/login_password_edt"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:hint="Enter Password Here"
+            android:inputType="textPassword"></EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:orientation="horizontal"
+        android:translationY="350dp">
+
+        <Button
+            android:id="@+id/login_login_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Login"
+            android:textColor="#ffffff"
+            android:textSize="20sp"></Button>
+
+        <Button
+            android:id="@+id/login_signup_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Signup"
+            android:textColor="#ffffff"
+            android:textSize="20sp"></Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:translationY="-275dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="150dp"
+            android:text="EZ Recipes!"
+            android:textColor="#673AB7"
+            android:textSize="60sp"></TextView>
+
+        <TextView
+            android:id="@+id/loginTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Login"
+            android:textAlignment="center"
+            android:textSize="30dp"
+            android:translationX="165dp"
+            android:translationY="-100dp" />
+    </LinearLayout>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
