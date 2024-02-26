@@ -2,6 +2,7 @@ package recipeapp.Users;
 
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,13 +42,6 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @PostMapping(path = "/users")
-    String createUser(@RequestBody Users users){
-        if (users == null)
-            return failure;
-        userRepository.save(users);
-        return success;
-    }
     //ONLY USE THIS IF NO OTHER DATAS ARE IN DB. JUST FOR BACKEND TESTING
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
@@ -61,6 +55,32 @@ public class UserController {
         userRepository.save(users4);
 
         return success;
+    }
+    /*
+     * POST - create new user
+     * params: new user (nuser)
+     * return: user
+     *
+     * if no other users in db, save new user and return user
+     * if other users in db, check to see if user exists (by username or email)
+     */
+    @PostMapping(path = "/newuser")
+    Users createUser(@RequestBody Users nuser) {
+        boolean exists = false;
+        if (userRepository.count() > 0) {
+            List<Users> users = getAllUsers();
+            for (Users e : users) {
+                if (e.getUsername().equals(nuser.getUsername()) || e.getEmailAddress().equals(nuser.getEmailAddress())) {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        if (!exists) {
+            userRepository.save(nuser);
+            return nuser;
+        }
+        return null;
     }
 
     @DeleteMapping(path = "/users")
