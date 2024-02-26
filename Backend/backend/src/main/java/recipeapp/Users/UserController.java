@@ -82,6 +82,22 @@ public class UserController {
         }
         return null;
     }
+    /*
+     * POST - login user
+     * params: user that Frontend sends
+     * return: user from Backend's DB if username & password match
+     *
+     * if no user exists, nothing is returned
+     */
+    @PostMapping(path = "/login")
+    Users login(@RequestBody Users user) {
+        List<Users> existingUsers = getAllUsers();
+        for (Users e : existingUsers) {
+            if (e.getUsername().equals(user.getUsername()) && e.getPassword().equals(user.getPassword()))
+                return e;
+        }
+        return null;
+    }
 
     @DeleteMapping(path = "/users")
     String deleteUser(@RequestBody Users users) {
