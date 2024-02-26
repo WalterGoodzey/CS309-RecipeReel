@@ -1,0 +1,6 @@
+com.example.myappexp4.test.app-annotation-experimental-1.3.0-0 /Users/ryanmcfadden/.gradle/caches/transforms-3/77660fa7dce3f77235db1b1d34b10103/transformed/annotation-experimental-1.3.0/res
+com.example.myappexp4.test.app-core-1.5.0-1 /Users/ryanmcfadden/.gradle/caches/transforms-3/c773155d28b3ff4d874c87b2f158df48/transformed/core-1.5.0/res
+com.example.myappexp4.test.app-androidTest-2 /Users/ryanmcfadden/Desktop/COMS309/mk1_3/Experiments/Ryan-McFadden/exp4/app/build/generated/res/resValues/androidTest/debug
+com.example.myappexp4.test.app-mergeDebugAndroidTestResources-3 /Users/ryanmcfadden/Desktop/COMS309/mk1_3/Experiments/Ryan-McFadden/exp4/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.example.myappexp4.test.app-mergeDebugAndroidTestResources-4 /Users/ryanmcfadden/Desktop/COMS309/mk1_3/Experiments/Ryan-McFadden/exp4/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.example.myappexp4.test.app-merged_res-5 /Users/ryanmcfadden/Desktop/COMS309/mk1_3/Experiments/Ryan-McFadden/exp4/app/build/intermediates/merged_res/debugAndroidTest

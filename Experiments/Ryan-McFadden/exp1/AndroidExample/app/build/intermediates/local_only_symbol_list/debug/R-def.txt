@@ -1,0 +1,25 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color white
+drawable baseline_text_snippet_24
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id PlainTextRed
+id main_move_btn
+id main_msg_txt
+id second_button
+id second_message_txt
+id textViewTest
+layout activity_main
+layout activity_second
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string red
+string tilted
+string welcome
+style Base.Theme.AndroidExample
+style Theme.AndroidExample
+xml backup_rules
+xml data_extraction_rules
