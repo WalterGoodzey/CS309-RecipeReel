@@ -13,14 +13,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
-
-//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-//        bottomNavigationView.setSelectedItemId(R.id.bottom_saved);
-//
-//        bottomNavigationView.setOnItemSelectedListener(item -> {
-//
-//
-//            return false;
-//        });
+        
     }
 }
