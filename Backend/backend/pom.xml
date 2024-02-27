@@ -5,7 +5,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>coms309</groupId>
-  <artifactId>onetoone</artifactId>
+  <artifactId>recipeapp</artifactId>
   <version>1.0.0</version>
 
   <!-- To make it a spring boot project -->
@@ -38,7 +38,7 @@
     <dependency>
         <groupId>com.h2database</groupId>
         <artifactId>h2</artifactId>
-        <version>1.4.200</version>
+        <version>2.1.214</version>
         <scope>runtime</scope>
     </dependency>
 

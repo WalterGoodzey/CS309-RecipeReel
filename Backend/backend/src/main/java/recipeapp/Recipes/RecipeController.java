@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import recipeapp.Users.User;
+import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
 
 /**
@@ -63,9 +63,9 @@ public class RecipeController {
     String deleteRecipe(@PathVariable int id){
 
         // Check if there is an object depending on user and then remove the dependency
-        User user = userRepository.findByRecipe_Id(id);
-        user.setRecipe(null);
-        userRepository.save(user);
+        Users users = userRepository.findByRecipe_Id(id);
+        users.setRecipe(null);
+        userRepository.save(users);
 
         // delete the recipe if the changes have not been reflected by the above statement
         recipeRepository.deleteById(id);

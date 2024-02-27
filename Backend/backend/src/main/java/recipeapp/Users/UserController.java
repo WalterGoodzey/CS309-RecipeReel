@@ -32,53 +32,53 @@ public class UserController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/users")
-    List<User> getAllUsers(){
+    List<Users> getAllUsers(){
         return userRepository.findAll();
     }
 
     @GetMapping(path = "/users/{id}")
-    User getUserById( @PathVariable int id){
+    Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
     }
 
     @PostMapping(path = "/users")
-    String createUser(@RequestBody User user){
-        if (user == null)
+    String createUser(@RequestBody Users users){
+        if (users == null)
             return failure;
-        userRepository.save(user);
+        userRepository.save(users);
         return success;
     }
     //ONLY USE THIS IF NO OTHER DATAS ARE IN DB. JUST FOR BACKEND TESTING
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
-        User user1 = new User("daveb", "dave@iastate.edu", "password1");
-        User user2 = new User("ryanm","ryan@iastate.edu", "password2");
-        User user3 = new User("willc", "will@iastate.edu", "password3");
-        User user4 = new User("walterg", "walter@iastate.edu", "password4");
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        userRepository.save(user4);
+        Users users1 = new Users("daveb", "dave@iastate.edu", "password1");
+        Users users2 = new Users("ryanm","ryan@iastate.edu", "password2");
+        Users users3 = new Users("willc", "will@iastate.edu", "password3");
+        Users users4 = new Users("walterg", "walter@iastate.edu", "password4");
+        userRepository.save(users1);
+        userRepository.save(users2);
+        userRepository.save(users3);
+        userRepository.save(users4);
 
         return success;
     }
 
     @DeleteMapping(path = "/users")
-    String deleteUser(@RequestBody User user) {
-        if (user == null)
+    String deleteUser(@RequestBody Users users) {
+        if (users == null)
             return failure;
-        userRepository.delete(user);
+        userRepository.delete(users);
         return success;
     }
 
     @PutMapping("/users/{id}")
-    User updateUser(@PathVariable int id, @RequestBody User request){
-        User user = userRepository.findById(id);
+    Users updateUser(@PathVariable int id, @RequestBody Users request){
+        Users users = userRepository.findById(id);
 
-        if(user == null) {
+        if(users == null) {
             throw new RuntimeException("user id does not exist");
         }
-        else if (user.getId() != id){
+        else if (users.getId() != id){
             throw new RuntimeException("path variable id does not match User request id");
         }
 
@@ -88,13 +88,13 @@ public class UserController {
 
     @PutMapping("/users/{userId}/recipes/{recipeId}")
     String assignRecipeToUser(@PathVariable int userId,@PathVariable int recipeId){
-        User user = userRepository.findById(userId);
+        Users users = userRepository.findById(userId);
         Recipe recipe = recipeRepository.findById(recipeId);
-        if(user == null || recipe == null)
+        if(users == null || recipe == null)
             return failure;
-        recipe.setUser(user);
-        user.setRecipe(recipe);
-        userRepository.save(user);
+        recipe.setUsers(users);
+        users.setRecipe(recipe);
+        userRepository.save(users);
         return success;
     }
 
