@@ -8,11 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 
  */ 
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
     
-    User findById(int id);
+    Users findById(int id);
 
     void deleteById(int id);
 
-    User findByRecipe_Id(int id);
+    Users findByRecipe_Id(int id);
 }

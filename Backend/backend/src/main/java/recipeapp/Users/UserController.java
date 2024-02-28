@@ -2,6 +2,7 @@ package recipeapp.Users;
 
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,53 +33,88 @@ public class UserController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/users")
-    List<User> getAllUsers(){
+    List<Users> getAllUsers(){
         return userRepository.findAll();
     }
 
     @GetMapping(path = "/users/{id}")
-    User getUserById( @PathVariable int id){
+    Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
     }
 
-    @PostMapping(path = "/users")
-    String createUser(@RequestBody User user){
-        if (user == null)
-            return failure;
-        userRepository.save(user);
-        return success;
-    }
     //ONLY USE THIS IF NO OTHER DATAS ARE IN DB. JUST FOR BACKEND TESTING
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
-        User user1 = new User("daveb", "dave@iastate.edu", "password1");
-        User user2 = new User("ryanm","ryan@iastate.edu", "password2");
-        User user3 = new User("willc", "will@iastate.edu", "password3");
-        User user4 = new User("walterg", "walter@iastate.edu", "password4");
-        userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        userRepository.save(user4);
+        Users users1 = new Users("daveb", "dave@iastate.edu", "password1");
+        Users users2 = new Users("ryanm","ryan@iastate.edu", "password2");
+        Users users3 = new Users("willc", "will@iastate.edu", "password3");
+        Users users4 = new Users("walterg", "walter@iastate.edu", "password4");
+        userRepository.save(users1);
+        userRepository.save(users2);
+        userRepository.save(users3);
+        userRepository.save(users4);
 
         return success;
     }
+    /*
+     * POST - create new user
+     * params: new user (nuser)
+     * return: user
+     *
+     * if no other users in db, save new user and return user
+     * if other users in db, check to see if user exists (by username or email)
+     */
+    @PostMapping(path = "/newuser")
+    Users createUser(@RequestBody Users nuser) {
+        boolean exists = false;
+        if (userRepository.count() > 0) {
+            List<Users> users = getAllUsers();
+            for (Users e : users) {
+                if (e.getUsername().equals(nuser.getUsername()) || e.getEmailAddress().equals(nuser.getEmailAddress())) {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        if (!exists) {
+            userRepository.save(nuser);
+            return nuser;
+        }
+        return null;
+    }
+    /*
+     * POST - login user
+     * params: user that Frontend sends
+     * return: user from Backend's DB if username & password match
+     *
+     * if no user exists, nothing is returned
+     */
+    @PostMapping(path = "/login")
+    Users login(@RequestBody Users user) {
+        List<Users> existingUsers = getAllUsers();
+        for (Users e : existingUsers) {
+            if (e.getUsername().equals(user.getUsername()) && e.getPassword().equals(user.getPassword()))
+                return e;
+        }
+        return null;
+    }
 
     @DeleteMapping(path = "/users")
-    String deleteUser(@RequestBody User user) {
-        if (user == null)
+    String deleteUser(@RequestBody Users users) {
+        if (users == null)
             return failure;
-        userRepository.delete(user);
+        userRepository.delete(users);
         return success;
     }
 
     @PutMapping("/users/{id}")
-    User updateUser(@PathVariable int id, @RequestBody User request){
-        User user = userRepository.findById(id);
+    Users updateUser(@PathVariable int id, @RequestBody Users request){
+        Users users = userRepository.findById(id);
 
-        if(user == null) {
+        if(users == null) {
             throw new RuntimeException("user id does not exist");
         }
-        else if (user.getId() != id){
+        else if (users.getId() != id){
             throw new RuntimeException("path variable id does not match User request id");
         }
 
@@ -88,13 +124,13 @@ public class UserController {
 
     @PutMapping("/users/{userId}/recipes/{recipeId}")
     String assignRecipeToUser(@PathVariable int userId,@PathVariable int recipeId){
-        User user = userRepository.findById(userId);
+        Users users = userRepository.findById(userId);
         Recipe recipe = recipeRepository.findById(recipeId);
-        if(user == null || recipe == null)
+        if(users == null || recipe == null)
             return failure;
-        recipe.setUser(user);
-        user.setRecipe(recipe);
-        userRepository.save(user);
+        recipe.setUsers(users);
+        users.setRecipe(recipe);
+        userRepository.save(users);
         return success;
     }
 
