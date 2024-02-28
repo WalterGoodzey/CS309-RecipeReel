@@ -31,7 +31,7 @@ public class Users {
     private String password;
 
     //Change to OneToMany
-
+    //@JoinColumn, ??@OneToMany??,
     @OneToOne
     @JsonIgnore
     @Getter
