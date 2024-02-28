@@ -30,10 +30,28 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CreateRecipeActivity extends AppCompatActivity {
 
+    private Button button_post, button_image_upload;
+
+    private static final String URL_JSON_OBJ = "TEMP";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+
+        button_post = findViewById(R.id.button_post);
+        button_image_upload = findViewById(R.id.button_image_upload);
+
+        button_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){};
+        });
+
+        button_image_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){};
+        });
+
 
     }
 }
