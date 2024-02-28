@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.List;
 
+/**
+ * @author Ryan McFadden
+ */
 public class ListAdapter extends ArrayAdapter<ListItemObject> {
 
     public ListAdapter(Context context, List<ListItemObject> items) {
