@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,9 +31,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CreateRecipeActivity extends AppCompatActivity {
 
-    private Button button_post, button_image_upload;
+    private Button button_post;
+//    private Button button_image_upload;
 
-    private static final String URL_JSON_OBJ = "TEMP";
+    private EditText input_title, input_description,
+            input_ingredients, input_steps, input_tags;
+    private static final String URL_JSON_OBJ =
+            "http://coms-309-018.class.las.iastate.edu:8080/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +45,28 @@ public class CreateRecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_recipe);
 
         button_post = findViewById(R.id.button_post);
-        button_image_upload = findViewById(R.id.button_image_upload);
+//        button_image_upload = findViewById(R.id.button_image_upload);
+
+        input_title = findViewById(R.id.input_title);
+        input_description = findViewById(R.id.input_description);
+        input_ingredients = findViewById(R.id.input_ingredients);
+        input_steps = findViewById(R.id.input_steps);
+        input_tags = findViewById(R.id.input_tags);
+
+//        button_image_upload.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//
+//            ;
+//        });
 
         button_post.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){};
+            public void onClick(View v) {
+            }
+
+            ;
         });
-
-        button_image_upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){};
-        });
-
-
     }
 }

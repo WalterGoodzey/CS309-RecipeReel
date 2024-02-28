@@ -79,11 +79,11 @@
         tools:layout_editor_absoluteX="259dp"
         tools:layout_editor_absoluteY="647dp" />
 
-    <Button
-        android:id="@+id/button_image_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Image"
-        tools:layout_editor_absoluteX="53dp"
-        tools:layout_editor_absoluteY="649dp" />
+<!--    <Button-->
+<!--        android:id="@+id/button_image_upload"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Upload Image"-->
+<!--        tools:layout_editor_absoluteX="53dp"-->
+<!--        tools:layout_editor_absoluteY="649dp" />-->
 </androidx.appcompat.widget.LinearLayoutCompat>
