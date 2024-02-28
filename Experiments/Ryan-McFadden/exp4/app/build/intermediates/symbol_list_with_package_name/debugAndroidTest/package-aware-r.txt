@@ -1,3 +1,0 @@
-com.example.myappexp4.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

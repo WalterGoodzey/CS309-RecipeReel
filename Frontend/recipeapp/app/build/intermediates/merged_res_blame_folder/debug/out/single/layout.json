@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_following.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_following.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_view_recipe.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_view_recipe.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_trending.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_trending.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_entry.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_entry.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_profile.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_saved.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_saved.xml"
+    },
+    {
+        "merged": "com.example.recipeapp-mergeDebugResources-33:/layout/activity_signup.xml",
+        "source": "com.example.recipeapp-main-36:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_main.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_search.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_search.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_signup.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_signup.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/list_item.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/list_item.xml"
+    },
+    {
+        "merged": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-mergeDebugResources-33:/layout/activity_login.xml",
+        "source": "/Users/ryanmcfadden/.gradle/daemon/8.2/com.example.recipeapp-main-36:/layout/activity_login.xml"
+    }
+]
