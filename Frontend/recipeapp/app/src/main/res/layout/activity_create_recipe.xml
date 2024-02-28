@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bottomNavigationView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="276dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="62dp"
         tools:layout_editor_absoluteX="53dp"
         tools:layout_editor_absoluteY="34dp">
@@ -15,61 +15,61 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_title"
             android:layout_width="match_parent"
-            android:layout_height="62dp"
+            android:layout_height="match_parent"
             android:hint="Recipe Title" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="170dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="Description" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="294dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_ingredients"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="Ingredients" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="430dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_steps"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="Steps" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="556dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/input_tags"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="Tags" />
-    </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_post"
@@ -86,4 +86,4 @@
         android:text="Upload Image"
         tools:layout_editor_absoluteX="53dp"
         tools:layout_editor_absoluteY="649dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
