@@ -20,14 +20,19 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author Ryan McFadden
+ */
 public class SignupActivity extends AppCompatActivity {
 
     private EditText usernameEditText;  // define username edittext variable
+    private EditText emailEditText;     // define email edittext variable
     private EditText passwordEditText;  // define password edittext variable
     private EditText confirmEditText;   // define confirm edittext variable
-    private Button loginButton;         // define return to login button variable
+    private Button entryButton;         // define back to entry button variable
     private Button signupButton;        // define signup button variable
+
+//    private static final String URL_SIGNUP = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/post_test";
     private static final String URL_SIGNUP = "http://coms-309-018.class.las.iastate.edu:8080/newuser"; //define server URL for signup
     private JSONObject user;            //define user JSONObject to POST
     @Override
@@ -36,20 +41,21 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         /* initialize UI elements */
-        usernameEditText = findViewById(R.id.signup_username_edt);  // link to username edtext in the Signup activity XML
-        passwordEditText = findViewById(R.id.signup_password_edt);  // link to password edtext in the Signup activity XML
-        confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edtext in the Signup activity XML
-        loginButton = findViewById(R.id.signup_login_btn);    // link to return to login button in the Signup activity XML
-        signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
+        usernameEditText = findViewById(R.id.signup_username_edt);  // link to username edittext in the Signup activity XML
+        passwordEditText = findViewById(R.id.signup_password_edt);  // link to password edittext in the Signup activity XML
+        emailEditText = findViewById(R.id.signup_email_edt);        // link to password edittext in the Signup activity XML
+        confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edittext in the Signup activity XML
+        entryButton = findViewById(R.id.signup_entry_btn);          // link to return to login button in the Signup activity XML
+        signupButton = findViewById(R.id.signup_signup_btn);        // link to signup button in the Signup activity XML
 
         /* click listener on login button pressed */
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        entryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /* when login button is pressed, use intent to switch to Login Activity */
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);  // go to LoginActivity
+                /* when entry button is pressed, use intent to switch to EntryActivity */
+                Intent intent = new Intent(SignupActivity.this, EntryActivity.class);
+                startActivity(intent);  // go to EntryActivity
             }
         });
 
@@ -60,6 +66,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 /* grab strings from user inputs */
                 String username = usernameEditText.getText().toString();
+                String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
 
@@ -69,6 +76,7 @@ public class SignupActivity extends AppCompatActivity {
                     user = new JSONObject();
                     try {
                         user.put("username", username);
+                        user.put("email", email);
                         user.put("password", password);
                     } catch (JSONException e){
                         e.printStackTrace();
@@ -126,8 +134,13 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                //                params.put("param1", "value1");
-                //                params.put("param2", "value2");
+                try{
+                    params.put("username", user.getString("username"));
+                    params.put("email", user.getString("email"));
+                    params.put("password", user.getString("password"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 return params;
             }
         };

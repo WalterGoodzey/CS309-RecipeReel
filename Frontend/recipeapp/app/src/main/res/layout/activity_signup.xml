@@ -18,11 +18,12 @@
         android:textColor="#673AB7"
         android:textSize="40dp"></TextView>
 
+<!--    USERNAME    -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -39,9 +40,33 @@
             android:hint="Enter Username Here"
             android:inputType="text"
             android:maxLines="1"></EditText>
-
     </LinearLayout>
 
+<!--    EMAIL   -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="email: "
+            android:textColor="#000000"
+            android:textSize="20dp"></TextView>
+
+        <EditText
+            android:id="@+id/signup_email_edt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Enter Email Here"
+            android:inputType="text"
+            android:maxLines="1"></EditText>
+    </LinearLayout>
+
+<!--    PASSWORD    -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,9 +86,9 @@
             android:layout_height="50dp"
             android:hint="Enter Password Here"
             android:inputType="textPassword"></EditText>
-
     </LinearLayout>
 
+<!--    CONFIRM PASSWORD    -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical">
 
         <Button
@@ -105,11 +130,11 @@
             app:iconPadding="0dp"></Button>
 
         <Button
-            android:id="@+id/signup_login_btn"
+            android:id="@+id/signup_entry_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="Return to Login"
+            android:text="Back to Entry"
             android:textColor="#ffffff"
             android:textSize="20sp"></Button>
 
@@ -117,12 +142,3 @@
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".SignupActivity">-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

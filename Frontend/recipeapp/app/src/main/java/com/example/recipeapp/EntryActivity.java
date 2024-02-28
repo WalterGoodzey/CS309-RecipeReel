@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+/**
+ * @author Ryan McFadden
+ */
 public class EntryActivity extends AppCompatActivity {
 
     private TextView messageText;   // define message textview variable

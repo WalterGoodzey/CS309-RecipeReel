@@ -62,8 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:orientation="horizontal"
-        android:translationY="350dp">
+        android:orientation="vertical"
+        android:translationY="300dp">
 
         <Button
             android:id="@+id/login_login_btn"
@@ -75,11 +75,10 @@
             android:textSize="20sp"></Button>
 
         <Button
-            android:id="@+id/login_signup_btn"
+            android:id="@+id/login_entry_btn"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Signup"
+            android:text="Back to Entry"
             android:textColor="#ffffff"
             android:textSize="20sp"></Button>
 
@@ -89,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:translationY="-275dp">
+        android:translationY="-350dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,12 +115,3 @@
 
 </androidx.appcompat.widget.LinearLayoutCompat>
 
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".LoginActivity">-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
