@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             try {
                                 Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                                intent.putExtra("id", response.getInt("id"));
                                 intent.putExtra("USERNAME", response.getString("username"));  // key-value to pass to the ProfilActivity
                                 startActivity(intent);  // go to ProfileActivity with the key-value data (the user's username)
                             } catch (JSONException e) {
