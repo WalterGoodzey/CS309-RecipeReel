@@ -1,0 +1,537 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.Recipeapp\"\n        tools:targetApi=\"31\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:label=\"@string/app_name\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	
++++ b/app/src/main/AndroidManifest.xml	
+@@ -1,8 +1,10 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools">
++    <uses-permission android:name="android.permission.INTERNET" />
+ 
+     <application
++        android:usesCleartextTraffic="true"
+         android:allowBackup="true"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+         android:fullBackupContent="@xml/backup_rules"
+@@ -12,6 +14,9 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.Recipeapp"
+         tools:targetApi="31">
++        <activity
++            android:name=".ViewRecipeActivity"
++            android:exported="false" />
+         <activity
+             android:name=".MainActivity"
+             android:exported="true"
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/JsonArrReqActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.androidexample;\n\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.AdapterView;\nimport android.widget.Button;\nimport android.widget.ListView;\nimport android.widget.TextView;\n\nimport com.android.volley.Request;\nimport com.android.volley.Response;\nimport com.android.volley.VolleyError;\nimport com.android.volley.VolleyLog;\nimport com.android.volley.toolbox.JsonArrayRequest;\n\nimport org.json.JSONArray;\nimport org.json.JSONException;\nimport org.json.JSONObject;\n\nimport java.util.ArrayList;\nimport java.util.HashMap;\nimport java.util.Map;\n\n//added\nimport android.content.Intent;\n\n\npublic class JsonArrReqActivity extends AppCompatActivity {\n\n    private Button btnJsonArrReq;\n    private ListAdapter adapter;\n    private ListView listView;\n\n//    private static final String URL_JSON_ARRAY = \"https://jsonplaceholder.typicode.com/users\";\n//    private static final String URL_JSON_ARRAY = \"https://76996fed-8c69-4b5a-99a7-9b2ce56847d0.mock.pstmn.io/recipestest\";\n    private static final String URL_JSON_ARRAY = \"https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/recipes\";\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_json_arr_req);\n\n        btnJsonArrReq = findViewById(R.id.btnJsonArr);\n        listView = findViewById(R.id.listView);\n\n        // Initialize the adapter with an empty list (data will be added later)\n        adapter = new ListAdapter(this, new ArrayList<>());\n        listView.setAdapter(adapter);\n\n        btnJsonArrReq.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                makeJsonArrayReq();\n            }\n        });\n\n        //Added to go to activity_view_recipe when an item in listview is clicked\n        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {\n            @Override\n            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {\n                //intent to view single recipe\n                Intent intent = new Intent(JsonArrReqActivity.this, ViewRecipeActivity.class);\n                //send full JSON recipe as a string to be used in recipe view Activity\n                intent.putExtra(\"RecipeJsonAsString\", adapter.getItem(i).getFullRecipe().toString());\n                //start ViewRecipeActivity\n                startActivity(intent);\n            }\n        });\n    }\n\n    /**\n     * Making json array request\n     * */\n    private void makeJsonArrayReq() {\n        JsonArrayRequest jsonArrReq = new JsonArrayRequest(\n                Request.Method.GET,\n                URL_JSON_ARRAY,\n                null, // Pass null as the request body since it's a GET request\n                new Response.Listener<JSONArray>() {\n                    @Override\n                    public void onResponse(JSONArray response) {\n                        Log.d(\"Volley Response\", response.toString());\n\n                        // Parse the JSON array and add data to the adapter\n                        for (int i = 0; i < response.length(); i++) {\n                            try {\n                                JSONObject jsonObject = response.getJSONObject(i);\n                                String title = jsonObject.getString(\"title\");\n//                                String email = jsonObject.getString(\"email\");\n                                String description = jsonObject.getString(\"description\");\n\n                                // Create a ListItemObject and add it to the adapter\n                                ListItemObject item = new ListItemObject(title, description, jsonObject);\n                                adapter.add(item);\n\n                            } catch (JSONException e) {\n                                e.printStackTrace();\n                            }\n                        }\n                    }\n                },\n                new Response.ErrorListener() {\n                    @Override\n                    public void onErrorResponse(VolleyError error) {\n                        Log.e(\"Volley Error\", error.toString());\n                    }\n        }) {\n            @Override\n            public Map<String, String> getHeaders() {\n                Map<String, String> headers = new HashMap<>();\n//                headers.put(\"Authorization\", \"Bearer YOUR_ACCESS_TOKEN\");\n//                headers.put(\"Content-Type\", \"application/json\");\n                return headers;\n            }\n\n            @Override\n            protected Map<String, String> getParams() {\n                Map<String, String> params = new HashMap<>();\n//                params.put(\"param1\", \"value1\");\n//                params.put(\"param2\", \"value2\");\n                return params;\n            }\n        };\n\n        // Adding request to request queue\n        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrReq);\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/JsonArrReqActivity.java b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/JsonArrReqActivity.java
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/JsonArrReqActivity.java	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/JsonArrReqActivity.java	
+@@ -88,11 +88,11 @@
+                             try {
+                                 JSONObject jsonObject = response.getJSONObject(i);
+                                 String title = jsonObject.getString("title");
+-//                                String email = jsonObject.getString("email");
++                                String author = jsonObject.getString("author");
+                                 String description = jsonObject.getString("description");
+ 
+                                 // Create a ListItemObject and add it to the adapter
+-                                ListItemObject item = new ListItemObject(title, description, jsonObject);
++                                ListItemObject item = new ListItemObject(title, description, author, jsonObject);
+                                 adapter.add(item);
+ 
+                             } catch (JSONException e) {
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.androidexample;\n\n\nimport android.content.Context;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.ArrayAdapter;\nimport android.widget.TextView;\nimport java.util.List;\n\npublic class ListAdapter extends ArrayAdapter<ListItemObject> {\n\n    public ListAdapter(Context context, List<ListItemObject> items) {\n        super(context, 0, items);\n    }\n\n    @Override\n    public View getView(int position, View convertView, ViewGroup parent) {\n        // Get the data item for this position\n        ListItemObject item = getItem(position);\n\n        // Check if an existing view is being reused, otherwise inflate the view\n        if (convertView == null) {\n            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);\n        }\n\n        // Lookup view for data population\n        TextView itemName = convertView.findViewById(R.id.itemName);\n        TextView itemEmail = convertView.findViewById(R.id.itemEmail);\n\n        // Populate the data into the template view using the data object\n        itemName.setText(item.getTitle());\n        itemEmail.setText(item.getDescription());\n\n        // Return the completed view to render on screen\n        return convertView;\n    }\n\n//    @Override\n//    public ListItemObject getItem(int position){\n//        return items.get(position);\n//    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListAdapter.java b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListAdapter.java
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListAdapter.java	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListAdapter.java	
+@@ -26,12 +26,14 @@
+         }
+ 
+         // Lookup view for data population
+-        TextView itemName = convertView.findViewById(R.id.itemName);
+-        TextView itemEmail = convertView.findViewById(R.id.itemEmail);
++        TextView itemName = convertView.findViewById(R.id.itemTitle);
++        TextView itemAuthor = convertView.findViewById(R.id.itemAuthor);
++        TextView itemDescription = convertView.findViewById(R.id.itemDescription);
+ 
+         // Populate the data into the template view using the data object
+         itemName.setText(item.getTitle());
+-        itemEmail.setText(item.getDescription());
++        itemAuthor.setText(item.getAuthor());
++        itemDescription.setText(item.getDescription());
+ 
+         // Return the completed view to render on screen
+         return convertView;
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_view_recipe.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\">\n\n    <TextView\n\n        android:id=\"@+id/titleText\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n\n        android:layout_centerInParent=\"true\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginTop=\"10dp\"\n        android:textSize=\"50dp\"\n        android:text=\"Title\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n    <TextView\n        android:id=\"@+id/authorText\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_centerInParent=\"true\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginTop=\"10dp\"\n        android:textSize=\"40dp\"\n        android:text=\"Author\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/titleText\"\n        />\n    <TextView\n        android:id=\"@+id/descriptionText\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n\n        android:layout_centerInParent=\"true\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginTop=\"10dp\"\n        android:textSize=\"30dp\"\n        android:text=\"Description\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/authorText\"\n        />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_view_recipe.xml b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_view_recipe.xml
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_view_recipe.xml	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_view_recipe.xml	
+@@ -33,7 +33,6 @@
+         android:id="@+id/descriptionText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-
+         android:layout_centerInParent="true"
+         android:layout_marginStart="10dp"
+         android:layout_marginTop="10dp"
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_json_arr_req.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.appcompat.widget.LinearLayoutCompat\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    tools:context=\".MainActivity\"\n    android:layout_height=\"match_parent\"\n    android:layout_width=\"match_parent\"\n    android:orientation=\"vertical\">\n\n    <Button\n        android:id=\"@+id/btnJsonArr\"\n        android:layout_width=\"fill_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"10dp\"\n        android:text=\"JSON Array Request\" />\n\n    <TextView\n        android:layout_width=\"fill_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"20dp\"\n        android:textSize=\"30sp\"\n        android:text=\"Response: \" />\n\n    <ListView\n        android:id=\"@+id/listView\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"20dp\"\n        android:layout_marginBottom=\"20dp\">\n\n    </ListView>\n\n<!--    <TextView-->\n<!--        android:id=\"@+id/msgResponse\"-->\n<!--        android:layout_width=\"fill_parent\"-->\n<!--        android:layout_height=\"wrap_content\"-->\n<!--        android:layout_marginTop=\"25dp\"-->\n<!--        android:text=\"\" />-->\n\n</androidx.appcompat.widget.LinearLayoutCompat>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_json_arr_req.xml b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_json_arr_req.xml
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_json_arr_req.xml	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/activity_json_arr_req.xml	
+@@ -2,7 +2,7 @@
+ <androidx.appcompat.widget.LinearLayoutCompat
+     xmlns:tools="http://schemas.android.com/tools"
+     xmlns:android="http://schemas.android.com/apk/res/android"
+-    tools:context=".MainActivity"
++    tools:context=".JsonArrReqActivity"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:orientation="vertical">
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListItemObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.androidexample;\n\nimport org.json.JSONObject;\n\npublic class ListItemObject {\n    private String title;\n    private String description;\n\n    private JSONObject fullRecipe;\n\n    public ListItemObject(String title, String description, JSONObject fullRecipe) {\n        this.title = title;\n        this.description = description;\n        this.fullRecipe = fullRecipe;\n    }\n\n    public String getTitle() {\n        return title;\n    }\n\n    public String getDescription() {\n        return description;\n    }\n\n    public JSONObject getFullRecipe() { return fullRecipe; }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListItemObject.java b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListItemObject.java
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListItemObject.java	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/java/com/example/androidexample/ListItemObject.java	
+@@ -6,10 +6,13 @@
+     private String title;
+     private String description;
+ 
++    private String author;
++
+     private JSONObject fullRecipe;
+ 
+-    public ListItemObject(String title, String description, JSONObject fullRecipe) {
++    public ListItemObject(String title, String author, String description, JSONObject fullRecipe) {
+         this.title = title;
++        this.author = author;
+         this.description = description;
+         this.fullRecipe = fullRecipe;
+     }
+@@ -18,6 +21,8 @@
+         return title;
+     }
+ 
++    public String getAuthor() { return author; }
++
+     public String getDescription() {
+         return description;
+     }
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id(\"com.android.application\")\n}\n\nandroid {\n    namespace = \"com.example.recipeapp\"\n    compileSdk = 34\n\n    defaultConfig {\n        applicationId = \"com.example.recipeapp\"\n        minSdk = 25\n        targetSdk = 34\n        versionCode = 1\n        versionName = \"1.0\"\n\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            isMinifyEnabled = false\n            proguardFiles(\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\n                \"proguard-rules.pro\"\n            )\n        }\n    }\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_1_8\n        targetCompatibility = JavaVersion.VERSION_1_8\n    }\n    buildFeatures {\n        viewBinding = true\n    }\n}\n\ndependencies {\n\n    implementation(\"androidx.appcompat:appcompat:1.6.1\")\n    implementation(\"com.google.android.material:material:1.11.0\")\n    implementation(\"androidx.constraintlayout:constraintlayout:2.1.4\")\n    implementation(\"androidx.lifecycle:lifecycle-livedata-ktx:2.7.0\")\n    implementation(\"androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0\")\n    implementation(\"androidx.navigation:navigation-fragment:2.7.7\")\n    implementation(\"androidx.navigation:navigation-ui:2.7.7\")\n    testImplementation(\"junit:junit:4.13.2\")\n    androidTestImplementation(\"androidx.test.ext:junit:1.1.5\")\n    androidTestImplementation(\"androidx.test.espresso:espresso-core:3.5.1\")\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	
++++ b/app/build.gradle.kts	
+@@ -46,4 +46,5 @@
+     testImplementation("junit:junit:4.13.2")
+     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
++    implementation("com.android.volley:volley:1.2.1")
+ }
+\ No newline at end of file
+Index: ../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/list_item.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<LinearLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"wrap_content\"\n    android:orientation=\"vertical\"\n    android:padding=\"16dp\">\n\n    <TextView\n        android:id=\"@+id/itemName\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginRight=\"30dp\"\n        android:layout_gravity=\"left\"\n        android:text=\"name\"\n        android:textSize=\"20sp\"\n        android:textColor=\"#000000\" />\n\n    <TextView\n        android:id=\"@+id/itemEmail\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:gravity=\"right\"\n        android:text=\"email\"\n        android:textSize=\"18sp\"\n        android:textColor=\"#888888\" />\n</LinearLayout>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/list_item.xml b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/list_item.xml
+--- a/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/list_item.xml	
++++ b/../../Experiments/Ryan-McFadden/volleyEx2/AndroidExample/app/src/main/res/layout/list_item.xml	
+@@ -7,21 +7,30 @@
+     android:padding="16dp">
+ 
+     <TextView
+-        android:id="@+id/itemName"
++        android:id="@+id/itemTitle"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginRight="30dp"
+         android:layout_gravity="left"
+-        android:text="name"
++        android:text="title"
+         android:textSize="20sp"
+         android:textColor="#000000" />
+ 
+     <TextView
+-        android:id="@+id/itemEmail"
++        android:id="@+id/itemAuthor"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:gravity="right"
++        android:text="author"
++        android:textSize="18sp"
++        android:textColor="#888888" />
++
++    <TextView
++        android:id="@+id/itemDescription"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="right"
+-        android:text="email"
++        android:text="description"
+         android:textSize="18sp"
+         android:textColor="#888888" />
+ </LinearLayout>
+Index: app/src/main/java/com/example/recipeapp/ListItemObject.java
+===================================================================
+diff --git a/app/src/main/java/com/example/recipeapp/ListItemObject.java b/app/src/main/java/com/example/recipeapp/ListItemObject.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/recipeapp/ListItemObject.java	
+@@ -0,0 +1,31 @@
++package com.example.recipeapp;
++
++import org.json.JSONObject;
++
++public class ListItemObject {
++    private String title;
++    private String description;
++
++    private String author;
++
++    private JSONObject fullRecipe;
++
++    public ListItemObject(String title, String author, String description, JSONObject fullRecipe) {
++        this.title = title;
++        this.author = author;
++        this.description = description;
++        this.fullRecipe = fullRecipe;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public String getAuthor() { return author; }
++
++    public String getDescription() {
++        return description;
++    }
++
++    public JSONObject getFullRecipe() { return fullRecipe; }
++}
+Index: app/src/main/java/com/example/recipeapp/ListAdapter.java
+===================================================================
+diff --git a/app/src/main/java/com/example/recipeapp/ListAdapter.java b/app/src/main/java/com/example/recipeapp/ListAdapter.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/recipeapp/ListAdapter.java	
+@@ -0,0 +1,48 @@
++package com.example.recipeapp;
++
++
++import android.content.Context;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ArrayAdapter;
++import android.widget.TextView;
++import java.util.List;
++
++public class ListAdapter extends ArrayAdapter<ListItemObject> {
++
++    public ListAdapter(Context context, List<ListItemObject> items) {
++        super(context, 0, items);
++    }
++
++    @Override
++    public View getView(int position, View convertView, ViewGroup parent) {
++        // Get the data item for this position
++        ListItemObject item = getItem(position);
++
++        // Check if an existing view is being reused, otherwise inflate the view
++        if (convertView == null) {
++            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
++        }
++
++        // Lookup view for data population
++        TextView itemName = convertView.findViewById(R.id.itemTitle);
++        TextView itemAuthor = convertView.findViewById(R.id.itemAuthor);
++        TextView itemDescription = convertView.findViewById(R.id.itemDescription);
++
++        // Populate the data into the template view using the data object
++        itemName.setText(item.getTitle());
++        itemAuthor.setText(item.getAuthor());
++        itemDescription.setText(item.getDescription());
++
++        // Return the completed view to render on screen
++        return convertView;
++    }
++
++//    @Override
++//    public ListItemObject getItem(int position){
++//        return items.get(position);
++//    }
++}
++
++
+Index: app/src/main/res/layout/list_item.xml
+===================================================================
+diff --git a/app/src/main/res/layout/list_item.xml b/app/src/main/res/layout/list_item.xml
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/res/layout/list_item.xml	
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout
++    xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:orientation="vertical"
++    android:padding="16dp">
++
++    <TextView
++        android:id="@+id/itemTitle"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginRight="30dp"
++        android:layout_gravity="left"
++        android:text="title"
++        android:textSize="20sp"
++        android:textColor="#000000" />
++
++    <TextView
++        android:id="@+id/itemAuthor"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:gravity="right"
++        android:text="author"
++        android:textSize="18sp"
++        android:textColor="#888888" />
++
++    <TextView
++        android:id="@+id/itemDescription"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:gravity="right"
++        android:text="description"
++        android:textSize="18sp"
++        android:textColor="#888888" />
++</LinearLayout>
+Index: app/src/main/java/com/example/recipeapp/ViewRecipeActivity.java
+===================================================================
+diff --git a/app/src/main/java/com/example/recipeapp/ViewRecipeActivity.java b/app/src/main/java/com/example/recipeapp/ViewRecipeActivity.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/recipeapp/ViewRecipeActivity.java	
+@@ -0,0 +1,53 @@
++package com.example.recipeapp;
++
++import android.os.Bundle;
++import android.view.View;
++
++//added
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.appcompat.app.AppCompatActivity;
++
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.Button;
++import android.widget.TextView;
++
++
++import org.json.JSONException;
++import org.json.JSONObject;
++
++import java.util.HashMap;
++import java.util.Map;
++
++
++public class ViewRecipeActivity extends AppCompatActivity {
++
++    private TextView titleTxt;
++    private TextView authorTxt;
++    private TextView descriptionTxt;
++
++
++    private JSONObject fullRecipeJSON;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_view_recipe);
++        titleTxt = findViewById(R.id.titleText);
++        authorTxt = findViewById(R.id.authorText);
++        descriptionTxt = findViewById(R.id.descriptionText);
++
++        try {
++            //get full JSON from intent
++            fullRecipeJSON = new JSONObject(getIntent().getStringExtra("RecipeJsonAsString"));
++            //fill text with data from JSON recipe
++            titleTxt.setText(fullRecipeJSON.getString("title"));
++            authorTxt.setText(fullRecipeJSON.getString("author"));
++            descriptionTxt.setText(fullRecipeJSON.getString("description"));
++        } catch (JSONException e) {
++
++            throw new RuntimeException(e);
++        }
++    }
++}
+Index: app/src/main/java/com/example/recipeapp/VolleySingleton.java
+===================================================================
+diff --git a/app/src/main/java/com/example/recipeapp/VolleySingleton.java b/app/src/main/java/com/example/recipeapp/VolleySingleton.java
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/example/recipeapp/VolleySingleton.java	
+@@ -0,0 +1,64 @@
++package com.example.recipeapp;
++
++import android.content.Context;
++import android.graphics.Bitmap;
++import android.util.LruCache;
++
++import com.android.volley.Request;
++import com.android.volley.RequestQueue;
++import com.android.volley.toolbox.ImageLoader;
++import com.android.volley.toolbox.Volley;
++
++public class VolleySingleton {
++
++    private static VolleySingleton instance;
++    private RequestQueue requestQueue;
++    private ImageLoader imageLoader;
++    private static Context ctx;
++
++    private VolleySingleton(Context context) {
++        ctx = context;
++        requestQueue = getRequestQueue();
++
++        imageLoader = new ImageLoader(requestQueue,
++                new ImageLoader.ImageCache() {
++                    private final LruCache<String, Bitmap>
++                            cache = new LruCache<String, Bitmap>(20);
++
++                    @Override
++                    public Bitmap getBitmap(String url) {
++                        return cache.get(url);
++                    }
++
++                    @Override
++                    public void putBitmap(String url, Bitmap bitmap) {
++                        cache.put(url, bitmap);
++                    }
++                });
++    }
++
++    public static synchronized VolleySingleton getInstance(Context context) {
++        if (instance == null) {
++            instance = new VolleySingleton(context);
++        }
++        return instance;
++    }
++
++    public RequestQueue getRequestQueue() {
++        if (requestQueue == null) {
++            // getApplicationContext() is key, it keeps you from leaking the
++            // Activity or BroadcastReceiver if someone passes one in.
++            requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
++        }
++        return requestQueue;
++    }
++
++    public <T> void addToRequestQueue(Request<T> req) {
++        getRequestQueue().add(req);
++    }
++
++    public ImageLoader getImageLoader() {
++        return imageLoader;
++    }
++}
++
+Index: app/src/main/res/layout/activity_view_recipe.xml
+===================================================================
+diff --git a/app/src/main/res/layout/activity_view_recipe.xml b/app/src/main/res/layout/activity_view_recipe.xml
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/res/layout/activity_view_recipe.xml	
+@@ -0,0 +1,46 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent">
++
++    <TextView
++
++        android:id="@+id/titleText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++
++        android:layout_centerInParent="true"
++        android:layout_marginStart="10dp"
++        android:layout_marginTop="10dp"
++        android:textSize="50dp"
++        android:text="Title"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++    <TextView
++        android:id="@+id/authorText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_centerInParent="true"
++        android:layout_marginStart="10dp"
++        android:layout_marginTop="10dp"
++        android:textSize="40dp"
++        android:text="Author"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/titleText"
++        />
++    <TextView
++        android:id="@+id/descriptionText"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++
++        android:layout_centerInParent="true"
++        android:layout_marginStart="10dp"
++        android:layout_marginTop="10dp"
++        android:textSize="30dp"
++        android:text="Description"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/authorText"
++        />
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

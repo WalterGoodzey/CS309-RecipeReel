@@ -29,7 +29,7 @@ public class SavedActivity extends AppCompatActivity {
     private ListAdapter adapter;
     private ListView listView;
 
-    private String username;
+    private int userId;
 
     private static final String URL_JSON_ARRAY = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/recipes";
 
@@ -42,7 +42,7 @@ public class SavedActivity extends AppCompatActivity {
         //get username from previous activity
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            username = extras.getString("USERNAME");
+            userId = extras.getInt("id");
         }
 
         //bottom navigation setup and operation
@@ -53,17 +53,17 @@ public class SavedActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.bottom_trending) {
                 Intent intent = new Intent(getApplicationContext(), TrendingActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_following) {
                 Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
@@ -71,7 +71,7 @@ public class SavedActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }
