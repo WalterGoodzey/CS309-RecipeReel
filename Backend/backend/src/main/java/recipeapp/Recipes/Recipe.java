@@ -1,17 +1,10 @@
 package recipeapp.Recipes;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import recipeapp.Users.Users;
 
 /**
@@ -33,20 +26,28 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NonNull
     private String title;
+
+    @NonNull
     private String instructions;
+
     private String tags;
-    private double rating;
+
+    // private double rating;
 
     /*
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
      * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "users_id")
     @JsonIgnore
     @Getter
     @Setter
-    private Users users;
+    private Users user;
 
-
+    @NonNull
+    private String username = user.getUsername();
 }

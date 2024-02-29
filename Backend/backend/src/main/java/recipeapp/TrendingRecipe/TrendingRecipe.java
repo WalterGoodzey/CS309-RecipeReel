@@ -22,6 +22,7 @@ public class TrendingRecipe {
     // in the trending tab will be aquired using this ID.
     @OneToOne
     @Getter
+    @JsonIgnore
     private Recipe recipe;
 
 }

@@ -17,6 +17,7 @@ import recipeapp.Users.UserRepository;
 /**
  * 
  * @author David Borucki
+ * @author Will Custis
  * 
  */ 
 
