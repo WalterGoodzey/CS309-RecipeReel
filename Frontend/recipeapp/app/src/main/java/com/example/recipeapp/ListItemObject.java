@@ -1,7 +1,9 @@
 package com.example.recipeapp;
 
 import org.json.JSONObject;
-
+/**
+ * @author Ryan McFadden
+ */
 public class ListItemObject {
     private String title;
 
