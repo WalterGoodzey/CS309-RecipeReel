@@ -14,5 +14,4 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     void deleteById(int id);
 
-    Users findByRecipe_Id(int id);
 }

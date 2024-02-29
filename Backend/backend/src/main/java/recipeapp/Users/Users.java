@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import recipeapp.Recipes.Recipe;
 
+import java.util.List;
+
 /**
  * 
  * @author David Borucki
@@ -23,18 +25,14 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NonNull
     private String username;
+
     @NonNull
     private String emailAddress;
+
     @NonNull
     private String password;
 
-    //Change to OneToMany
-    //@JoinColumn, ??@OneToMany??,
-    @OneToOne
-    @JsonIgnore
-    @Getter
-    @Setter
-    private Recipe recipe;
 }

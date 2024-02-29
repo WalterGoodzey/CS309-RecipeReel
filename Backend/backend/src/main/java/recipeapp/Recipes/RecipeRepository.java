@@ -13,5 +13,4 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     void deleteById(int id);
 
-    Recipe findByUser_Id(int id);
 }

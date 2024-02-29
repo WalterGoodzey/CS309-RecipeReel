@@ -31,23 +31,16 @@ public class Recipe {
     private String title;
 
     @NonNull
+    private String description;
+
+    @NonNull
+    private String ingredients;
+
+    @NonNull
     private String instructions;
 
     private String tags;
 
-    // private double rating;
+    private Boolean saved;
 
-    /*
-     * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
-     * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
-     */
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    @JsonIgnore
-    @Getter
-    @Setter
-    private Users user;
-
-    @NonNull
-    private String username = user.getUsername();
 }
