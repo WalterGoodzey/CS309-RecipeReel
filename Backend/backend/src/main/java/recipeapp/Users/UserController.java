@@ -19,30 +19,34 @@ import recipeapp.Recipes.RecipeRepository;
  * 
  * @author David Borucki
  * 
- */ 
+ */
 
 @RestController
 public class UserController {
+
+   /*
+    * In order of POST / GET / PUT / DELETE
+    */
 
     @Autowired
     UserRepository userRepository;
     @Autowired
     RecipeRepository recipeRepository;
 
+    /*
+     * Success and Failure return Strings
+     */
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/users")
-    List<Users> getAllUsers(){
-        return userRepository.findAll();
-    }
-
-    @GetMapping(path = "/users/{id}")
-    Users getUserById(@PathVariable int id){
-        return userRepository.findById(id);
-    }
-
-    //ONLY USE THIS IF NO OTHER DATAS ARE IN DB. JUST FOR BACKEND TESTING
+    /*
+     * POST - creates dummy users
+     * params : none
+     * return: String (success/failure)
+     *
+     * you can use this if you need some users to test certain functionalities
+     * kinda OP if database is nuked, and we need quick users
+     */
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
         Users users1 = new Users("daveb", "dave@iastate.edu", "password1");
@@ -56,6 +60,7 @@ public class UserController {
 
         return success;
     }
+
     /*
      * POST - create new user
      * params: new user (nuser)
@@ -82,6 +87,7 @@ public class UserController {
         }
         return null;
     }
+
     /*
      * POST - login user
      * params: user that Frontend sends
@@ -98,30 +104,61 @@ public class UserController {
         }
         return null;
     }
-
-    @DeleteMapping(path = "/users")
-    String deleteUser(@RequestBody Users users) {
-        if (users == null)
-            return failure;
-        userRepository.delete(users);
-        return success;
+    /*
+     * GET - get all users
+     * params: none
+     * return: List of Users type
+     */
+    @GetMapping(path = "/users")
+    List<Users> getAllUsers(){
+        return userRepository.findAll();
     }
 
-    @PutMapping("/users/{id}")
-    Users updateUser(@PathVariable int id, @RequestBody Users request){
-        Users users = userRepository.findById(id);
-
-        if(users == null) {
-            throw new RuntimeException("user id does not exist");
-        }
-        else if (users.getId() != id){
-            throw new RuntimeException("path variable id does not match User request id");
-        }
-
-        userRepository.save(request);
+    /*
+     * GET - get certain user by id
+     * params: int of users id
+     * return: User
+     */
+    @GetMapping(path = "/users/{id}")
+    Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
     }
 
+    /*
+     * PUT - update user by id
+     * params: int of users id, User object that has updated info
+     * return: String(success/failure)
+     */
+    @PutMapping("/users/{id}")
+    String updateUser(@PathVariable int id, Users updatedUser){
+        Users user = userRepository.findById(id);
+
+        if(user == null) {
+            throw new RuntimeException("user id does not exist");
+        }
+        else if (user.getId() != id){
+            throw new RuntimeException("path variable id does not match User request id");
+        }
+
+        if (!updatedUser.getUsername().equals(user.getUsername())) {
+            user.setUsername(updatedUser.getUsername());
+        }
+        if (!updatedUser.getEmailAddress().equals(user.getEmailAddress())) {
+            user.setEmailAddress(updatedUser.getEmailAddress());
+        }
+        if (!updatedUser.getPassword().equals(user.getPassword())) {
+            user.setPassword(updatedUser.getPassword());
+        }
+        userRepository.save(user);
+        return success;
+    }
+    /*
+     * PUT - assign recipe to a user
+     * params: int of users id, int of recipes id
+     * return: String (success/failure)
+     *
+     * connects a recipe to a user, so that the user can list the recipes
+     */
     @PutMapping("/users/{userId}/recipes/{recipeId}")
     String assignRecipeToUser(@PathVariable int userId,@PathVariable int recipeId){
         Users users = userRepository.findById(userId);
@@ -134,9 +171,27 @@ public class UserController {
         return success;
     }
 
+    /*
+     * DELETE - deletes a user by id
+     * params: int of users id
+     * return: String (success/failure)
+     */
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         userRepository.deleteById(id);
+        return success;
+    }
+
+    /*
+     * DELETE - deletes a user using Users object
+     * params: User object
+     * return: String (success/failure)
+     */
+    @DeleteMapping(path = "/users")
+    String deleteUser(@RequestBody Users users) {
+        if (users == null)
+            return failure;
+        userRepository.delete(users);
         return success;
     }
 }
