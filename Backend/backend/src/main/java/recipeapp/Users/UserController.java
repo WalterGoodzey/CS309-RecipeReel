@@ -122,21 +122,10 @@ public class UserController {
         return userRepository.findById(id);
     }
 
-    @PutMapping("/users/{userId}/recipes/{recipeId}")
-    String assignRecipeToUser(@PathVariable int userId,@PathVariable int recipeId){
-        Users users = userRepository.findById(userId);
-        Recipe recipe = recipeRepository.findById(recipeId);
-        if(users == null || recipe == null)
-            return failure;
-        recipe.setUsers(users);
-        users.setRecipe(recipe);
-        userRepository.save(users);
-        return success;
-    }
-
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
-        userRepository.deleteById(id);
+        Users u = userRepository.findById(id);
+        userRepository.delete(u);
         return success;
     }
 }
