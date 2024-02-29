@@ -9,14 +9,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class TrendingActivity extends AppCompatActivity {
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trending);
 
+        //get username from previous activity
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            username = extras.getString("USERNAME");
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_saved);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_trending);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -25,16 +32,24 @@ public class TrendingActivity extends AppCompatActivity {
                 //current activity, do nothing
                 return true;
             } else if (id == R.id.bottom_following) {
-                startActivity(new Intent(getApplicationContext(), FollowingActivity.class));
+                Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
-                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
-                startActivity(new Intent(getApplicationContext(), SavedActivity.class));
+                Intent intent = new Intent(getApplicationContext(), SavedActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             }
             return false;

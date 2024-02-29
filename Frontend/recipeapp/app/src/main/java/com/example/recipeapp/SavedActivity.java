@@ -29,6 +29,8 @@ public class SavedActivity extends AppCompatActivity {
     private ListAdapter adapter;
     private ListView listView;
 
+    private String username;
+
     private static final String URL_JSON_ARRAY = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/recipes";
 
 
@@ -37,7 +39,11 @@ public class SavedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
 
-
+        //get username from previous activity
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            username = extras.getString("USERNAME");
+        }
 
         //bottom navigation setup and operation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -46,21 +52,27 @@ public class SavedActivity extends AppCompatActivity {
 
             int id = item.getItemId();
             if (id == R.id.bottom_trending) {
-                startActivity(new Intent(getApplicationContext(), TrendingActivity.class));
-//                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_left);
-//                finish();
+                Intent intent = new Intent(getApplicationContext(), TrendingActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_following) {
-                startActivity(new Intent(getApplicationContext(), FollowingActivity.class));
+                Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
-                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
                 //current activity, do nothing
                 return true;
             } else if (id == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                intent.putExtra("USERNAME", username);
+                startActivity(intent);
                 return true;
             }
             return false;
