@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">AndroidExample</string>
-    <string name="welcome">Welcome to COM S 309!</string>
-    <string name="tilted">This text is tilted</string>
-    <string name="red">This text is red</string>
-</resources>
