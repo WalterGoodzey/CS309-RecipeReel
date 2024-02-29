@@ -79,7 +79,13 @@
         tools:layout_editor_absoluteX="259dp"
         tools:layout_editor_absoluteY="647dp" />
 
-<!--    <Button-->
+    <TextView
+        android:id="@+id/server_response"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <!--    <Button-->
 <!--        android:id="@+id/button_image_upload"-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
