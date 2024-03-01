@@ -33,7 +33,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
     private TextView server_response;
     private static final String URL_JSON_OBJ =
-            "http://coms-309-018.class.las.iastate.edu:8080/";
+            "http://coms-309-018.class.las.iastate.edu:8080/recipe";
 //            "https://jsonplaceholder.typicode.com/users/1";
 
     @Override
