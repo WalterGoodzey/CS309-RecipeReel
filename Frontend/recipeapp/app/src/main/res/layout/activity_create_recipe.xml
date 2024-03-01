@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Recipe Title" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Description" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Ingredients" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_steps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Steps" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        tools:layout_editor_absoluteX="53dp"
+        tools:layout_editor_absoluteY="34dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/input_tags"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Tags" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        tools:layout_editor_absoluteX="259dp"
+        tools:layout_editor_absoluteY="647dp" />
+
+    <TextView
+        android:id="@+id/server_response"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <!--    <Button-->
+<!--        android:id="@+id/button_image_upload"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Upload Image"-->
+<!--        tools:layout_editor_absoluteX="53dp"-->
+<!--        tools:layout_editor_absoluteY="649dp" />-->
+</androidx.appcompat.widget.LinearLayoutCompat>
