@@ -59,7 +59,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
 //            ;
 //        });
 
-
         button_post.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 postRecipe();
