@@ -153,18 +153,14 @@ public class UserController {
      * params: int of users id, User object that has updated info
      * return: String(success/failure)
      */
-    @PutMapping("/users/{id}")
-    String updateUser(@PathVariable int id, Users updatedUser){
-        Users user = userRepository.findById(id);
-        LoginUsers userOne = loginRepository.findById(id);
+    @PutMapping("/users/")
+    String updateUser( Users updatedUser){
+        Users user = userRepository.findById(updatedUser.getId());
+        LoginUsers userOne = loginRepository.findById(updatedUser.getId());
 
         if(user == null) {
             throw new RuntimeException("user id does not exist");
         }
-        else if (user.getId() != id){
-            throw new RuntimeException("path variable id does not match User request id");
-        }
-
         if (!updatedUser.getUsername().equals(user.getUsername())) {
             user.setUsername(updatedUser.getUsername());
             userOne.setUsername(updatedUser.getUsername());
