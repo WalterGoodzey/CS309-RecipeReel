@@ -52,13 +52,17 @@ public class UserController {
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
         Users users1 = new Users("daveb", "dave@iastate.edu", "password1");
-        Users usersOne = new Users("daveb", "password1");
+        LoginUsers usersOne = new LoginUsers("daveb", "password1");
+
         Users users2 = new Users("ryanm","ryan@iastate.edu", "password2");
-        Users usersTwo = new Users("ryanm", "password2");
+        LoginUsers usersTwo = new LoginUsers("ryanm", "password2");
+
         Users users3 = new Users("willc", "will@iastate.edu", "password3");
-        Users usersThree = new Users("willc", "password3");
+        LoginUsers usersThree = new LoginUsers("willc", "password3");
+
         Users users4 = new Users("walterg", "walter@iastate.edu", "password4");
-        Users usersFour = new Users("walterg", "password4");
+        LoginUsers usersFour = new LoginUsers("walterg", "password4");
+
         userRepository.save(users1);
         loginRepository.save(usersOne);
         userRepository.save(users2);
@@ -92,7 +96,7 @@ public class UserController {
             }
         }
         if (!exists) {
-            Users nuser1 = new Users(nuser.getUsername(),nuser.getPassword());
+            LoginUsers nuser1 = new LoginUsers(nuser.getUsername(),nuser.getPassword());
             userRepository.save(nuser);
             loginRepository.save(nuser1);
             return nuser;
@@ -124,6 +128,15 @@ public class UserController {
     @GetMapping(path = "/users")
     List<Users> getAllUsers(){
         return userRepository.findAll();
+    }
+    /*
+     * GET - get all logins
+     * params: none
+     * return: List of LoginUsers type
+     */
+    @GetMapping(path = "/userslogins")
+    List<Users> getAllLogins(){
+        return loginRepository.findAll();
     }
 
     /*
@@ -170,7 +183,7 @@ public class UserController {
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         Users u = userRepository.findById(id);
-        Users u1 = new Users(u.getUsername(),u.getPassword());
+        LoginUsers u1 = new LoginUsers(u.getUsername(),u.getPassword());
         userRepository.delete(u);
         loginRepository.delete(u1);
         return success;

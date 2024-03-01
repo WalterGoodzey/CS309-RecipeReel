@@ -42,5 +42,5 @@ public class Recipe {
     private String tags;
 
     private Boolean saved;
-
+    private double rating = 0.0;
 }
