@@ -17,6 +17,7 @@ import recipeapp.Users.UserRepository;
 /**
  * 
  * @author David Borucki
+ * @author Will Custis
  * 
  */ 
 
@@ -59,16 +60,4 @@ public class RecipeController {
         return recipeRepository.findById(id);
     }
 
-    @DeleteMapping(path = "/recipes/{id}")
-    String deleteRecipe(@PathVariable int id){
-
-        // Check if there is an object depending on user and then remove the dependency
-        Users users = userRepository.findByRecipe_Id(id);
-        users.setRecipe(null);
-        userRepository.save(users);
-
-        // delete the recipe if the changes have not been reflected by the above statement
-        recipeRepository.deleteById(id);
-        return success;
-    }
 }

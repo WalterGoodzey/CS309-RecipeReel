@@ -12,7 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class TrendingActivity extends AppCompatActivity {
 
-    private String username;
+    private int userId;
 
     private Button createRecipe;
 
@@ -27,7 +27,7 @@ public class TrendingActivity extends AppCompatActivity {
         //get username from previous activity
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            username = extras.getString("USERNAME");
+            userId = extras.getInt("id");
         }
 
 
@@ -50,22 +50,22 @@ public class TrendingActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_following) {
                 Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
                 Intent intent = new Intent(getApplicationContext(), SavedActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("USERNAME", username);
+                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }
