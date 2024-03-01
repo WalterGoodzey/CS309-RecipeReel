@@ -76,7 +76,7 @@ public class SignupActivity extends AppCompatActivity {
                     user = new JSONObject();
                     try {
                         user.put("username", username);
-                        user.put("email", email);
+                        user.put("emailAddress", email);
                         user.put("password", password);
                     } catch (JSONException e){
                         e.printStackTrace();
@@ -108,8 +108,8 @@ public class SignupActivity extends AppCompatActivity {
                         else {
                             try {
                                 Intent intent = new Intent(SignupActivity.this, ProfileActivity.class);
-                                intent.putExtra("USERNAME", response.getString("username"));  // key-value to pass to the ProfilActivity
-                                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's username)
+                                intent.putExtra("id", response.getInt("id"));  // key-value to pass to the ProfileActivity
+                                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's id)
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -136,7 +136,7 @@ public class SignupActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 try{
                     params.put("username", user.getString("username"));
-                    params.put("email", user.getString("email"));
+                    params.put("emailAddress", user.getString("emailAddress"));
                     params.put("password", user.getString("password"));
                 } catch (JSONException e) {
                     e.printStackTrace();

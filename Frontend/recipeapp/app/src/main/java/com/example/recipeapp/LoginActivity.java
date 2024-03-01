@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             try {
                                 Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                                intent.putExtra("id", response.getInt("id"));
                                 intent.putExtra("USERNAME", response.getString("username"));  // key-value to pass to the ProfilActivity
                                 startActivity(intent);  // go to ProfileActivity with the key-value data (the user's username)
                             } catch (JSONException e) {
@@ -121,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError or Nonexistent User)", Toast.LENGTH_LONG).show();
                     }
                 }
         ){
@@ -138,7 +139,6 @@ public class LoginActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 try{
                     params.put("username", user.getString("username"));
-//                    params.put("email", null); //TODO - Implement user inputting email on signup
                     params.put("password", user.getString("password"));
                 } catch (JSONException e) {
                     e.printStackTrace();
