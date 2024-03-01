@@ -31,6 +31,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    LoginRepository loginRepository;
+    @Autowired
     RecipeRepository recipeRepository;
 
     /*
@@ -50,13 +52,21 @@ public class UserController {
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
         Users users1 = new Users("daveb", "dave@iastate.edu", "password1");
+        Users usersOne = new Users("daveb", "password1");
         Users users2 = new Users("ryanm","ryan@iastate.edu", "password2");
+        Users usersTwo = new Users("ryanm", "password2");
         Users users3 = new Users("willc", "will@iastate.edu", "password3");
+        Users usersThree = new Users("willc", "password3");
         Users users4 = new Users("walterg", "walter@iastate.edu", "password4");
+        Users usersFour = new Users("walterg", "password4");
         userRepository.save(users1);
+        loginRepository.save(usersOne);
         userRepository.save(users2);
+        loginRepository.save(usersTwo);
         userRepository.save(users3);
+        loginRepository.save(usersThree);
         userRepository.save(users4);
+        loginRepository.save(usersFour);
 
         return success;
     }
@@ -82,7 +92,9 @@ public class UserController {
             }
         }
         if (!exists) {
+            Users nuser1 = new Users(nuser.getUsername(),nuser.getPassword());
             userRepository.save(nuser);
+            loginRepository.save(nuser1);
             return nuser;
         }
         return null;
@@ -123,12 +135,44 @@ public class UserController {
     Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
     }
+    /*
+     * PUT - update user by id
+     * params: int of users id, User object that has updated info
+     * return: String(success/failure)
+     */
+    @PutMapping("/users/{id}")
+    String updateUser(@PathVariable int id, Users updatedUser){
+        Users user = userRepository.findById(id);
+        Users userOne = loginRepository.findById(id);
 
+        if(user == null) {
+            throw new RuntimeException("user id does not exist");
+        }
+        else if (user.getId() != id){
+            throw new RuntimeException("path variable id does not match User request id");
+        }
 
+        if (!updatedUser.getUsername().equals(user.getUsername())) {
+            user.setUsername(updatedUser.getUsername());
+            userOne.setUsername(updatedUser.getUsername());
+        }
+        if (!updatedUser.getEmailAddress().equals(user.getEmailAddress())) {
+            user.setEmailAddress(updatedUser.getEmailAddress());
+        }
+        if (!updatedUser.getPassword().equals(user.getPassword())) {
+            user.setPassword(updatedUser.getPassword());
+            userOne.setPassword(updatedUser.getPassword());
+        }
+        userRepository.save(user);
+        loginRepository.save(userOne);
+        return success;
+    }
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         Users u = userRepository.findById(id);
+        Users u1 = new Users(u.getUsername(),u.getPassword());
         userRepository.delete(u);
+        loginRepository.delete(u1);
         return success;
     }
 

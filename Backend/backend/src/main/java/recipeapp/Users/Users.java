@@ -14,7 +14,7 @@ import java.util.List;
  * 
  */ 
 
-@Entity @RequiredArgsConstructor @NoArgsConstructor
+@Entity @NoArgsConstructor
 @Getter @Setter
 public class Users {
 
@@ -34,5 +34,16 @@ public class Users {
 
     @NonNull
     private String password;
+
+    public Users(@NonNull String username, @NonNull String emailAddress, @NonNull String password) {
+        this.username = username;
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
+
+    public Users(@NonNull String username, @NonNull String password) {
+        this.username = username;
+        this.password = password;
+    }
 
 }
