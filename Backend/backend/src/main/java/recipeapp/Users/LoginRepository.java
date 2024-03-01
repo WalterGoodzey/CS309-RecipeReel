@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author David Borucki
  *
  */
-public interface LoginRepository extends JpaRepository<Users, Long> {
-    Users findById(int id);
-    Users findByUsername(String username);
+public interface LoginRepository extends JpaRepository<LoginUsers, Long> {
+    LoginUsers findById(int id);
+    LoginUsers findByUsername(String username);
 
     void deleteById(int id);
 }

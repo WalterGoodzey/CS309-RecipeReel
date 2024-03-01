@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity @RequiredArgsConstructor @NoArgsConstructor
 @Getter @Setter
-public class LoginUsers extends Users {
+public class LoginUsers{
 
     /*
      * The annotation @ID marks the field below as the primary key for the table created by springboot

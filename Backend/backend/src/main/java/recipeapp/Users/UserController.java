@@ -135,7 +135,7 @@ public class UserController {
      * return: List of LoginUsers type
      */
     @GetMapping(path = "/userslogins")
-    List<Users> getAllLogins(){
+    List<LoginUsers> getAllLogins(){
         return loginRepository.findAll();
     }
 
@@ -156,7 +156,7 @@ public class UserController {
     @PutMapping("/users/{id}")
     String updateUser(@PathVariable int id, Users updatedUser){
         Users user = userRepository.findById(id);
-        Users userOne = loginRepository.findById(id);
+        LoginUsers userOne = loginRepository.findById(id);
 
         if(user == null) {
             throw new RuntimeException("user id does not exist");
