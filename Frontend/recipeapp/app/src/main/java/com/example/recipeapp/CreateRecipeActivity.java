@@ -14,10 +14,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+/**
+    @author Walter Goodzey
+ */
 
 public class CreateRecipeActivity extends AppCompatActivity {
 
@@ -29,8 +33,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
     private TextView server_response;
     private static final String URL_JSON_OBJ =
-//            "http://coms-309-018.class.las.iastate.edu:8080/";
-            "https://jsonplaceholder.typicode.com/users/1";
+            "http://coms-309-018.class.las.iastate.edu:8080/";
+//            "https://jsonplaceholder.typicode.com/users/1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,16 @@ public class CreateRecipeActivity extends AppCompatActivity {
     }
 
     private void postRecipe() {
-        JSONObject postBody = null;
+        JSONObject postBody = new JSONObject();
+        try {
+            postBody.put("title", input_title.getText().toString());
+            postBody.put("description", input_description.getText().toString());
+            postBody.put("ingredients", input_ingredients.getText().toString());
+            postBody.put("instructions", input_instructions.getText().toString());
+            postBody.put("tags", input_tags.getText().toString());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
@@ -85,8 +98,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         ) {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                //                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-                //                headers.put("Content-Type", "application/json");
                 return headers;
             }
 
