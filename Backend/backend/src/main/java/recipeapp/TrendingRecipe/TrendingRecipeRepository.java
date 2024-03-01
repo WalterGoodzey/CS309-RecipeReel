@@ -13,5 +13,4 @@ public interface TrendingRecipeRepository extends JpaRepository<TrendingRecipe, 
 
     void deleteById(int id);
 
-    TrendingRecipe findByRecipe_Id(int id);
 }
