@@ -25,6 +25,8 @@ import java.util.Map;
 
 public class CreateRecipeActivity extends AppCompatActivity {
 
+    private int userId;
+
     private Button button_post;
 //    private Button button_image_upload;
 
@@ -40,6 +42,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            userId = extras.getInt("id");
+        }
 
         button_post = findViewById(R.id.button_post);
 //        button_image_upload = findViewById(R.id.button_image_upload);
