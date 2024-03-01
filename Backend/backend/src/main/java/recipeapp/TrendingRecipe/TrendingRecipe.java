@@ -13,15 +13,12 @@ public class TrendingRecipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Who added the recipe to the trending page
-    // Temporary until trending page is generated automatically
-    @NonNull
-    private String addedBy;
 
     // Foreign key to a recipe in the recipes table, any data about the recipe
-    // in the trending tab will be aquired using this ID.
+    // in the trending tab will be acquired using this ID.
     @OneToOne
     @Getter
+    @Setter
     @JsonIgnore
     private Recipe recipe;
 
