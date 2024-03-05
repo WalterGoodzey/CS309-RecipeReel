@@ -1,23 +1,25 @@
 package com.example.recipeapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
     private int userId;
     private String URL_GET_USER_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
     private String URL_GET_USER;
+
+//     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,15 @@ public class ProfileActivity extends AppCompatActivity {
             logoutButton.setVisibility(View.INVISIBLE);
             editButton.setVisibility(View.INVISIBLE);
         }
+
+        /* options toolbar at top */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("My Profile");
+        }
+//        toolbar.setSubtitle("Test Subtitle");
+        toolbar.inflateMenu(R.menu.profile_menu);
 
         /* click listener on logout button pressed */
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +147,44 @@ public class ProfileActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    /* profile header bar */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.profile_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection.
+
+        int itemId = item.getItemId();
+        if(itemId == R.id.profile_options_create){
+            //go to create recipe activity
+            Intent intent = new Intent(getApplicationContext(), CreateRecipeActivity.class);
+            intent.putExtra("id", userId);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.profile_options_logout){
+            /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
+            Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.profile_options_edit){
+            /* when edit profile button is pressed, use intent to switch to Edit Profile Activity without sending any extras (logging user out) */
+            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+            intent.putExtra("id", userId);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.profile_options_delete) {
+            //TODO
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void getUserInfoReq() {
