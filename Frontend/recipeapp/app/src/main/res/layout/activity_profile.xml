@@ -45,29 +45,29 @@
         android:translationY="110dp"
         />
 
-    <Button
-        android:id="@+id/profile_logout_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        android:translationX="-15dp"
-        android:translationY="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/profile_logout_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Logout"-->
+<!--        android:textColor="#ffffff"-->
+<!--        android:textSize="20dp"-->
+<!--        android:translationX="-15dp"-->
+<!--        android:translationY="15dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <Button
-        android:id="@+id/profile_edit_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        android:translationX="-15dp"
-        android:translationY="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_logout_btn" />
+<!--    <Button-->
+<!--        android:id="@+id/profile_edit_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Edit"-->
+<!--        android:textColor="#ffffff"-->
+<!--        android:textSize="20dp"-->
+<!--        android:translationX="-15dp"-->
+<!--        android:translationY="15dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_logout_btn" />-->
 
 
     <TextView

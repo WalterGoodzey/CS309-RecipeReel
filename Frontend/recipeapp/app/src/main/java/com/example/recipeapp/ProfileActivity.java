@@ -33,12 +33,12 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView guestText;
     private TextView usernameText;
     private TextView descriptionText;
-    private Button logoutButton;
+//    private Button logoutButton;
     private Button entryButton;
-    private Button editButton;
+//    private Button editButton;
     private int userId;
-    private String URL_GET_USER_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
-    private String URL_GET_USER;
+    private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
+    private String URL_THIS_USER;
 
 //     private Toolbar toolbar;
 
@@ -51,9 +51,9 @@ public class ProfileActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.profile_username_txt);
         guestText = findViewById(R.id.profile_guest_txt);
         descriptionText = findViewById(R.id.profile_description_txt);
-        logoutButton = findViewById(R.id.profile_logout_btn);
+//        logoutButton = findViewById(R.id.profile_logout_btn);
         entryButton = findViewById(R.id.profile_entry_btn);
-        editButton = findViewById(R.id.profile_edit_btn);
+//        editButton = findViewById(R.id.profile_edit_btn);
 
         Intent createIntent = getIntent();
         /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
@@ -61,36 +61,38 @@ public class ProfileActivity extends AppCompatActivity {
 
             /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
             userId = createIntent.getIntExtra("id", -1);
-            URL_GET_USER = URL_GET_USER_BASE + "/" + userId;
+            URL_THIS_USER = URL_USERS + "/" + userId;
             getUserInfoReq();
 
             guestText.setVisibility(View.INVISIBLE);
             entryButton.setVisibility(View.INVISIBLE);
-        } else {
-            usernameText.setText("No user signed in");
-            guestText.setText("You're not signed in!");
-            logoutButton.setVisibility(View.INVISIBLE);
-            editButton.setVisibility(View.INVISIBLE);
-        }
 
-        /* options toolbar at top */
-        Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("My Profile");
-        }
-//        toolbar.setSubtitle("Test Subtitle");
-        toolbar.inflateMenu(R.menu.profile_menu);
-
-        /* click listener on logout button pressed */
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
-                Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-                startActivity(intent);
+            /* options toolbar at top */
+            Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("My Profile");
             }
-        });
+            toolbar.inflateMenu(R.menu.profile_menu);
+        } else {
+            usernameText.setVisibility(View.INVISIBLE);
+            descriptionText.setVisibility(View.INVISIBLE);
+            guestText.setText("You're not signed in!");
+//            logoutButton.setVisibility(View.INVISIBLE);
+//            editButton.setVisibility(View.INVISIBLE);
+        }
+
+
+
+//        /* click listener on logout button pressed */
+//        logoutButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
+//                Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         /* click listener on entry button pressed */
         entryButton.setOnClickListener(new View.OnClickListener() {
@@ -102,16 +104,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        /* click listener on edit button pressed */
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when edit button is pressed, use intent to switch to Edit Profile Activity, sending id as an extra */
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                intent.putExtra("id", userId);
-                startActivity(intent);
-            }
-        });
+//        /* click listener on edit button pressed */
+//        editButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                /* when edit button is pressed, use intent to switch to Edit Profile Activity, sending id as an extra */
+//                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+//                intent.putExtra("id", userId);
+//                startActivity(intent);
+//            }
+//        });
 
 
         //bottom navigation bar setup and functionality
@@ -181,6 +183,7 @@ public class ProfileActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.profile_options_delete) {
             //TODO
+            deleteUserReq();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -189,7 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getUserInfoReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
-                URL_GET_USER,
+                URL_THIS_USER,
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -207,6 +210,50 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                         usernameText.setText(usernameResponse);
                         descriptionText.setText(emailResponse);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("username", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+
+//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+    }
+
+    private void deleteUserReq() {
+        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.DELETE,
+                URL_THIS_USER,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Volley Received Response, deleting account", Toast.LENGTH_LONG).show();
+
+                        /* when account is deleted, use intent to switch to Entry Activity without sending any extras (logging user out) */
+                        Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
+                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {
