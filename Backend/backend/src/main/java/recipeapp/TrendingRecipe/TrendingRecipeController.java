@@ -61,6 +61,18 @@ public class TrendingRecipeController {
         return success;
     }
 
+    @PutMapping(path = "/trending/{id}")
+    Recipe updateTrendingRecipe(@PathVariable int id, @RequestBody Recipe request){
+        TrendingRecipe trendingRecipe = trendingRecipeRepository.findById(id);
+        Recipe recipe = trendingRecipe.getRecipe();
+        if(recipe == null){
+            return null;
+        }
+        trendingRecipe.setRecipe(request);
+        trendingRecipeRepository.save(trendingRecipe);
+        return  trendingRecipe.getRecipe();
+    }
+
     @DeleteMapping(path = "/trending/{id}")
     String deleteTrendingRecipe(@PathVariable int id){
         trendingRecipeRepository.deleteById(id);

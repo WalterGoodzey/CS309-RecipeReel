@@ -60,4 +60,14 @@ public class RecipeController {
         return recipeRepository.findById(id);
     }
 
+    @DeleteMapping(path = "/recipes/{id}")
+    String deleteRecipe(@PathVariable int id){
+        Recipe recipe = recipeRepository.findById(id);
+        if(recipe == null){
+            return failure;
+        }
+        recipeRepository.delete(recipe);
+        return success;
+    }
+
 }
