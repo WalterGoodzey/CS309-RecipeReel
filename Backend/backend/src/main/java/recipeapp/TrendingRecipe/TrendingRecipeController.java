@@ -63,20 +63,22 @@ public class TrendingRecipeController {
     }
 
     @PutMapping(path = "/trending/{id}")
-    Recipe updateTrendingRecipe(@PathVariable int id, @RequestBody Recipe request){
+    Recipe updateTrendingRecipe(@PathVariable int id, @RequestBody String tempId){
         TrendingRecipe trendingRecipe = trendingRecipeRepository.findById(id);
-        Recipe recipe = trendingRecipe.getRecipe();
-        if(recipe == null){
-            return null;
+        if(trendingRecipe == null){
+            throw new RuntimeException("Trending Recipe ID not found");
         }
-        trendingRecipe.setRecipe(request);
+        int recipeId = Integer.parseInt(tempId);
+        Recipe recipe = recipeRepository.findById(recipeId);
+        trendingRecipe.setRecipe(recipe);
         trendingRecipeRepository.save(trendingRecipe);
         return  trendingRecipe.getRecipe();
     }
 
     @DeleteMapping(path = "/trending/{id}")
     String deleteTrendingRecipe(@PathVariable int id){
-        trendingRecipeRepository.deleteById(id);
+        TrendingRecipe trending = trendingRecipeRepository.findById(id);
+        trendingRecipeRepository.delete(trending);
         return success;
     }
 
