@@ -50,7 +50,8 @@ public class TrendingRecipeController {
 
     //Adds a recipe to a new trending recipe object where the body is the recipe id
     @PostMapping(path = "/trending")
-    String addRecipeByRecipeId(@RequestBody int id){
+    String addRecipeByRecipeId(@RequestBody String stringId){
+        int id = Integer.parseInt(stringId);
         Recipe recipe = recipeRepository.findById(id);
         if(recipe == null){
             return failure;
