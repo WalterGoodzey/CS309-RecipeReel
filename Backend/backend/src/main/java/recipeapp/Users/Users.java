@@ -15,7 +15,7 @@ import java.util.List;
  */ 
 
 @Entity @RequiredArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@Getter @Setter @ToString
 public class Users {
 
     /*
