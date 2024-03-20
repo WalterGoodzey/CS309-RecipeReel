@@ -1,13 +1,13 @@
 package com.example.recipeapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -31,8 +31,8 @@ public class SavedActivity extends AppCompatActivity {
 
     private int userId;
 
-    private static final String URL_JSON_ARRAY = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/recipes";
-
+    private static final String URL_SERVER = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/";
+    private static String URL_SAVED_ARRAY = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +86,7 @@ public class SavedActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         //make JSON array request on opening
+        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
         makeRecipeListReq();
 
         //Added to go to activity_view_recipe when an item in listview is clicked
@@ -106,7 +107,7 @@ public class SavedActivity extends AppCompatActivity {
     private void makeRecipeListReq() {
         JsonArrayRequest recipeListReq = new JsonArrayRequest(
                 Request.Method.GET,
-                URL_JSON_ARRAY,
+                URL_SAVED_ARRAY,
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONArray>() {
                     @Override
