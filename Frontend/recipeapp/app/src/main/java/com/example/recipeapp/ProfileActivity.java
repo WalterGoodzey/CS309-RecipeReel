@@ -182,7 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (itemId == R.id.profile_options_delete) {
-            //TODO
+            //TODO - add password protection
             deleteUserReq();
             return true;
         } else {
