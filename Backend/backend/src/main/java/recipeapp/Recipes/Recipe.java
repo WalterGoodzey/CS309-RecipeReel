@@ -7,11 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import recipeapp.Users.Users;
 
-/**
- * 
- * @author Vivek Bengre
- */ 
-
 @Entity
 @Getter
 @Setter
@@ -42,5 +37,6 @@ public class Recipe {
     private String tags;
 
     private Boolean saved;
+
     private double rating = 0.0;
 }
