@@ -5,27 +5,25 @@ package com.example.recipeapp;
  */
 public class MessageItemObject {
     private String message;
-    private String sender;
-    private String recipient;
+    private String otherUser;
+    private String date;
     private String timestamp;
     private int senderId;
 
 
-    public MessageItemObject(String message, String sender, String recipient, String timestamp, int senderId) {
+    public MessageItemObject(String message, String otherUser, String date, String timestamp, int senderId) {
         this.message = message;
-        this.sender = sender;
-        this.recipient = recipient;
+        this.otherUser = otherUser;
+        this.date = date;
         this.timestamp = timestamp;
         this.senderId = senderId;
     }
 
     public String getMessage() { return message; }
 
-    public String getSender() { return sender; }
+    public String getOtherUser() { return otherUser; }
 
-    public String getRecipient() {
-        return recipient;
-    }
+    public String getDate() { return date; }
 
     public String getTimestamp() { return timestamp; }
 

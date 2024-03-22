@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.activities;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.recipeapp.R;
 
 /**
  * @author Ryan McFadden

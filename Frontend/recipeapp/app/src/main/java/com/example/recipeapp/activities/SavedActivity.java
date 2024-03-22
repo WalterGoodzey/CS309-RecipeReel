@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.example.recipeapp.ListAdapter;
+import com.example.recipeapp.ListItemObject;
+import com.example.recipeapp.R;
+import com.example.recipeapp.VolleySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;

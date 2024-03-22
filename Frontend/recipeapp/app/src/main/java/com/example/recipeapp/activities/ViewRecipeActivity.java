@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.example.recipeapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
