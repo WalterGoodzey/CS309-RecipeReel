@@ -39,7 +39,11 @@
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
-        android:layout_height="618dp"
+        android:layout_height="0dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
         app:layout_constraintBottom_toTopOf="@+id/layout_chat_chatbox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_chat">
