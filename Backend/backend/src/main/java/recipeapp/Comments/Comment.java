@@ -10,7 +10,6 @@ import lombok.*;
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
 
@@ -22,7 +21,16 @@ public class Comment {
     private String username;
 
     @NonNull
+    private int recipeId;
+
+    @NonNull
     private String content;
 
     private int likes = 0;
+
+    public Comment(String username, int recipeId, String content){
+        this.username = username;
+        this.recipeId = recipeId;
+        this.content = content;
+    }
 }
