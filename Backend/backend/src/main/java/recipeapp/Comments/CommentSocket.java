@@ -13,6 +13,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import recipeapp.Recipes.*;
+
 /**
  * @author Will Custis
  */
@@ -20,12 +22,20 @@ import java.util.Map;
 @ServerEndpoint(value = "/recipes/{recipeId}/{username}")
 public class CommentSocket {
 
+    //Set up comment repository
     private static CommentRepository commentRepo;
-
     @Autowired
     public void setCommentRepo(CommentRepository repo){
         commentRepo = repo;
     }
+
+    //Set up recipe repository
+    private static RecipeRepository recipeRepo;
+    @Autowired
+    public void setRecipeRepository (RecipeRepository repo){
+        recipeRepo = repo;
+    }
+
 
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
@@ -40,8 +50,14 @@ public class CommentSocket {
         sessionUsernameMap.put(session, username);
         usernameSessionMap.put(username, session);
 
+        Recipe recipe = recipeRepo.findById(recipeId);
+
         try {
+            //Output a String of the recipe
+            usernameSessionMap.get(username).getBasicRemote().sendText(recipeToString(recipe));
+            //Output all the comments under that recipe
             usernameSessionMap.get(username).getBasicRemote().sendText(getComments(recipeId));
+
         } catch(IOException e) {
             logger.info("Exception: " + e.getMessage());
             e.printStackTrace();
@@ -102,6 +118,19 @@ public class CommentSocket {
                 e.printStackTrace();
             }
         });
+    }
+
+    private String recipeToString(Recipe recipe){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Title: ").append(recipe.getTitle());
+        sb.append("\nDescription: ").append(recipe.getDescription());
+        sb.append("\nIngredients: ").append(recipe.getIngredients());
+        sb.append("\nInstructions: ").append(recipe.getInstructions());
+        if(recipe.getTags() != null){
+            sb.append("\nTags: ").append(recipe.getTags());
+        }
+        sb.append("\nRating: ").append(recipe.getRating());
+        return sb.toString();
     }
 
 }
