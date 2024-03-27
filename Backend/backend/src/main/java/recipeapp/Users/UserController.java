@@ -120,6 +120,12 @@ public class UserController {
         }
         return null;
     }
+    @PostMapping(path="/users/{id}/savedrecipes")
+    String addSavedRecipe(@PathVariable int id, @RequestBody Recipe r) {
+        Users u = userRepository.findById(id);
+        u.addSavedRecipe(r);
+        return success;
+    }
     /*
      * GET - get all users
      * params: none
@@ -128,6 +134,12 @@ public class UserController {
     @GetMapping(path = "/users")
     List<Users> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    @GetMapping(path ="/users/{id}/savedrecipes")
+    List<Recipe> getSavedRecipes(@PathVariable int id) {
+        Users u = userRepository.findById(id);
+        return u.getSavedRecipes();
     }
     /*
      * GET - get all logins

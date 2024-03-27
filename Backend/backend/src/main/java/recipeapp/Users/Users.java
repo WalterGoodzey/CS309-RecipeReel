@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import recipeapp.Recipes.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,18 @@ public class Users {
 
     @NonNull
     private String password;
+    @OneToMany
+    private List<Recipe> savedRecipes = new ArrayList<>();
+
+    public List<Recipe> getSavedRecipes() {
+        return savedRecipes;
+    }
+    public void addSavedRecipe(Recipe r) {
+        this.savedRecipes.add(r);
+    }
+    public void deleteSavedRecipe(Recipe r) {
+        this.savedRecipes.remove(r);
+    }
 
 
 }
