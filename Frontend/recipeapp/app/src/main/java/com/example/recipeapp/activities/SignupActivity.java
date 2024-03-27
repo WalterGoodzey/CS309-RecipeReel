@@ -1,13 +1,13 @@
 package com.example.recipeapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,20 +23,36 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 /**
+ * Activity for client to create an account
+ *
  * @author Ryan McFadden
  */
 public class SignupActivity extends AppCompatActivity {
+    /** EditText for client to set their username */
+    private EditText usernameEditText;
+    /** EditText for client to set their email address */
+    private EditText emailEditText;
+    /** EditText for client to set their password */
+    private EditText passwordEditText;
+    /** EditText for client to confirm their password */
+    private EditText confirmEditText;
+    /** Button to bring client back to EntryActivity */
+    private Button entryButton;
+    /** Button to make Volley request to attempt to create account */
+    private Button signupButton;
+    /** URL for signup Volley POST request */
+    private static final String URL_SIGNUP = "http://coms-309-018.class.las.iastate.edu:8080/newuser";
+    /** JSONObject to store signup info for POST request */
+    private JSONObject user;
 
-    private EditText usernameEditText;  // define username edittext variable
-    private EditText emailEditText;     // define email edittext variable
-    private EditText passwordEditText;  // define password edittext variable
-    private EditText confirmEditText;   // define confirm edittext variable
-    private Button entryButton;         // define back to entry button variable
-    private Button signupButton;        // define signup button variable
-
-//    private static final String URL_SIGNUP = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/post_test";
-    private static final String URL_SIGNUP = "http://coms-309-018.class.las.iastate.edu:8080/newuser"; //define server URL for signup
-    private JSONObject user;            //define user JSONObject to POST
+    /**
+     * onCreate for SignupActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +108,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Volley POST request to attempt to create a new account with the user information
+     * given by the client
+     */
     private void makeSignupRequest() {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,

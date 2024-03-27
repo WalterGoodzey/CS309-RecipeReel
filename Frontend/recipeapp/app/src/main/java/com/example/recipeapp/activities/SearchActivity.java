@@ -10,11 +10,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.recipeapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Activity for user to search for recipes by name or category
+ */
 public class SearchActivity extends AppCompatActivity {
-
+    /** Local user's userId */
     private int userId;
+    /** Button to bring user to ChatActivity - TEMPORARY (for testing) */
+    private Button chatButton;
 
-    private Button chatButton; //TEMPORARY (for testing)
+    /**
+     * onCreate method for SearchActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

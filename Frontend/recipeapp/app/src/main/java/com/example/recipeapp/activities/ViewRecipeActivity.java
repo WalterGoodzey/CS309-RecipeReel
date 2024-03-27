@@ -1,37 +1,38 @@
 package com.example.recipeapp.activities;
 
 import android.os.Bundle;
-import android.view.View;
-
-//added
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.recipeapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
+/**
+ * Activity to view a single recipe in its entirety
+ *
+ * TODO - Update to display the rest of the recipe's data
+ */
 public class ViewRecipeActivity extends AppCompatActivity {
-
+    /** TextView to display the title of the recipe */
     private TextView titleTxt;
+    /** TextView to display the author of the recipe */
     private TextView authorTxt;
+    /** TextView to display the description of the recipe */
     private TextView descriptionTxt;
-
-
+    /** JSONObject to store the full recipe */
     private JSONObject fullRecipeJSON;
 
+    /**
+     * onCreate for ViewRecipeActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +40,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         titleTxt = findViewById(R.id.titleText);
         authorTxt = findViewById(R.id.authorText);
         descriptionTxt = findViewById(R.id.descriptionText);
-
         try {
             //get full JSON from intent
             fullRecipeJSON = new JSONObject(getIntent().getStringExtra("RecipeJsonAsString"));

@@ -13,8 +13,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.recipeapp.ListAdapter;
-import com.example.recipeapp.ListItemObject;
+import com.example.recipeapp.RecipeAdapter;
+import com.example.recipeapp.RecipeItemObject;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,17 +27,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Activity to list the recipes saved by the local user
+ */
 public class SavedActivity extends AppCompatActivity {
-
-    private ListAdapter adapter;
+    /** RecipeAdapter for the ListView of RecipeItemObjects */
+    private RecipeAdapter adapter;
+    /** ListView to store list of RecipeItemObjects */
     private ListView listView;
-
+    /** Local user's userId */
     private int userId;
-
+    /** Base URL for Volley GET request with Volley server (TODO - Update to our server)*/
     private static final String URL_SERVER = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/";
+    /** Local user's specific URL for Volley GET request with Volley server (TODO - Update to our server)*/
     private static String URL_SAVED_ARRAY = "";
 
+    /**
+     * onCreate method for SavedActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +98,7 @@ public class SavedActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
 
         // Initialize the adapter with an empty list (data will be added later)
-        adapter = new ListAdapter(this, new ArrayList<>());
+        adapter = new RecipeAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
         //make JSON array request on opening
@@ -108,6 +120,9 @@ public class SavedActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Volley GET request to get local user's list of saved recipes
+     */
     private void makeRecipeListReq() {
         JsonArrayRequest recipeListReq = new JsonArrayRequest(
                 Request.Method.GET,
@@ -127,7 +142,7 @@ public class SavedActivity extends AppCompatActivity {
                                 String description = jsonObject.getString("description");
 
                                 // Create a ListItemObject and add it to the adapter
-                                ListItemObject item = new ListItemObject(title, author, description, jsonObject);
+                                RecipeItemObject item = new RecipeItemObject(title, author, description, jsonObject);
                                 adapter.add(item);
 
                             } catch (JSONException e) {
@@ -149,7 +164,6 @@ public class SavedActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -158,7 +172,6 @@ public class SavedActivity extends AppCompatActivity {
                 return params;
             }
         };
-
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
     }

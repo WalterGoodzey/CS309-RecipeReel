@@ -15,11 +15,17 @@ import java.net.URI;
  * the application's lifecycle, allowing for centralized WebSocket handling.
  */
 public class  WebSocketManager {
-
+    /** instance of WebSocket manager (needed because it is a "sudo-Singleton" class) */
     private static WebSocketManager instance;
+    /** webSocketClient to connect to */
     private MyWebSocketClient webSocketClient;
+    /** webSocketListener to listen to messages from websocket */
     private WebSocketListener webSocketListener;
 
+    /**
+     * Constructor for WebSocketManager
+     * private so that multiple instances of it cannot be made (see getInstance)
+     */
     private WebSocketManager() {}
 
     /**
@@ -102,6 +108,10 @@ public class  WebSocketManager {
      */
     private class MyWebSocketClient extends WebSocketClient {
 
+        /**
+         * Constructor for MyWebSocketClient
+         * @param serverUri server's uniform resource identifier (uri)
+         */
         private MyWebSocketClient(URI serverUri) {
             super(serverUri);
         }

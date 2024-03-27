@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author ryanmcfadden
- *
  * Activity for user to edit their profile information
+ *
+ * @author Ryan McFadden
  */
 public class EditProfileActivity extends AppCompatActivity {
     /** TextView to display local user's username */
@@ -77,6 +77,8 @@ public class EditProfileActivity extends AppCompatActivity {
         confirmEditText = findViewById(R.id.editprofile_confirm_edt);       // link to confirm password editor in the EditProfile activity XML
         saveButton = findViewById(R.id.editprofile_save_btn);               // link to save button in the EditProfile activity XML
         exitButton = findViewById(R.id.editprofile_exit_btn);               // link to exit button in the EditProfile activity XML
+
+        //TODO - add password protection to editing account info
 
         Intent createIntent = getIntent();
         /* set userId and add to url for GET request, make GET request (fills in user's profile page) */

@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * another user account. Activity handles the display of messages and the websocket
  * methods to enable the conversation between the two users
  *
- * @author ryanmcfadden
+ * @author Ryan McFadden
  */
 public class ChatActivity extends AppCompatActivity implements WebSocketListener {
     /** MessageAdapter for list of messages */

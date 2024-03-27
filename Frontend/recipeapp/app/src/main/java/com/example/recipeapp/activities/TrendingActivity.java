@@ -1,22 +1,33 @@
 package com.example.recipeapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.recipeapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * Activity to display recipes that have recently become popular
+ * and well rated on the platform
+ */
 public class TrendingActivity extends AppCompatActivity {
-
+    /** Local user's userId */
     private int userId;
-
+    /** Button to bring user to CreateRecipeActivity - TEMPORARY (for testing) */
     private Button createRecipe;
 
-
+    /**
+     * onCreate method for TrendingActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
