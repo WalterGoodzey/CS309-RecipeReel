@@ -1,7 +1,5 @@
 package com.example.recipeapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,24 +24,47 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author ryanmcfadden
+ *
+ * Activity for user to edit their profile information
+ */
 public class EditProfileActivity extends AppCompatActivity {
-
-
-
+    /** TextView to display local user's username */
     private TextView usernameText;
+    /** TextView to display local user's email address */
     private TextView emailText;
+    /** TextView to display local user's password */
     private TextView passwordText;
-    private EditText usernameEditText;  // define username edittext variable
-    private EditText emailEditText;     // define email edittext variable
-    private EditText passwordEditText;  // define password edittext variable
-    private EditText confirmEditText;   // define confirm password edittext variable
+    /** EditText for local user to edit their username */
+    private EditText usernameEditText;
+    /** EditText for local user to edit their email address */
+    private EditText emailEditText;
+    /** EditText for local user to edit their password */
+    private EditText passwordEditText;
+    /** EditText for local user to confirm their new password */
+    private EditText confirmEditText;
+    /** Button for local user to save their changes */
     private Button saveButton;
+    /** Button for local user to exit EditProfileActivity and go to their ProfileActivity */
     private Button exitButton;
+    /** Local user's userId */
     private int userId;
+    /** Base URL for Volley GET and PUT requests */
     private String URL_EDIT_USER_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
+    /** URL for Volley GET and PUT requests for this specific local user */
     private String URL_EDIT_USER;
+    /** JSONObject to store and send local user's profile information */
     private JSONObject user;
 
+    /**
+     * onCreate method for EditProfileActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
 
-        /*  click listener on exit button   */
+        /* click listener on exit button */
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +133,9 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Volley PUT request to PUT user's new profile information to the server
+     */
     private void putUserInfoReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
                 URL_EDIT_USER,
@@ -120,8 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
                         Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
-
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -138,7 +161,6 @@ public class EditProfileActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -152,12 +174,14 @@ public class EditProfileActivity extends AppCompatActivity {
                 return params;
             }
         };
-
 //        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
+    /**
+     * Volley GET request to GET user's profile information from the server
+     */
     private void getUserInfoReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
                 URL_EDIT_USER,
@@ -198,7 +222,6 @@ public class EditProfileActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
@@ -207,7 +230,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 return params;
             }
         };
-
 //        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);

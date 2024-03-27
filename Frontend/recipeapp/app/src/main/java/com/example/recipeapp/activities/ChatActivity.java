@@ -18,16 +18,35 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.util.ArrayList;
 
+/**
+ * Activity used to display a chat interface between local user and
+ * another user account. Activity handles the display of messages and the websocket
+ * methods to enable the conversation between the two users
+ *
+ * @author ryanmcfadden
+ */
 public class ChatActivity extends AppCompatActivity implements WebSocketListener {
-
+    /** MessageAdapter for list of messages */
     private MessageAdapter adapter;
+    /** ListView for storing sent and received messages */
     private ListView messageListView;
+    /** EditText for user to type messages to be sent */
     private EditText messageEditText;
+    /** Button to send message typed in messageEditText to websocket */
     private Button sendButton;
+    /** Local user's userId */
     private int userId;
+    /** Base URL of websocket connection */
     private static final String BASE_URL = "ws://10.0.2.2:8080/chat/";
+    /** Message to fill next MessageItemObject (sent or received) */
+    private String message;
 
-    private String message, date, timestamp, senderId;
+    /**
+     * onCreate method for ChatActivity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +92,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
     }
 
+    /**
+     * Handler for when message is received from the websocket
+     * @param message The received WebSocket message.
+     */
     @Override
     public void onWebSocketMessage(String message) {
         /**
@@ -88,6 +111,12 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         });
     }
 
+    /**
+     * Handler for closing websocket connection
+     * @param code   The status code indicating the reason for closure.
+     * @param reason A human-readable explanation for the closure.
+     * @param remote Indicates whether the closure was initiated by the remote endpoint.
+     */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
@@ -97,9 +126,17 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         });
     }
 
+    /**
+     * Handler for when websocket connection is opened
+     * @param handshakedata Information about the server handshake.
+     */
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {}
 
+    /**
+     * Handle for when there is a websocket error
+     * @param ex The exception that describes the error.
+     */
     @Override
     public void onWebSocketError(Exception ex) {}
 
