@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.recipeapp.R;
+import com.example.recipeapp.VolleySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
@@ -26,34 +28,44 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Activity to display local user's profile
+ *
+ * @author Ryan McFadden
+ */
 public class ProfileActivity extends AppCompatActivity {
-
-    private TextView headerText;
+    /** TextView to display message if local user is not logged in */
     private TextView guestText;
+    /** TextView to display local user's username */
     private TextView usernameText;
+    /** TextView to display description message */
     private TextView descriptionText;
-//    private Button logoutButton;
+    /** Button to go to EntryActivity if local user is not logged in */
     private Button entryButton;
-//    private Button editButton;
+    /** Local user's userId */
     private int userId;
+    /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
+    /** Specific URL for local user's Volley requests with server */
     private String URL_THIS_USER;
 
-//     private Toolbar toolbar;
-
+    /**
+     * onCreate method for ProfileActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        headerText = findViewById(R.id.profile_header_txt);
         usernameText = findViewById(R.id.profile_username_txt);
         guestText = findViewById(R.id.profile_guest_txt);
         descriptionText = findViewById(R.id.profile_description_txt);
-//        logoutButton = findViewById(R.id.profile_logout_btn);
         entryButton = findViewById(R.id.profile_entry_btn);
-//        editButton = findViewById(R.id.profile_edit_btn);
 
         Intent createIntent = getIntent();
         /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
@@ -78,21 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
             usernameText.setVisibility(View.INVISIBLE);
             descriptionText.setVisibility(View.INVISIBLE);
             guestText.setText("You're not signed in!");
-//            logoutButton.setVisibility(View.INVISIBLE);
-//            editButton.setVisibility(View.INVISIBLE);
         }
-
-
-
-//        /* click listener on logout button pressed */
-//        logoutButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
-//                Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         /* click listener on entry button pressed */
         entryButton.setOnClickListener(new View.OnClickListener() {
@@ -103,18 +101,6 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-//        /* click listener on edit button pressed */
-//        editButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                /* when edit button is pressed, use intent to switch to Edit Profile Activity, sending id as an extra */
-//                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-//                intent.putExtra("id", userId);
-//                startActivity(intent);
-//            }
-//        });
-
 
         //bottom navigation bar setup and functionality
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -151,7 +137,12 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    /* profile header bar */
+    /**
+     * onCreate for ProfileActivity's header toolbar
+     *
+     * @param menu The options menu in which you place your items.
+     * @return true on successful create
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -159,10 +150,16 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Handler for when an option from the toolbar is selected
+     *
+     * @param item The menu item that was selected.
+     *
+     * @return true if applicable option is selected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection.
-
         int itemId = item.getItemId();
         if(itemId == R.id.profile_options_create){
             //go to create recipe activity
@@ -182,7 +179,7 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (itemId == R.id.profile_options_delete) {
-            //TODO
+            //TODO - add password protection
             deleteUserReq();
             return true;
         } else {
@@ -190,6 +187,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Volley GET request to get the local user's profile information
+     */
     private void getUserInfoReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
                 URL_THIS_USER,
@@ -241,6 +241,10 @@ public class ProfileActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
+    /**
+     * Volley DELETE request to delete local user's account
+     *
+     */
     private void deleteUserReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.DELETE,
                 URL_THIS_USER,

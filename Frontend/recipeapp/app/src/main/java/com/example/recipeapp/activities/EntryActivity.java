@@ -1,7 +1,5 @@
-package com.example.recipeapp;
+package com.example.recipeapp.activities;
 
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,22 +7,37 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.recipeapp.R;
 
 /**
+ * Activity which allows client to choose to login to their account,
+ * signup for an account, or continue as a guest user, and brings them to
+ * the corresponding activity for their choice
+ *
  * @author Ryan McFadden
  */
 public class EntryActivity extends AppCompatActivity {
+    /** TextView for main welcome message */
+    private TextView messageText;
+    /** TextView for sub message */
+    private TextView subText;
+    /** Button to bring client to LoginActivity */
+    private Button loginButton;
+    /** Button to bring client to SignupActivity */
+    private Button signupButton;
+    /** Button to bring client to ProfileActivity without logging them in */
+    private Button guestButton;
 
-    private TextView messageText;   // define message textview variable
-    private TextView subText;       // define sub message textview variable - ADDED
-    private TextView usernameText;  // define username textview variable
-    private Button loginButton;     // define login button variable
-    private Button signupButton;    // define signup button variable
-    private Button guestButton;    // define guest button variable
-
-
-
+    /**
+     * onCreate method for EntryActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +45,6 @@ public class EntryActivity extends AppCompatActivity {
 
         /* initialize UI elements */
         messageText = findViewById(R.id.entry_msg_txt);      // link to message textview in the entry activity XML
-//        usernameText = findViewById(R.id.entry_username_txt);// link to username textview in the entry activity XML
         loginButton = findViewById(R.id.entry_login_btn);    // link to login button in the entry activity XML
         signupButton = findViewById(R.id.entry_signup_btn);  // link to signup button in the entry activity XML
         guestButton = findViewById(R.id.entry_guest_btn);  // link to logout button in the entry activity XML - ADDED
@@ -40,22 +52,6 @@ public class EntryActivity extends AppCompatActivity {
 
         messageText.setText("Welcome Message");
         subText.setText("Login or Signup");
-
-
-//        /* extract data passed into this activity from another activity */
-//        Bundle extras = getIntent().getExtras();
-//        if(extras == null) {
-//            subText.setText("Login or Signup"); //modified to subtext
-//            usernameText.setVisibility(View.INVISIBLE);             // set username text invisible initially
-//            logoutButton.setVisibility(View.INVISIBLE);             // set logout button invisible
-//        } else {
-//            subText.setText("Welcome"); //modified to subtext
-//            usernameText.setText(extras.getString("USERNAME")); // this will come from LoginActivity
-//            loginButton.setVisibility(View.INVISIBLE);              // set login button invisible
-//            signupButton.setVisibility(View.INVISIBLE);             // set signup button invisible
-//        }
-
-
 
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +75,7 @@ public class EntryActivity extends AppCompatActivity {
             }
         });
 
-        /* click listener on logout button pressed - ADDED */
+        /* click listener on logout button pressed */
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

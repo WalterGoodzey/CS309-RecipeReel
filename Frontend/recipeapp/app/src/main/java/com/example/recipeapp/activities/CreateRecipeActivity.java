@@ -1,6 +1,4 @@
-package com.example.recipeapp;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.recipeapp.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,11 +6,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.recipeapp.R;
+import com.example.recipeapp.VolleySingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,24 +22,41 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 /**
-    @author Walter Goodzey
+ * Activity for a user to create a recipe
+ *
+ * @author Walter Goodzey
  */
 
 public class CreateRecipeActivity extends AppCompatActivity {
-
+    /** Local user's userId */
     private int userId;
-
+    /** Button to post new created recipe (initiates Volley request) */
     private Button button_post;
 //    private Button button_image_upload;
-
-    private EditText input_title, input_description,
-            input_ingredients, input_instructions, input_tags;
-
+    /** EditText to input recipe's title */
+    private EditText input_title;
+    /** EditText to input recipe's description */
+    private EditText input_description;
+    /** EditText to input recipe's ingredients */
+    private EditText input_ingredients;
+    /** EditText to input recipe's instructions */
+    private EditText input_instructions;
+    /** EditText to input recipe's tags */
+    private EditText input_tags;
+    /** TextView to display the server's response on Volley requests (used for testing) */
     private TextView server_response;
+    /** Base URL for making recipe JSONObject POST requests to the server */
     private static final String URL_JSON_OBJ =
             "http://coms-309-018.class.las.iastate.edu:8080/recipes";
 //            "https://jsonplaceholder.typicode.com/users/1";
 
+    /**
+     * onCreate method for CreateRecipeActivity
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +92,9 @@ public class CreateRecipeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Volley request to post a recipe to the server
+     */
     private void postRecipe() {
         JSONObject postBody = new JSONObject();
         try {

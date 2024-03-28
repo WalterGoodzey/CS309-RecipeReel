@@ -1,23 +1,22 @@
-package com.example.recipeapp;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.recipeapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.recipeapp.R;
+import com.example.recipeapp.VolleySingleton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,18 +24,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Activity for client to login to their account
  * @author Ryan McFadden
  */
 public class LoginActivity extends AppCompatActivity {
-
-    private EditText usernameEditText;  // define username edittext variable
-    private EditText passwordEditText;  // define password edittext variable
-    private Button loginButton;         // define login button variable
-    private Button entryButton;        // define back to entry button variable
+    /** EditText for client to type in their username */
+    private EditText usernameEditText;
+    /** EditText for client to type in their password */
+    private EditText passwordEditText;
+    /** Button for client to attempt to login */
+    private Button loginButton;
+    /** Button for client to return to EntryActivity */
+    private Button entryButton;
+    /** URL for login Volley POST request */
     private static final String URL_LOGIN = "http://coms-309-018.class.las.iastate.edu:8080/login";     //define server URL for login
-//    private static final String URL_LOGIN = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/post_test";
-    private JSONObject user;            //define user JSONObject to POST
+    /** JSONObject to store data for POST request */
+    private JSONObject user;
 
+    /**
+     * onCreate method for LoginActivity
+     *
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Volley POST request to attempt to login
+     */
     private void makeLoginRequest() {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
