@@ -16,9 +16,10 @@ import recipeapp.Recipes.Recipe;
 import recipeapp.Recipes.RecipeRepository;
 
 /**
- * 
+ * Controller class for managing users in the recipe sharing app.
+ * This class handles HTTP requests related to users.
+ *
  * @author David Borucki
- * 
  */
 
 @RestController
@@ -41,13 +42,9 @@ public class UserController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    /*
-     * POST - creates dummy users
-     * params : none
-     * return: String (success/failure)
-     *
-     * you can use this if you need some users to test certain functionalities
-     * kinda OP if database is nuked, and we need quick users
+    /**
+     * POST - creates dummy users for testing.
+     * @return A success message if the creation is successful, otherwise a failure message.
      */
     @PostMapping(path = "/dummyusers")
     String createDummyUsers() {
@@ -75,13 +72,11 @@ public class UserController {
         return success;
     }
 
-    /*
-     * POST - create new user
-     * params: new user (nuser)
-     * return: user
-     *
-     * if no other users in db, save new user and return user
-     * if other users in db, check to see if user exists (by username or email)
+
+    /**
+     * POST - create a new user.
+     * @param nuser The new user to create.
+     * @return The created user object if creation is successful, otherwise null.
      */
     @PostMapping(path = "/newuser")
     Users createUser(@RequestBody Users nuser) {
@@ -104,12 +99,10 @@ public class UserController {
         return null;
     }
 
-    /*
-     * POST - login user
-     * params: user that Frontend sends
-     * return: user from Backend's DB if username & password match
-     *
-     * if no user exists, nothing is returned
+    /**
+     * POST - login user.
+     * @param user The user to log in.
+     * @return The logged-in user object if login is successful, otherwise null.
      */
     @PostMapping(path = "/login")
     Users login(@RequestBody Users user) {
@@ -120,50 +113,60 @@ public class UserController {
         }
         return null;
     }
+
+    /**
+     * POST - add a saved recipe to a user.
+     * @param id The ID of the user.
+     * @param r The recipe to add.
+     * @return A success message if the addition is successful, otherwise a failure message.
+     */
     @PostMapping(path="/users/{id}/savedrecipes")
     String addSavedRecipe(@PathVariable int id, @RequestBody Recipe r) {
         Users u = userRepository.findById(id);
         u.addSavedRecipe(r);
         return success;
     }
-    /*
-     * GET - get all users
-     * params: none
-     * return: List of Users type
+    /**
+     * GET - get all users.
+     * @return List of Users.
      */
     @GetMapping(path = "/users")
     List<Users> getAllUsers(){
         return userRepository.findAll();
     }
-
+    /**
+     * GET - get saved recipes of a user.
+     * @param id The ID of the user.
+     * @return List of saved recipes.
+     */
     @GetMapping(path ="/users/{id}/savedrecipes")
     List<Recipe> getSavedRecipes(@PathVariable int id) {
         Users u = userRepository.findById(id);
         return u.getSavedRecipes();
     }
-    /*
-     * GET - get all logins
-     * params: none
-     * return: List of LoginUsers type
+    /**
+     * GET - get all logins.
+     * @return List of LoginUsers.
      */
     @GetMapping(path = "/userslogins")
     List<LoginUsers> getAllLogins(){
         return loginRepository.findAll();
     }
 
-    /*
-     * GET - get certain user by id
-     * params: int of users id
-     * return: User
+    /**
+     * GET - get a user by ID.
+     * @param id The ID of the user.
+     * @return The user object.
      */
     @GetMapping(path = "/users/{id}")
     Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
     }
-    /*
-     * PUT - update user by id
-     * params: int of users id, User object that has updated info
-     * return: String(success/failure)
+    /**
+     * PUT - update a user by ID.
+     * @param id The ID of the user.
+     * @param updatedUser The updated user object.
+     * @return A success message if the update is successful, otherwise a failure message.
      */
     @PutMapping("/users/{id}")
     String updateUser(@PathVariable int id, @RequestBody Users updatedUser){
@@ -191,6 +194,11 @@ public class UserController {
         loginRepository.save(userOne);
         return success;
     }
+    /**
+     * DELETE - delete a user by ID.
+     * @param id The ID of the user.
+     * @return A success message if the deletion is successful, otherwise a failure message.
+     */
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         Users u = userRepository.findById(id);
@@ -200,10 +208,11 @@ public class UserController {
         return success;
     }
 
-    /*
-     * DELETE - deletes a user using Users object
-     * params: User object
-     * return: String (success/failure)
+
+    /**
+     * DELETE - delete a user.
+     * @param users The user to delete.
+     * @return A success message if the deletion is successful, otherwise a failure message.
      */
     @DeleteMapping(path = "/users")
     String deleteUser(@RequestBody Users users) {
