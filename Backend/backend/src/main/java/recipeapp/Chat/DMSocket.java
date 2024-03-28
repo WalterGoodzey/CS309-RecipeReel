@@ -1,6 +1,10 @@
 package recipeapp.Chat;
 
-import jakarta.websocket.*;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
@@ -16,6 +20,7 @@ import java.util.Map;
 @Controller      // Endpoint for springboot
 @ServerEndpoint(value = "/chat/{username}")  // Websocket URL
 public class DMSocket {
+
     private static DMRepository dmRepository;
     @Autowired
     public void setDmRepository(DMRepository repository) {

@@ -1,11 +1,15 @@
 package recipeapp.Chat;
 import java.util.Date;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
+@Table(name = "dms")
+@Data
 public class DM {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
