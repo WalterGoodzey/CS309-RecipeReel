@@ -102,16 +102,16 @@ public class UserController {
     /**
      * POST - login user.
      * @param user The user to log in.
-     * @return The logged-in user object if login is successful, otherwise null.
+     * @return String of success or failure. If user is found and usernames/passwords match, success. Else failure
      */
     @PostMapping(path = "/login")
-    Users login(@RequestBody Users user) {
+    String login(@RequestBody Users user) {
         List<Users> existingUsers = getAllUsers();
         for (Users e : existingUsers) {
             if (e.getUsername().equals(user.getUsername()) && e.getPassword().equals(user.getPassword()))
-                return e;
+                return success;
         }
-        return null;
+        return failure;
     }
 
     /**
