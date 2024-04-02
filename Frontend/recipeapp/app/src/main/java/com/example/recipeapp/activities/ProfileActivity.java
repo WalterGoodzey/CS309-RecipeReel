@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -42,12 +44,36 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView descriptionText;
     /** Button to go to EntryActivity if local user is not logged in */
     private Button entryButton;
+
+
     /** Local user's userId */
     private int userId;
+    /** Local user's username */
+    private String username;
+    /** Local user's emailAddress */
+    private String emailAddress;
+    /** Local user's password */
+    private String password;
+
+
     /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** Specific URL for local user's Volley requests with server */
     private String URL_THIS_USER;
+
+
+    /** constant key for shared preferences */
+    public static final String SHARED_PREFS = "shared_prefs";
+    /** constant key for storing user's userId */
+    public static final String USERID_KEY = "userid_key";
+    /** constant key for storing user's userId */
+    public static final String USERNAME_KEY = "username_key";
+    /** constant key for storing user's email */
+    public static final String EMAIL_KEY = "email_key";
+    /** constant key for storing user's password */
+    public static final String PASSWORD_KEY = "password_key";
+    /** variable for SharedPreferences */
+    SharedPreferences sharedPreferences;
 
     /**
      * onCreate method for ProfileActivity
@@ -67,17 +93,27 @@ public class ProfileActivity extends AppCompatActivity {
         descriptionText = findViewById(R.id.profile_description_txt);
         entryButton = findViewById(R.id.profile_entry_btn);
 
-        Intent createIntent = getIntent();
-        /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
-        if(createIntent.hasExtra("id") && createIntent.getIntExtra("id", -1) > 0){
+        //initializing our shared preferences
+        SharedPreferences saved_values = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+//        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        //get data from shared preferences and store it into variables
+//        userId = sharedPreferences.getInt(USERID_KEY, -1);
+//        username = sharedPreferences.getString(USERNAME_KEY, null);
+//        emailAddress = sharedPreferences.getString(EMAIL_KEY, null);
+//        password = sharedPreferences.getString(PASSWORD_KEY, null);
 
-            /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
-            userId = createIntent.getIntExtra("id", -1);
-            URL_THIS_USER = URL_USERS + "/" + userId;
-            getUserInfoReq();
+        userId = saved_values.getInt(USERID_KEY, -1);
+        username = saved_values.getString(USERNAME_KEY, null);
+        emailAddress = saved_values.getString(EMAIL_KEY, null);
+        password = saved_values.getString(PASSWORD_KEY, null);
 
+
+        if(userId > 0) { //user is logged in
             guestText.setVisibility(View.INVISIBLE);
             entryButton.setVisibility(View.INVISIBLE);
+
+            usernameText.setText(username);
+            descriptionText.setText(emailAddress);
 
             /* options toolbar at top */
             Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
@@ -86,11 +122,37 @@ public class ProfileActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("My Profile");
             }
             toolbar.inflateMenu(R.menu.profile_menu);
-        } else {
+        } else { //user is not signed in
             usernameText.setVisibility(View.INVISIBLE);
             descriptionText.setVisibility(View.INVISIBLE);
             guestText.setText("You're not signed in!");
         }
+//        }
+
+//        Intent createIntent = getIntent();
+//        /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
+//        if(createIntent.hasExtra("id") && createIntent.getIntExtra("id", -1) > 0){
+//
+//            /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
+//            userId = createIntent.getIntExtra("id", -1);
+//            URL_THIS_USER = URL_USERS + "/" + userId;
+//            getUserInfoReq();
+//
+//            guestText.setVisibility(View.INVISIBLE);
+//            entryButton.setVisibility(View.INVISIBLE);
+//
+//            /* options toolbar at top */
+//            Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+//            setSupportActionBar(toolbar);
+//            if (getSupportActionBar() != null) {
+//                getSupportActionBar().setTitle("My Profile");
+//            }
+//            toolbar.inflateMenu(R.menu.profile_menu);
+//        } else {
+//            usernameText.setVisibility(View.INVISIBLE);
+//            descriptionText.setVisibility(View.INVISIBLE);
+//            guestText.setText("You're not signed in!");
+//        }
 
         /* click listener on entry button pressed */
         entryButton.setOnClickListener(new View.OnClickListener() {
