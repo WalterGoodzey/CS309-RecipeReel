@@ -196,18 +196,15 @@ public class ProfileActivity extends AppCompatActivity {
             //go to EntryActivity
             startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
             return true;
-        } else if (itemId == R.id.profile_options_edit){
-            //go to EditProfileActivity
-            startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
-            return true;
-        } else if (itemId == R.id.profile_options_delete) {
-            //TODO - add password protection or combine with edit profile?
-            deleteUserReq();
+        } else if (itemId == R.id.profile_options_edit){ //Note: EditProfileActivity now includes the option to delete profile
+            //go to password check
+            startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * Volley GET request to get the local user's profile information
@@ -232,54 +229,6 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                         usernameText.setText(usernameResponse);
                         descriptionText.setText(emailResponse);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-    }
-
-    /**
-     * Volley DELETE request to delete local user's account
-     *
-     */
-    private void deleteUserReq() {
-        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.DELETE,
-                URL_THIS_USER,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Volley Response", response.toString());
-                        Toast.makeText(getApplicationContext(), "Volley Received Response, deleting account", Toast.LENGTH_LONG).show();
-
-                        /* when account is deleted, use intent to switch to Entry Activity without sending any extras (logging user out) */
-                        Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -50,14 +51,36 @@ public class EditProfileActivity extends AppCompatActivity {
     private Button saveButton;
     /** Button for local user to exit EditProfileActivity and go to their ProfileActivity */
     private Button exitButton;
+    /** Button for local user to delete their account and bring up confirmation CardView*/
+    private Button deleteAccountButton;
+
+    /** Cardview for confirm "popup window" */
+    private CardView popupCard;
+    /** Message on "popup" */
+    private TextView popupMessage;
+    /** Button for local user to confirm deleting their account and go to EntryActivity */
+    private Button confirmDeleteAccountButton;
+    /** Button for local user to cancel deleting their account and remove confirmation CardView */
+    private Button cancelDeleteAccountButton;
+
+
     /** Local user's userId */
     private int userId;
+    /** Local user's username */
+    private String username;
+    /** Local user's emailAddress */
+    private String emailAddress;
+    /** Local user's password */
+    private String password;
+
     /** Base URL for Volley GET and PUT requests */
-    private String URL_EDIT_USER_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
+    private String URL_EDIT_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** URL for Volley GET and PUT requests for this specific local user */
-    private String URL_EDIT_USER;
+    private String URL_EDIT_THIS_USER;
     /** JSONObject to store and send local user's profile information */
     private JSONObject user;
+    /** Boolean to flag whether PUT request was successful*/
+    private Boolean successfulPUT;
 
     /**
      * onCreate method for EditProfileActivity
@@ -79,20 +102,33 @@ public class EditProfileActivity extends AppCompatActivity {
         confirmEditText = findViewById(R.id.editprofile_confirm_edt);       // link to confirm password editor in the EditProfile activity XML
         saveButton = findViewById(R.id.editprofile_save_btn);               // link to save button in the EditProfile activity XML
         exitButton = findViewById(R.id.editprofile_exit_btn);               // link to exit button in the EditProfile activity XML
+        deleteAccountButton = findViewById(R.id.editprofile_delete_btn);    // link to delete button in the EditProfile activity XML
+        confirmDeleteAccountButton = findViewById(R.id.editprofile_popup_confirm_btn);      // link to confirm delete button in the EditProfile activity XML
+        cancelDeleteAccountButton = findViewById(R.id.editprofile_popup_cancel_btn);        // link to cancel delete button in the EditProfile activity XML
+        popupCard = findViewById(R.id.editprofile_popup_card);
+        popupMessage = findViewById(R.id.editprofile_popup_message);
 
-        //TODO - add password protection to editing account info
+        //make popup window invisible
+        popupCard.setVisibility(View.INVISIBLE);
+        popupMessage.setVisibility(View.INVISIBLE);
+        confirmDeleteAccountButton.setVisibility(View.INVISIBLE);
+        cancelDeleteAccountButton.setVisibility(View.INVISIBLE);
 
         //get user info from shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
-        String username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
-        String email = saved_values.getString(getString(R.string.EMAIL_KEY), null);
-        String password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
+        username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+        emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
+        password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
+
 
         usernameEditText.setText(username);
-        emailEditText.setText(email);
+        emailEditText.setText(emailAddress);
         passwordEditText.setText(password);
         confirmEditText.setText(password);
+
+        //setup URL for Volley requests
+        URL_EDIT_THIS_USER = URL_EDIT_BASE + "/" + userId;
 
         /*  click listener on save button   */
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -118,11 +154,23 @@ public class EditProfileActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     //make PUT request
+                    successfulPUT = false;
                     putUserInfoReq();
+
+                    //TODO - add check for successfulPUT that accounts for delayed Volley response
+                    //On successful POST, update shared preferences to new values
+                    SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                    //make editor for sharedPreferences
+                    SharedPreferences.Editor editor = saved_values.edit();
+                    // put values into sharedPreferences
+                    editor.putString(getString(R.string.USERNAME_KEY), username);
+                    editor.putString(getString(R.string.EMAIL_KEY), emailAddress);
+                    editor.putString(getString(R.string.PASSWORD_KEY), password);
+                    // save new key-value data
+                    editor.apply();
+
                     //go to profile activity (with updated info)
-                    Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-                    intent.putExtra("id", userId);  // key-value to pass to the ProfileActivity
-                    startActivity(intent);  // go to ProfileActivity with the key-value data (the user's id)
+                    startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
@@ -130,31 +178,115 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
         /* click listener on exit button */
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-                intent.putExtra("id", userId);  // key-value to pass to the ProfileActivity
-                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's id)
+                // go to ProfileActivity
+                startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+            }
+        });
+
+        /* click listener on delete account button */
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //make popup window visible
+                popupCard.setVisibility(View.VISIBLE);
+                popupMessage.setVisibility(View.VISIBLE);
+                confirmDeleteAccountButton.setVisibility(View.VISIBLE);
+                cancelDeleteAccountButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        /* click listener on confirm delete account button */
+        confirmDeleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //clear and saved shared preferences
+                SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = saved_values.edit();
+                editor.clear();
+                editor.apply();
+
+                //send Volley delete request, will send user back to EntryActivity
+                deleteUserReq();
+            }
+        });
+
+        /* click listener on cancel delete account button */
+        cancelDeleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //make popup window invisible
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                confirmDeleteAccountButton.setVisibility(View.INVISIBLE);
+                cancelDeleteAccountButton.setVisibility(View.INVISIBLE);
             }
         });
     }
+
+
 
     /**
      * Volley PUT request to PUT user's new profile information to the server
      */
     private void putUserInfoReq() {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
-                URL_EDIT_USER,
+                URL_EDIT_THIS_USER,
                 user, // request body for PUT request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+                        successfulPUT = true;
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                        successfulPUT = false;
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+    }
+
+    /**
+     * Volley DELETE request to delete local user's account
+     *
+     */
+    private void deleteUserReq() {
+        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.DELETE,
+                URL_EDIT_THIS_USER,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+//                        Toast.makeText(getApplicationContext(), "Volley Received Response, deleting account", Toast.LENGTH_LONG).show();
+
+                        /* when account is deleted, use intent to switch to Entry Activity */
+                        Intent intent = new Intent(EditProfileActivity.this, EntryActivity.class);
+                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {
@@ -171,77 +303,18 @@ public class EditProfileActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                try{
-                    params.put("username", user.getString("username"));
-                    params.put("emailAddress", user.getString("email"));
-                    params.put("password", user.getString("password"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//                params.put("username", "value1");
+//                params.put("param2", "value2");
                 return params;
             }
         };
+
 //        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
-
-//    /**
-//     * Volley GET request to GET user's profile information from the server
-//     */
-//    private void getUserInfoReq() {
-//        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
-//                URL_EDIT_USER,
-//                null, // Pass null as the request body since it's a GET request
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", response.toString());
-////                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
-//
-//                        String usernameResponse = "testusername";
-//                        String emailResponse = "testemail";
-//                        String passwordResponse = "testpassword";
-//                        try{
-//                            usernameResponse = response.getString("username");
-//                            emailResponse = response.getString("emailAddress");
-//                            passwordResponse = response.getString("password");
-//                        }catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        usernameEditText.setText(usernameResponse);
-//                        emailEditText.setText(emailResponse);
-//                        passwordEditText.setText(passwordResponse);
-//                        confirmEditText.setText(passwordResponse);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-////                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("username", "value1");
-////                params.put("param2", "value2");
-//                return params;
-//            }
-//        };
-////        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-//        // Adding request to request queue
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-//    }
 }

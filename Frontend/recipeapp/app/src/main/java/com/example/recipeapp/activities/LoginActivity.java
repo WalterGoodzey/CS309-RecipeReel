@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             try {
                                 // getting the data which is stored in shared preferences.
-                                SharedPreferences saved_values = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                                SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
                                 //make editor for sharedPreferences
                                 SharedPreferences.Editor editor = saved_values.edit();
                                 // put values into sharedPreferences
