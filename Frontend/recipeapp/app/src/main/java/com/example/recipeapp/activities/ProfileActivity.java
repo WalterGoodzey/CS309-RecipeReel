@@ -62,18 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String URL_THIS_USER;
 
 
-    /** constant key for shared preferences */
-    public static final String SHARED_PREFS = "shared_prefs";
-    /** constant key for storing user's userId */
-    public static final String USERID_KEY = "userid_key";
-    /** constant key for storing user's userId */
-    public static final String USERNAME_KEY = "username_key";
-    /** constant key for storing user's email */
-    public static final String EMAIL_KEY = "email_key";
-    /** constant key for storing user's password */
-    public static final String PASSWORD_KEY = "password_key";
-    /** variable for SharedPreferences */
-    SharedPreferences sharedPreferences;
+
 
     /**
      * onCreate method for ProfileActivity
@@ -94,18 +83,12 @@ public class ProfileActivity extends AppCompatActivity {
         entryButton = findViewById(R.id.profile_entry_btn);
 
         //initializing our shared preferences
-        SharedPreferences saved_values = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-//        sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        //get data from shared preferences and store it into variables
-//        userId = sharedPreferences.getInt(USERID_KEY, -1);
-//        username = sharedPreferences.getString(USERNAME_KEY, null);
-//        emailAddress = sharedPreferences.getString(EMAIL_KEY, null);
-//        password = sharedPreferences.getString(PASSWORD_KEY, null);
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
 
-        userId = saved_values.getInt(USERID_KEY, -1);
-        username = saved_values.getString(USERNAME_KEY, null);
-        emailAddress = saved_values.getString(EMAIL_KEY, null);
-        password = saved_values.getString(PASSWORD_KEY, null);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
+        username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+        emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
+        password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
 
 
         if(userId > 0) { //user is logged in
@@ -127,32 +110,6 @@ public class ProfileActivity extends AppCompatActivity {
             descriptionText.setVisibility(View.INVISIBLE);
             guestText.setText("You're not signed in!");
         }
-//        }
-
-//        Intent createIntent = getIntent();
-//        /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
-//        if(createIntent.hasExtra("id") && createIntent.getIntExtra("id", -1) > 0){
-//
-//            /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
-//            userId = createIntent.getIntExtra("id", -1);
-//            URL_THIS_USER = URL_USERS + "/" + userId;
-//            getUserInfoReq();
-//
-//            guestText.setVisibility(View.INVISIBLE);
-//            entryButton.setVisibility(View.INVISIBLE);
-//
-//            /* options toolbar at top */
-//            Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
-//            setSupportActionBar(toolbar);
-//            if (getSupportActionBar() != null) {
-//                getSupportActionBar().setTitle("My Profile");
-//            }
-//            toolbar.inflateMenu(R.menu.profile_menu);
-//        } else {
-//            usernameText.setVisibility(View.INVISIBLE);
-//            descriptionText.setVisibility(View.INVISIBLE);
-//            guestText.setText("You're not signed in!");
-//        }
 
         /* click listener on entry button pressed */
         entryButton.setOnClickListener(new View.OnClickListener() {
@@ -224,24 +181,27 @@ public class ProfileActivity extends AppCompatActivity {
         // Handle item selection.
         int itemId = item.getItemId();
         if(itemId == R.id.profile_options_create){
-            //go to create recipe activity
-            Intent intent = new Intent(getApplicationContext(), CreateRecipeActivity.class);
-            intent.putExtra("id", userId);
-            startActivity(intent);
+            //go to CreateRecipeActivity
+            startActivity(new Intent(getApplicationContext(), CreateRecipeActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_logout){
-            /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
-            Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-            startActivity(intent);
+            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
+            // getting the data which is stored in shared preferences.
+            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+            //make editor for shared preferences
+            SharedPreferences.Editor editor = saved_values.edit();
+            //clear and save shared preferences
+            editor.clear();
+            editor.apply();
+            //go to EntryActivity
+            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_edit){
-            /* when edit profile button is pressed, use intent to switch to Edit Profile Activity without sending any extras (logging user out) */
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            intent.putExtra("id", userId);
-            startActivity(intent);
+            //go to EditProfileActivity
+            startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_delete) {
-            //TODO - add password protection
+            //TODO - add password protection or combine with edit profile?
             deleteUserReq();
             return true;
         } else {

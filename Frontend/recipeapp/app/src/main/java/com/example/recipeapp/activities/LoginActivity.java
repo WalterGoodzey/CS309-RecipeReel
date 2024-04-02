@@ -54,8 +54,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String EMAIL_KEY = "email_key";
     /** constant key for storing user's password */
     public static final String PASSWORD_KEY = "password_key";
-    /** variable for SharedPreferences */
-//    public SharedPreferences sharedPreferences;
 
     /**
      * onCreate method for LoginActivity
@@ -76,11 +74,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_login_btn);           // link to login button in the Login activity XML
         entryButton = findViewById(R.id.login_entry_btn);           // link to entry button in the Login activity XML
 
-//        /* initialize sharedPreferences (get the data stored in it, should be nothing) */
-//        // getting the data which is stored in shared preferences.
-//        SharedPreferences saved_values = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-
         user = new JSONObject();
+
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
 
                 /* send a JSON object to server/backend to check if login info matches known user */
-//                user = new JSONObject();
                 try {
                     user.put("username", username);
                     user.put("email", null);
@@ -100,14 +94,8 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(getApplicationContext(), "Logging in", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Logging in", Toast.LENGTH_LONG).show();
                 makeLoginRequest();
-
-//                /* Test code to push to profile page without using Volley and DB */
-//                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-//                intent.putExtra("USERNAME", username);  // key-value to pass to the ProfileActivity
-//                intent.putExtra("PASSWORD", password);  // key-value to pass to the ProfileActivity
-//                startActivity(intent);  // go to ProfileActivity with the key-value data
             }
         });
 
@@ -115,10 +103,8 @@ public class LoginActivity extends AppCompatActivity {
         entryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /* when entry button is pressed, use intent to switch to Entry Activity */
-                Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
-                startActivity(intent);  // go to EntryActivity
+                startActivity(new Intent(LoginActivity.this, EntryActivity.class));
             }
         });
     }
@@ -144,25 +130,18 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             try {
                                 // getting the data which is stored in shared preferences.
-//                                sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-//                                sharedPreferences = getPreferences(Context.MODE_PRIVATE);
                                 SharedPreferences saved_values = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
                                 //make editor for sharedPreferences
                                 SharedPreferences.Editor editor = saved_values.edit();
-
                                 // put values into sharedPreferences
-                                editor.putInt(USERID_KEY, response.getInt("id"));
-                                editor.putString(USERNAME_KEY, response.getString("username"));
-                                editor.putString(EMAIL_KEY, response.getString("emailAddress"));
-                                editor.putString(PASSWORD_KEY, response.getString("password"));
-
-                                // to save our data with key and value.
+                                editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
+                                editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
+                                editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
+                                editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
+                                // to save our new key-value data
                                 editor.apply();
-
-                                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-//                                intent.putExtra("id", response.getInt("id"));
-//                                intent.putExtra("USERNAME", response.getString("username"));  // key-value to pass to the ProfileActivity
-                                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's username)
+                                // go to ProfileActivity
+                                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -179,24 +158,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                //                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-                //                headers.put("Content-Type", "application/json");
                 return headers;
             }
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                try{
-                    params.put("username", user.getString("username"));
-                    params.put("password", user.getString("password"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 return params;
             }
         };
-
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }

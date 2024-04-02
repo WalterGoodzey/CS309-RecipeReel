@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -80,11 +82,17 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //TODO - add password protection to editing account info
 
-        Intent createIntent = getIntent();
-        /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
-        userId = createIntent.getIntExtra("id", -1);
-        URL_EDIT_USER = URL_EDIT_USER_BASE + "/" + userId;
-        getUserInfoReq();
+        //get user info from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
+        String username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+        String email = saved_values.getString(getString(R.string.EMAIL_KEY), null);
+        String password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
+
+        usernameEditText.setText(username);
+        emailEditText.setText(email);
+        passwordEditText.setText(password);
+        confirmEditText.setText(password);
 
         /*  click listener on save button   */
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -181,59 +189,59 @@ public class EditProfileActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
-    /**
-     * Volley GET request to GET user's profile information from the server
-     */
-    private void getUserInfoReq() {
-        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
-                URL_EDIT_USER,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Volley Response", response.toString());
-//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
-
-                        String usernameResponse = "testusername";
-                        String emailResponse = "testemail";
-                        String passwordResponse = "testpassword";
-                        try{
-                            usernameResponse = response.getString("username");
-                            emailResponse = response.getString("emailAddress");
-                            passwordResponse = response.getString("password");
-                        }catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                        usernameEditText.setText(usernameResponse);
-                        emailEditText.setText(emailResponse);
-                        passwordEditText.setText(passwordResponse);
-                        confirmEditText.setText(passwordResponse);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-    }
+//    /**
+//     * Volley GET request to GET user's profile information from the server
+//     */
+//    private void getUserInfoReq() {
+//        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
+//                URL_EDIT_USER,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        Log.d("Volley Response", response.toString());
+////                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+//
+//                        String usernameResponse = "testusername";
+//                        String emailResponse = "testemail";
+//                        String passwordResponse = "testpassword";
+//                        try{
+//                            usernameResponse = response.getString("username");
+//                            emailResponse = response.getString("emailAddress");
+//                            passwordResponse = response.getString("password");
+//                        }catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        usernameEditText.setText(usernameResponse);
+//                        emailEditText.setText(emailResponse);
+//                        passwordEditText.setText(passwordResponse);
+//                        confirmEditText.setText(passwordResponse);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("username", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+////        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+//    }
 }

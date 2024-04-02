@@ -1,5 +1,7 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -55,11 +57,14 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         sendButton = findViewById(R.id.button_chat_send);
         messageEditText = findViewById(R.id.edit_chat_message);
 
-        //get username from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+//        //get username from previous activity
+//        Bundle extras = getIntent().getExtras();
+//        if(extras != null){
+//            userId = extras.getInt("id");
+//        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
         //message list setup and operation
         messageListView = findViewById(R.id.messageListView);
@@ -68,7 +73,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         adapter = new MessageAdapter(this, new ArrayList<>());
         messageListView.setAdapter(adapter);
 
-        //for websocket connection
+        //for websocket connection - TODO update to work with server
         String serverUrl = BASE_URL + "ryanm";
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
