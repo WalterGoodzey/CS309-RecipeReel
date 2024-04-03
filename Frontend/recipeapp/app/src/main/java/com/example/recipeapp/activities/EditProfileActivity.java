@@ -215,8 +215,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 cancelDeleteAccountButton.setVisibility(View.INVISIBLE);
 
                 //re-enable other buttons
-                saveButton.setEnabled(false);
-                exitButton.setEnabled(false);
+                saveButton.setEnabled(true);
+                exitButton.setEnabled(true);
             }
         });
     }
@@ -266,7 +266,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
                         try {
                             // getting the data which is stored in shared preferences.
                             SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
