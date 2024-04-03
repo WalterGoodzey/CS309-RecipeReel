@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,11 +36,9 @@ public class SearchActivity extends AppCompatActivity {
 
         chatButton = findViewById(R.id.search_chat_btn);
 
-        //get username from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
         /* click listener on chat button pressed */
         chatButton.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +46,6 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /* when chat button is pressed, use intent to switch to Chat Activity */
                 Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);  // go to ChatActivity
             }
         });
@@ -59,12 +58,10 @@ public class SearchActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.bottom_trending) {
                 Intent intent = new Intent(getApplicationContext(), TrendingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_following) {
                 Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
@@ -72,12 +69,10 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_saved) {
                 Intent intent = new Intent(getApplicationContext(), SavedActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }

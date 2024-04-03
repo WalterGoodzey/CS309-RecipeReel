@@ -1,5 +1,7 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,10 +64,14 @@ public class CreateRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+//        Bundle extras = getIntent().getExtras();
+//        if(extras != null){
+//            userId = extras.getInt("id");
+//        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
+
 
         button_post = findViewById(R.id.button_post);
 //        button_image_upload = findViewById(R.id.button_image_upload);

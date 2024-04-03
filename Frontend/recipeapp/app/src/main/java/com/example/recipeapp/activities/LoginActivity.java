@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * Activity for client to login to their account
  * @author Ryan McFadden
@@ -40,6 +43,17 @@ public class LoginActivity extends AppCompatActivity {
     private static final String URL_LOGIN = "http://coms-309-018.class.las.iastate.edu:8080/login";     //define server URL for login
     /** JSONObject to store data for POST request */
     private JSONObject user;
+
+//    /** constant key for shared preferences */
+//    public static final String SHARED_PREFS = "shared_prefs";
+//    /** constant key for storing user's userId */
+//    public static final String USERID_KEY = "userid_key";
+//    /** constant key for storing user's userId */
+//    public static final String USERNAME_KEY = "username_key";
+//    /** constant key for storing user's email */
+//    public static final String EMAIL_KEY = "email_key";
+//    /** constant key for storing user's password */
+//    public static final String PASSWORD_KEY = "password_key";
 
     /**
      * onCreate method for LoginActivity
@@ -60,8 +74,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_login_btn);           // link to login button in the Login activity XML
         entryButton = findViewById(R.id.login_entry_btn);           // link to entry button in the Login activity XML
 
-
         user = new JSONObject();
+
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
 
                 /* send a JSON object to server/backend to check if login info matches known user */
-//                user = new JSONObject();
                 try {
                     user.put("username", username);
                     user.put("email", null);
@@ -81,14 +94,8 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(getApplicationContext(), "Logging in", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Logging in", Toast.LENGTH_LONG).show();
                 makeLoginRequest();
-
-//                /* Test code to push to profile page without using Volley and DB */
-//                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-//                intent.putExtra("USERNAME", username);  // key-value to pass to the ProfileActivity
-//                intent.putExtra("PASSWORD", password);  // key-value to pass to the ProfileActivity
-//                startActivity(intent);  // go to ProfileActivity with the key-value data
             }
         });
 
@@ -96,10 +103,8 @@ public class LoginActivity extends AppCompatActivity {
         entryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /* when entry button is pressed, use intent to switch to Entry Activity */
-                Intent intent = new Intent(LoginActivity.this, EntryActivity.class);
-                startActivity(intent);  // go to EntryActivity
+                startActivity(new Intent(LoginActivity.this, EntryActivity.class));
             }
         });
     }
@@ -117,17 +122,33 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Login received Volley response", Toast.LENGTH_LONG).show();
 
+                        Boolean userExists = false;
+                        try {
+                            userExists = response.getInt("id") >= 1;
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         /* if backend returns null, it means the user does not exist in the DB */
-                        if(response == null){
+                        if(!userExists){ //
                             Toast.makeText(getApplicationContext(), "User does not exist. Try Signup!", Toast.LENGTH_LONG).show();
                         }
                         /* user exist in DB and is returned by backend, start profile activity with user info */
                         else {
                             try {
-                                Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
-                                intent.putExtra("id", response.getInt("id"));
-                                intent.putExtra("USERNAME", response.getString("username"));  // key-value to pass to the ProfilActivity
-                                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's username)
+                                // getting the data which is stored in shared preferences.
+                                SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                                //make editor for sharedPreferences
+                                SharedPreferences.Editor editor = saved_values.edit();
+                                // put values into sharedPreferences
+                                editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
+                                editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
+                                editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
+                                editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
+                                // to save our new key-value data
+                                editor.apply();
+                                // go to ProfileActivity
+                                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
@@ -137,31 +158,22 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError or Nonexistent User)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError)", Toast.LENGTH_LONG).show();
                     }
                 }
         ){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                //                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-                //                headers.put("Content-Type", "application/json");
                 return headers;
             }
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                try{
-                    params.put("username", user.getString("username"));
-                    params.put("password", user.getString("password"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 return params;
             }
         };
-
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }

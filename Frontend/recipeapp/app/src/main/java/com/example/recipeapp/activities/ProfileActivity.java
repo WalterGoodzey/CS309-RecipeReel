@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -42,12 +44,25 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView descriptionText;
     /** Button to go to EntryActivity if local user is not logged in */
     private Button entryButton;
+
+
     /** Local user's userId */
     private int userId;
+    /** Local user's username */
+    private String username;
+    /** Local user's emailAddress */
+    private String emailAddress;
+    /** Local user's password */
+    private String password;
+
+
     /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** Specific URL for local user's Volley requests with server */
     private String URL_THIS_USER;
+
+
+
 
     /**
      * onCreate method for ProfileActivity
@@ -67,17 +82,21 @@ public class ProfileActivity extends AppCompatActivity {
         descriptionText = findViewById(R.id.profile_description_txt);
         entryButton = findViewById(R.id.profile_entry_btn);
 
-        Intent createIntent = getIntent();
-        /* if intent has id and it is not null or the default value of -1, show user's profile page. If not, user is not signed in*/
-        if(createIntent.hasExtra("id") && createIntent.getIntExtra("id", -1) > 0){
+        //initializing our shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
 
-            /* set userId and add to url for GET request, make GET request (fills in user's profile page) */
-            userId = createIntent.getIntExtra("id", -1);
-            URL_THIS_USER = URL_USERS + "/" + userId;
-            getUserInfoReq();
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
+        username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+        emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
+        password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
 
+
+        if(userId > 0) { //user is logged in
             guestText.setVisibility(View.INVISIBLE);
             entryButton.setVisibility(View.INVISIBLE);
+
+            usernameText.setText(username);
+            descriptionText.setText(emailAddress);
 
             /* options toolbar at top */
             Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
@@ -86,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("My Profile");
             }
             toolbar.inflateMenu(R.menu.profile_menu);
-        } else {
+        } else { //user is not signed in
             usernameText.setVisibility(View.INVISIBLE);
             descriptionText.setVisibility(View.INVISIBLE);
             guestText.setText("You're not signed in!");
@@ -162,30 +181,30 @@ public class ProfileActivity extends AppCompatActivity {
         // Handle item selection.
         int itemId = item.getItemId();
         if(itemId == R.id.profile_options_create){
-            //go to create recipe activity
-            Intent intent = new Intent(getApplicationContext(), CreateRecipeActivity.class);
-            intent.putExtra("id", userId);
-            startActivity(intent);
+            //go to CreateRecipeActivity
+            startActivity(new Intent(getApplicationContext(), CreateRecipeActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_logout){
-            /* when logout button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
-            Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-            startActivity(intent);
+            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
+            // getting the data which is stored in shared preferences.
+            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+            //make editor for shared preferences
+            SharedPreferences.Editor editor = saved_values.edit();
+            //clear and save shared preferences
+            editor.clear();
+            editor.apply();
+            //go to EntryActivity
+            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
             return true;
-        } else if (itemId == R.id.profile_options_edit){
-            /* when edit profile button is pressed, use intent to switch to Edit Profile Activity without sending any extras (logging user out) */
-            Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-            intent.putExtra("id", userId);
-            startActivity(intent);
-            return true;
-        } else if (itemId == R.id.profile_options_delete) {
-            //TODO - add password protection
-            deleteUserReq();
+        } else if (itemId == R.id.profile_options_edit){ //Note: EditProfileActivity now includes the option to delete profile
+            //go to password check
+            startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * Volley GET request to get the local user's profile information
@@ -210,54 +229,6 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                         usernameText.setText(usernameResponse);
                         descriptionText.setText(emailResponse);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-    }
-
-    /**
-     * Volley DELETE request to delete local user's account
-     *
-     */
-    private void deleteUserReq() {
-        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.DELETE,
-                URL_THIS_USER,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Volley Response", response.toString());
-                        Toast.makeText(getApplicationContext(), "Volley Received Response, deleting account", Toast.LENGTH_LONG).show();
-
-                        /* when account is deleted, use intent to switch to Entry Activity without sending any extras (logging user out) */
-                        Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
-                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener() {
