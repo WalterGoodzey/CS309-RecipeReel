@@ -200,6 +200,12 @@ public class ProfileActivity extends AppCompatActivity {
             //go to password check
             startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
             return true;
+        } else if (itemId == R.id.profile_options_helperchat) { //Chat with helper "admin" user (possibly temporary to test chat websocket, possible new feature)
+            //go to chat, sending helper "admin" account username as an extra in intent
+            Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+            intent.putExtra("otherChatUser", "HELPERCHAT"); //hard set to HELPERCHAT for now
+            startActivity(intent);
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }

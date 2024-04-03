@@ -16,11 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:id="@+id/create_recipe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CREATE RECIPE" />
+    
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"

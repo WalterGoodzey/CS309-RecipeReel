@@ -102,8 +102,8 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
 
 
             // Populate the data into the template view using the data object
-            String tempUser = "user: " + item.getSenderId();
-            itemUserReceived.setText(tempUser); //TODO - update to get sender's username
+            String otherUser = item.getSenderUsername();
+            itemUserReceived.setText(otherUser);
 
             //populate received user, message, & timestamp
             itemMessageReceived.setText(item.getMessage());

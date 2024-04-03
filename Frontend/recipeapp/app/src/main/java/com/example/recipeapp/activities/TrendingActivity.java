@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,8 +17,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class TrendingActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
-    /** Button to bring user to CreateRecipeActivity - TEMPORARY (for testing) */
-    private Button createRecipe;
 
     /**
      * onCreate method for TrendingActivity
@@ -35,20 +31,9 @@ public class TrendingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trending);
 
-        createRecipe = findViewById(R.id.create_recipe);
-
         //get userId from shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
-
-
-        createRecipe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TrendingActivity.this, CreateRecipeActivity.class);
-                startActivity(intent);
-            }
-        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_trending);
