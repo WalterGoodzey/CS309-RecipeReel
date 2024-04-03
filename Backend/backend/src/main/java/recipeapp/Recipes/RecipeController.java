@@ -58,6 +58,7 @@ public class RecipeController {
     String createRecipe(@RequestBody Recipe Recipe){
         if (Recipe == null)
             return failure;
+        Recipe.setUsername(userRepository.findById(Recipe.getCreatorUserId()).getUsername());
         recipeRepository.save(Recipe);
         return success;
     }
