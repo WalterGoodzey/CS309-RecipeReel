@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +31,9 @@ public class FollowingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
 
-        //get username from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_following);
@@ -43,7 +43,6 @@ public class FollowingActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.bottom_trending) {
                 Intent intent = new Intent(getApplicationContext(), TrendingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_following) {
@@ -51,17 +50,14 @@ public class FollowingActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_search) {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
                 Intent intent = new Intent(getApplicationContext(), SavedActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }

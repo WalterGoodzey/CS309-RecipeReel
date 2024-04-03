@@ -80,7 +80,7 @@ public class EditProfileActivity extends AppCompatActivity {
     /** JSONObject to store and send local user's profile information */
     private JSONObject user;
     /** Boolean to flag whether PUT request was successful*/
-    private Boolean successfulPUT;
+    private Boolean successfulPut;
 
     /**
      * onCreate method for EditProfileActivity
@@ -141,39 +141,43 @@ public class EditProfileActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
 
-                /* if passwords match, make volley signup request */
+                /* if passwords match and meet requirements, make volley signup request */
                 if (password.equals(confirm)){
-                    Toast.makeText(getApplicationContext(), "Saving info", Toast.LENGTH_LONG).show();
-                    user = new JSONObject();
-                    try {
-                        user.put("id", userId);
-                        user.put("username", username);
-                        user.put("emailAddress", email);
-                        user.put("password", password);
-                    } catch (JSONException e){
-                        e.printStackTrace();
+                    if(isValidPassword(password)) {
+                        Toast.makeText(getApplicationContext(), "Saving info", Toast.LENGTH_LONG).show();
+                        user = new JSONObject();
+                        try {
+                            user.put("id", userId);
+                            user.put("username", username);
+                            user.put("emailAddress", email);
+                            user.put("password", password);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //make PUT request
+                        successfulPut = false;
+                        putUserInfoReq();
+
+                        //TODO - add check for successfulPUT that accounts for delayed Volley response
+                        //On successful POST, update shared preferences to new values
+                        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                        //make editor for sharedPreferences
+                        SharedPreferences.Editor editor = saved_values.edit();
+                        // put values into sharedPreferences
+                        editor.putString(getString(R.string.USERNAME_KEY), username);
+                        editor.putString(getString(R.string.EMAIL_KEY), emailAddress);
+                        editor.putString(getString(R.string.PASSWORD_KEY), password);
+                        // save new key-value data
+                        editor.apply();
+
+                        //go to profile activity (with updated info)
+                        startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Password must be 8-15 characters long and contain a number or special character", Toast.LENGTH_LONG).show();
                     }
-                    //make PUT request
-                    successfulPUT = false;
-                    putUserInfoReq();
-
-                    //TODO - add check for successfulPUT that accounts for delayed Volley response
-                    //On successful POST, update shared preferences to new values
-                    SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
-                    //make editor for sharedPreferences
-                    SharedPreferences.Editor editor = saved_values.edit();
-                    // put values into sharedPreferences
-                    editor.putString(getString(R.string.USERNAME_KEY), username);
-                    editor.putString(getString(R.string.EMAIL_KEY), emailAddress);
-                    editor.putString(getString(R.string.PASSWORD_KEY), password);
-                    // save new key-value data
-                    editor.apply();
-
-                    //go to profile activity (with updated info)
-                    startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -196,6 +200,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 popupMessage.setVisibility(View.VISIBLE);
                 confirmDeleteAccountButton.setVisibility(View.VISIBLE);
                 cancelDeleteAccountButton.setVisibility(View.VISIBLE);
+
+                //disable other buttons
+                saveButton.setEnabled(false);
+                exitButton.setEnabled(false);
             }
         });
 
@@ -208,7 +216,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = saved_values.edit();
                 editor.clear();
                 editor.apply();
-
                 //send Volley delete request, will send user back to EntryActivity
                 deleteUserReq();
             }
@@ -223,11 +230,47 @@ public class EditProfileActivity extends AppCompatActivity {
                 popupMessage.setVisibility(View.INVISIBLE);
                 confirmDeleteAccountButton.setVisibility(View.INVISIBLE);
                 cancelDeleteAccountButton.setVisibility(View.INVISIBLE);
+
+                //re-enable other buttons
+                saveButton.setEnabled(false);
+                exitButton.setEnabled(false);
             }
         });
     }
 
+    /**
+     * Helper function that checks whether a string contains at least one number or special character
+     * Used in isValidPassword()
+     * @param s - string to be checked
+     * @return true if string s contains a number or special character, false otherwise
+     */
+    private Boolean containsNumberOrSpecial(String s){
+        char c;
+        for(int i = 0; i < s.length(); ++i){
+            c = s.charAt(i);
+            if(Character.isDigit(c)){
+                return true;
+            } else if (!Character.isDigit(c) &&  !Character.isLetter(c) && !Character.isWhitespace(c)){
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /**
+     * Helper function that checks whether a string is a valid password
+     * Requirements for a valid password include being 8-15 characters in length and
+     * containing at least one special character or number
+     * @param s - string to be checked
+     * @return true if string s meets password requirements, false otherwise
+     */
+    private Boolean isValidPassword(String s){
+        if(s.length() > 7 && s.length() < 16 && containsNumberOrSpecial(s)){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Volley PUT request to PUT user's new profile information to the server
@@ -239,17 +282,17 @@ public class EditProfileActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        successfulPut = true;
                         Log.d("Volley Response", response.toString());
 //                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
-                        successfulPUT = true;
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        successfulPut = false;
                         Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
                         Log.e("Volley Error", error.toString());
-                        successfulPUT = false;
                     }
                 }) {
             @Override

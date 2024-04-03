@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,11 +37,9 @@ public class TrendingActivity extends AppCompatActivity {
 
         createRecipe = findViewById(R.id.create_recipe);
 
-        //get username from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
 
         createRecipe.setOnClickListener(new View.OnClickListener() {
@@ -61,22 +61,18 @@ public class TrendingActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_following) {
                 Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
                 Intent intent = new Intent(getApplicationContext(), SavedActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }

@@ -44,16 +44,16 @@ public class LoginActivity extends AppCompatActivity {
     /** JSONObject to store data for POST request */
     private JSONObject user;
 
-    /** constant key for shared preferences */
-    public static final String SHARED_PREFS = "shared_prefs";
-    /** constant key for storing user's userId */
-    public static final String USERID_KEY = "userid_key";
-    /** constant key for storing user's userId */
-    public static final String USERNAME_KEY = "username_key";
-    /** constant key for storing user's email */
-    public static final String EMAIL_KEY = "email_key";
-    /** constant key for storing user's password */
-    public static final String PASSWORD_KEY = "password_key";
+//    /** constant key for shared preferences */
+//    public static final String SHARED_PREFS = "shared_prefs";
+//    /** constant key for storing user's userId */
+//    public static final String USERID_KEY = "userid_key";
+//    /** constant key for storing user's userId */
+//    public static final String USERNAME_KEY = "username_key";
+//    /** constant key for storing user's email */
+//    public static final String EMAIL_KEY = "email_key";
+//    /** constant key for storing user's password */
+//    public static final String PASSWORD_KEY = "password_key";
 
     /**
      * onCreate method for LoginActivity

@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +72,6 @@ public class SignupActivity extends AppCompatActivity {
         entryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /* when entry button is pressed, use intent to switch to EntryActivity */
                 Intent intent = new Intent(SignupActivity.this, EntryActivity.class);
                 startActivity(intent);  // go to EntryActivity
@@ -88,25 +89,65 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
 
-                /* if passwords match, make volley signup request */
+                /* if passwords match and meet requirements, make volley signup request */
                 if (password.equals(confirm)){
-                    Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
-                    user = new JSONObject();
-                    try {
-                        user.put("username", username);
-                        user.put("emailAddress", email);
-                        user.put("password", password);
-                    } catch (JSONException e){
-                        e.printStackTrace();
+                    if(isValidPassword(password)) {
+                        Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
+                        user = new JSONObject();
+                        try {
+                            user.put("username", username);
+                            user.put("emailAddress", email);
+                            user.put("password", password);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        makeSignupRequest();
                     }
-                    makeSignupRequest();
+                    else {
+                        Toast.makeText(getApplicationContext(), "Password must be 8-15 characters long & contain a number or special character", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
+
+    /**
+     * Helper function that checks whether a string contains at least one number or special character
+     * Used in isValidPassword()
+     * @param s - string to be checked
+     * @return true if string s contains a number or special character, false otherwise
+     */
+    private Boolean containsNumberOrSpecial(String s){
+        char c;
+        for(int i = 0; i < s.length(); ++i){
+            c = s.charAt(i);
+            if(Character.isDigit(c)){
+                return true;
+            } else if (!Character.isDigit(c) &&  !Character.isLetter(c) && !Character.isWhitespace(c)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function that checks whether a string is a valid password
+     * Requirements for a valid password include being 8-15 characters in length and
+     * containing at least one special character or number
+     * @param s - string to be checked
+     * @return true if string s meets password requirements, false otherwise
+     */
+    private Boolean isValidPassword(String s){
+        if(s.length() > 7 && s.length() < 16 && containsNumberOrSpecial(s)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     /**
      * Volley POST request to attempt to create a new account with the user information
@@ -128,13 +169,24 @@ public class SignupActivity extends AppCompatActivity {
                         }
                         /* user does not yet exist in DB the new user is returned by backend, start profile activity with user info */
                         else {
+                            // getting the data which is stored in shared preferences.
+                            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                            //make editor for sharedPreferences
+                            SharedPreferences.Editor editor = saved_values.edit();
+
+                            // put values into sharedPreferences
                             try {
-                                Intent intent = new Intent(SignupActivity.this, ProfileActivity.class);
-                                intent.putExtra("id", response.getInt("id"));  // key-value to pass to the ProfileActivity
-                                startActivity(intent);  // go to ProfileActivity with the key-value data (the user's id)
+                                editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
+                                editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
+                                editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
+                                editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
+                            // to save our new key-value data
+                            editor.apply();
+                            // go to ProfileActivity
+                            startActivity(new Intent(SignupActivity.this, ProfileActivity.class));
                         }
                     }
                 },
@@ -156,13 +208,6 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                try{
-                    params.put("username", user.getString("username"));
-                    params.put("emailAddress", user.getString("emailAddress"));
-                    params.put("password", user.getString("password"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
                 return params;
             }
         };
