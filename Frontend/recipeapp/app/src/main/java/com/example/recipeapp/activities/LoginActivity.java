@@ -122,8 +122,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Login received Volley response", Toast.LENGTH_LONG).show();
 
+                        Boolean userExists = false;
+                        try {
+                            userExists = response.getInt("id") >= 1;
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         /* if backend returns null, it means the user does not exist in the DB */
-                        if(response == null){
+                        if(!userExists){ //
                             Toast.makeText(getApplicationContext(), "User does not exist. Try Signup!", Toast.LENGTH_LONG).show();
                         }
                         /* user exist in DB and is returned by backend, start profile activity with user info */
@@ -151,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError or Nonexistent User)", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Login unsuccessful (VolleyError)", Toast.LENGTH_LONG).show();
                     }
                 }
         ){

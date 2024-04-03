@@ -163,8 +163,15 @@ public class SignupActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Signup received Volley response", Toast.LENGTH_LONG).show();
 
+                        Boolean userAlreadyExists = true;
+                        try {
+                            userAlreadyExists = response.getInt("id") >= 1;
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
                         /* if backend returns null, it means the user already exists in the DB */
-                        if(response == null){
+                        if(userAlreadyExists){
                             Toast.makeText(getApplicationContext(), "User already exists. Try Login!", Toast.LENGTH_LONG).show();
                         }
                         /* user does not yet exist in DB the new user is returned by backend, start profile activity with user info */

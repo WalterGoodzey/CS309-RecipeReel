@@ -79,8 +79,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private String URL_EDIT_THIS_USER;
     /** JSONObject to store and send local user's profile information */
     private JSONObject user;
-    /** Boolean to flag whether PUT request was successful*/
-    private Boolean successfulPut;
 
     /**
      * onCreate method for EditProfileActivity
@@ -155,23 +153,8 @@ public class EditProfileActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         //make PUT request
-                        successfulPut = false;
                         putUserInfoReq();
 
-                        //TODO - add check for successfulPUT that accounts for delayed Volley response
-                        //On successful POST, update shared preferences to new values
-                        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
-                        //make editor for sharedPreferences
-                        SharedPreferences.Editor editor = saved_values.edit();
-                        // put values into sharedPreferences
-                        editor.putString(getString(R.string.USERNAME_KEY), username);
-                        editor.putString(getString(R.string.EMAIL_KEY), emailAddress);
-                        editor.putString(getString(R.string.PASSWORD_KEY), password);
-                        // save new key-value data
-                        editor.apply();
-
-                        //go to profile activity (with updated info)
-                        startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Password must be 8-15 characters long and contain a number or special character", Toast.LENGTH_LONG).show();
                     }
@@ -282,16 +265,31 @@ public class EditProfileActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        successfulPut = true;
                         Log.d("Volley Response", response.toString());
-//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+                        try {
+                            // getting the data which is stored in shared preferences.
+                            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                            //make editor for sharedPreferences
+                            SharedPreferences.Editor editor = saved_values.edit();
+                            // put values into sharedPreferences
+                            editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
+                            editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
+                            editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
+                            editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
+                            // to save our new key-value data
+                            editor.apply();
+                            // go to ProfileActivity
+                            startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        successfulPut = false;
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Update Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
                         Log.e("Volley Error", error.toString());
                     }
                 }) {
@@ -325,7 +323,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Volley Response", response.toString());
-//                        Toast.makeText(getApplicationContext(), "Volley Received Response, deleting account", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Volley Received Response, Account Deleted", Toast.LENGTH_LONG).show();
 
                         /* when account is deleted, use intent to switch to Entry Activity */
                         Intent intent = new Intent(EditProfileActivity.this, EntryActivity.class);
@@ -335,7 +333,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Delete Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
                         Log.e("Volley Error", error.toString());
                     }
                 }) {
