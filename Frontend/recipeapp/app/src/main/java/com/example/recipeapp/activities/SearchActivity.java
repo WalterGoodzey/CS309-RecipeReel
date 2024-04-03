@@ -17,7 +17,7 @@ public class SearchActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
     /** Button to bring user to ChatActivity - TEMPORARY (for testing) */
-    private Button chatButton;
+    private Button searchButton;
 
     /**
      * onCreate method for SearchActivity
@@ -32,7 +32,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        chatButton = findViewById(R.id.search_chat_btn);
+        searchButton = findViewById(R.id.search_button);
 
         //get username from previous activity
         Bundle extras = getIntent().getExtras();
@@ -41,13 +41,13 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         /* click listener on chat button pressed */
-        chatButton.setOnClickListener(new View.OnClickListener() {
+        searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /* when chat button is pressed, use intent to switch to Chat Activity */
-                Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
-                intent.putExtra("id", userId);
-                startActivity(intent);  // go to ChatActivity
+//                Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
+//                intent.putExtra("id", userId);
+//                startActivity(intent);  // go to ChatActivity
             }
         });
 
