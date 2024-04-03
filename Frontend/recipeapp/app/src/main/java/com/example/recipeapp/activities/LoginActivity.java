@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "Login received Volley response", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "Login received Volley response", Toast.LENGTH_LONG).show();
 
                         Boolean userExists = false;
                         try {
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         /* if backend returns null, it means the user does not exist in the DB */
                         if(!userExists){ //
-                            Toast.makeText(getApplicationContext(), "User does not exist. Try Signup!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "User does not exist or incorrect password", Toast.LENGTH_LONG).show();
                         }
                         /* user exist in DB and is returned by backend, start profile activity with user info */
                         else {
