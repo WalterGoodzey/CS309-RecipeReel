@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".EntryActivity">
+    tools:context=".activities.EntryActivity">
 
     <TextView
         android:id="@+id/entry_msg_txt"
