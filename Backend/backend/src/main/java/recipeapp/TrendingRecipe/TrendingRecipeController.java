@@ -16,9 +16,13 @@ import recipeapp.Recipes.RecipeRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
-* @author Will Custis
- **/
+ * Controller class for managing trending recipes in the recipe sharing app.
+ * This class handles HTTP requests related to trending recipes.
+ *
+ * @author Will Custis
+ */
 @RestController
 public class TrendingRecipeController {
 
@@ -31,7 +35,10 @@ public class TrendingRecipeController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    //Returns a list of recipe objects from the trendingRecipes in TrendingRecipeRepository
+    /**
+     * Retrieves a list of all trending recipes.
+     * @return List of Recipe objects representing all trending recipes.
+     */
     @GetMapping(path = "/trending")
     List<Recipe> getAllTrending(){
         List<Recipe> out = new ArrayList<>();
@@ -42,13 +49,21 @@ public class TrendingRecipeController {
         return out;
     }
 
-    //Returns a single recipe from a specified trending recipe object in the repository
+    /**
+     * Retrieves a trending recipe by its ID.
+     * @param id The ID of the trending recipe to retrieve.
+     * @return The Recipe object associated with the specified trending recipe ID.
+     */
     @GetMapping(path = "/trending/{id}")
     Recipe getTrendingRecipeById(@PathVariable int id){
         return trendingRecipeRepository.findById(id).getRecipe();
     }
 
-    //Adds a recipe to a new trending recipe object where the body is the recipe id
+    /**
+     * Adds a recipe to the list of trending recipes.
+     * @param stringId The ID of the recipe to add (in string format).
+     * @return A success message if the addition is successful, otherwise a failure message.
+     */
     @PostMapping(path = "/trending")
     String addRecipeByRecipeId(@RequestBody String stringId){
         int id = Integer.parseInt(stringId);
@@ -61,7 +76,12 @@ public class TrendingRecipeController {
         trendingRecipeRepository.save(trendingRecipe);
         return success;
     }
-
+    /**
+     * Updates the recipe associated with a trending recipe.
+     * @param id The ID of the trending recipe to update.
+     * @param tempId The ID of the new recipe to associate with the trending recipe (in string format).
+     * @return The updated Recipe object associated with the trending recipe.
+     */
     @PutMapping(path = "/trending/{id}")
     Recipe updateTrendingRecipe(@PathVariable int id, @RequestBody String tempId){
         TrendingRecipe trendingRecipe = trendingRecipeRepository.findById(id);
@@ -74,7 +94,11 @@ public class TrendingRecipeController {
         trendingRecipeRepository.save(trendingRecipe);
         return  trendingRecipe.getRecipe();
     }
-
+    /**
+     * Deletes a trending recipe by its ID.
+     * @param id The ID of the trending recipe to delete.
+     * @return A success message if the deletion is successful, otherwise a failure message.
+     */
     @DeleteMapping(path = "/trending/{id}")
     String deleteTrendingRecipe(@PathVariable int id){
         TrendingRecipe trending = trendingRecipeRepository.findById(id);

@@ -9,11 +9,11 @@ import recipeapp.Recipes.Recipe;
 import java.util.List;
 
 /**
+ * Represents a user for login purposes in the recipe sharing app.
+ * This entity stores information about a user, including their username and password.
  *
  * @author David Borucki
- *
  */
-
 @Entity @RequiredArgsConstructor @NoArgsConstructor
 @Getter @Setter @ToString
 public class LoginUsers{
@@ -26,9 +26,11 @@ public class LoginUsers{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /** The username of the user. */
     @NonNull
     private String username;
 
+    /** The password of the user. */
     @NonNull
     private String password;
 
