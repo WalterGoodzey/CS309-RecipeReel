@@ -202,8 +202,8 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_myChats){
-//            //go to myChats activity
-//            startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
+            //go to myChats activity
+            startActivity(new Intent(ProfileActivity.this, MyChatsActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_helperchat) { //Chat with helper "admin" user (possibly temporary to test chat websocket, possible new feature)
             //go to chat, sending helper "admin" account username as an extra in intent

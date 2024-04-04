@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.objects;
 
 /**
  * Class to model a single chat message and its data

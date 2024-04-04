@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.example.recipeapp.objects.ProfileItemObject;
+import com.example.recipeapp.R;
 
 import java.util.List;
 /**

@@ -10,8 +10,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.recipeapp.MessageAdapter;
-import com.example.recipeapp.MessageItemObject;
+import com.example.recipeapp.adapters.MessageAdapter;
+import com.example.recipeapp.objects.MessageItemObject;
 import com.example.recipeapp.R;
 import com.example.recipeapp.WebSocketListener;
 import com.example.recipeapp.WebSocketManager;

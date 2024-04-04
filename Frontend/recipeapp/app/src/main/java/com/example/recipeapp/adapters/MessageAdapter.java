@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+
+import com.example.recipeapp.objects.MessageItemObject;
+import com.example.recipeapp.R;
 
 import java.util.List;
 

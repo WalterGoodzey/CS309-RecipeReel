@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.recipeapp.R;
-import com.example.recipeapp.RecipeAdapter;
-import com.example.recipeapp.RecipeItemObject;
+import com.example.recipeapp.adapters.RecipeAdapter;
+import com.example.recipeapp.objects.RecipeItemObject;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class FollowingActivity extends AppCompatActivity {
         //for example
         for(int i = 0; i < 5; i++){
             String title = "Example" + i;
-            // Create a ListItemObject and add it to the adapter
+            // Create a RecipeItemObject and add it to the adapter
             RecipeItemObject item = new RecipeItemObject(title, "author", "description", null);
             adapter.add(item);
         }

@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.objects;
 
 /**
  * Class to model a single profile preview object and it's data
