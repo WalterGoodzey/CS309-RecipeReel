@@ -14,6 +14,7 @@
     <string name="profile_options_edit">Edit Profile</string>
     <string name="profile_options_delete">Delete Profile</string>
     <string name="profile_options_create">Create Recipe</string>
+    <string name="profile_options_myChats">My Chats</string>
     <string name="profile_options_helperchat">Chat with Helper</string>
 
     <string name="PREF_KEY">shared_prefs</string>

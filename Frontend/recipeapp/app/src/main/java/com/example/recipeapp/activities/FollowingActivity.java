@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.recipeapp.R;
+import com.example.recipeapp.RecipeAdapter;
+import com.example.recipeapp.RecipeItemObject;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 /**
  * Activity to display recent recipes published by users that the
@@ -17,6 +23,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class FollowingActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
+    /** RecipeAdapter for the ListView of RecipeItemObjects */
+    private RecipeAdapter adapter;
+    /** ListView to store list of RecipeItemObjects */
+    private ListView listView;
 
     /**
      * onCreate method for FollowingActivity
@@ -35,9 +45,16 @@ public class FollowingActivity extends AppCompatActivity {
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
+        /* options toolbar at top */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.following_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Following");
+        }
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_following);
-
+        bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
             int id = item.getItemId();
@@ -63,5 +80,24 @@ public class FollowingActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        //recipe list setup and operation
+        listView = findViewById(R.id.followingListView);
+
+        // Initialize the adapter with an empty list (data will be added later)
+        adapter = new RecipeAdapter(this, new ArrayList<>());
+        listView.setAdapter(adapter);
+
+//        //make JSON array request on opening
+//        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
+//        makeRecipeListReq();
+
+        //for example
+        for(int i = 0; i < 5; i++){
+            String title = "Example" + i;
+            // Create a ListItemObject and add it to the adapter
+            RecipeItemObject item = new RecipeItemObject(title, "author", "description", null);
+            adapter.add(item);
+        }
     }
 }

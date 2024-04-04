@@ -8,10 +8,17 @@
         android:icon="@drawable/ic_plus"
         android:actionLayout="@layout/activity_profile"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/profile_options_myChats"
+        android:orderInCategory="2"
+        android:title="@string/profile_options_myChats"
+        android:icon="@drawable/mychatsbutton"
+        android:actionLayout="@layout/activity_profile"
+        app:showAsAction="always"/>
 <!--    Options submenu -->
     <item
         android:id="@+id/profile_options_overflow"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="Overflow"
         android:icon="@drawable/ic_options"
         android:actionLayout="@layout/activity_profile"
