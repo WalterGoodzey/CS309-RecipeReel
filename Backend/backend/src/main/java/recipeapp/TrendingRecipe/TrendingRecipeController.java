@@ -2,6 +2,7 @@ package recipeapp.TrendingRecipe;
 
 import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import java.util.List;
  * This class handles HTTP requests related to trending recipes.
  *
  * @author Will Custis
+ * @author David Borucki
  */
 @RestController
 public class TrendingRecipeController {
@@ -42,11 +44,14 @@ public class TrendingRecipeController {
     @GetMapping(path = "/trending")
     List<Recipe> getAllTrending(){
         List<Recipe> out = new ArrayList<>();
-        List<TrendingRecipe> trendingList = trendingRecipeRepository.findAll();
-        for (TrendingRecipe trendingRecipe : trendingList) {
-            out.add(trendingRecipe.getRecipe());
-        }
-        return out;
+//        List<TrendingRecipe> trendingList = trendingRecipeRepository.findAll();
+//
+//        for (TrendingRecipe trendingRecipe : trendingList) {
+//            out.add(trendingRecipe.getRecipe());
+//        }
+        List<Recipe> ret = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "rating"));
+
+        return ret;
     }
 
     /**
