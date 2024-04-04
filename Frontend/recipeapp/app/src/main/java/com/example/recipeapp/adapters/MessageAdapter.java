@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.adapters;
 
 
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+
+import com.example.recipeapp.objects.MessageItemObject;
+import com.example.recipeapp.R;
 
 import java.util.List;
 
@@ -102,8 +105,8 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
 
 
             // Populate the data into the template view using the data object
-            String tempUser = "user: " + item.getSenderId();
-            itemUserReceived.setText(tempUser); //TODO - update to get sender's username
+            String otherUser = item.getSenderUsername();
+            itemUserReceived.setText(otherUser);
 
             //populate received user, message, & timestamp
             itemMessageReceived.setText(item.getMessage());
