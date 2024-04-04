@@ -134,6 +134,12 @@ public class UserController {
     List<Users> getAllUsers(){
         return userRepository.findAll();
     }
+    @GetMapping(path = "/users/{id}/recipes")
+    List<Recipe> getUsersRecipes(@PathVariable int id) {
+        Users u = getUserById(id);
+        return u.getRecipes();
+    }
+
     /**
      * GET - get saved recipes of a user.
      * @param id The ID of the user.

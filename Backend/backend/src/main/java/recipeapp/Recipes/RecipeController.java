@@ -55,11 +55,13 @@ public class RecipeController {
      * @return A success message if the creation is successful, otherwise a failure message.
      */
     @PostMapping(path = "/recipes")
-    String createRecipe(@RequestBody Recipe Recipe){
-        if (Recipe == null)
+    String createRecipe(@RequestBody Recipe recipe){
+        if (recipe == null)
             return failure;
-        Recipe.setUsername(userRepository.findById(Recipe.getCreatorUserId()).getUsername());
-        recipeRepository.save(Recipe);
+        recipe.setUsername(userRepository.findById(recipe.getCreatorUserId()).getUsername());
+        Users u = userRepository.findByUsername(recipe.getUsername());
+        u.addRecipe(recipe);
+        recipeRepository.save(recipe);
         return success;
     }
     /**
