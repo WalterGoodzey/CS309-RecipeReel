@@ -94,6 +94,7 @@ public class TrendingRecipeController {
         trendingRecipeRepository.save(trendingRecipe);
         return  trendingRecipe.getRecipe();
     }
+
     /**
      * Deletes a trending recipe by its ID.
      * @param id The ID of the trending recipe to delete.
