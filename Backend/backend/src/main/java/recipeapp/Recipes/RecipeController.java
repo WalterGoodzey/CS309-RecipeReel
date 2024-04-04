@@ -1,6 +1,8 @@
 package recipeapp.Recipes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import recipeapp.Tags.Tag;
 import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
 
@@ -32,6 +35,7 @@ public class RecipeController {
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
+
     /**
      * Retrieves all recipes stored in the system.
      * @return List of Recipe objects representing all recipes.
@@ -40,6 +44,7 @@ public class RecipeController {
     List<Recipe> getAllRecipes(){
         return recipeRepository.findAll();
     }
+
     /**
      * Retrieves a recipe by its ID.
      * @param id The ID of the recipe to retrieve.
@@ -49,6 +54,19 @@ public class RecipeController {
     Recipe getRecipeById(@PathVariable int id){
         return recipeRepository.findById(id);
     }
+
+    /**
+     * Retrieves all recipes from the repo matching the search
+     * @param searchString
+     * @return A list of recipes with searchString as a substring of the title and matching the tags
+     */
+    @GetMapping(path = "/recipes/search/{searchString}")
+    List<Recipe> searchRecipes(@PathVariable String searchString, @RequestBody List<Tag> tags){
+        return recipeRepository.findByTitleContainingIgnoreCase(searchString);
+    }
+
+
+
     /**
      * Creates a new recipe.
      * @param Recipe The Recipe object representing the new recipe.
@@ -62,6 +80,7 @@ public class RecipeController {
         recipeRepository.save(Recipe);
         return success;
     }
+
     /**
      * Updates an existing recipe.
      * @param id The ID of the recipe to update.
@@ -76,6 +95,7 @@ public class RecipeController {
         recipeRepository.save(request);
         return recipeRepository.findById(id);
     }
+
     /**
      * Deletes a recipe by its ID.
      * @param id The ID of the recipe to delete.

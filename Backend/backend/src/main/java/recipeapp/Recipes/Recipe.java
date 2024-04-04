@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
+import recipeapp.Tags.Tag;
 import recipeapp.Users.*;
+
+import java.util.List;
 
 /**
  * Represents a recipe in the recipe sharing app.
@@ -53,7 +56,8 @@ public class Recipe {
     private String instructions;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
-    private String tags;
+    @ElementCollection
+    private List<String> tags;
 
 
     /** The rating of the recipe given by users. */
