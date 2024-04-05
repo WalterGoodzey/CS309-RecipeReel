@@ -1,5 +1,7 @@
 package recipeapp.Chat;
 import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -18,7 +20,11 @@ public class DM {
     private int id;
     /** The username of the sender of the direct message. */
     @Column
-    private String username;
+    private String sender;
+    @Column
+    private String receiver;
+    @Column
+    private int chatRoomId;
     /** The content of the direct message. */
     @Lob
     private String content;
@@ -28,13 +34,11 @@ public class DM {
     private Date sent = new Date();
     /** Default constructor */
     public DM(){};
-    /**
-     * Constructs a new direct message with the given username and content.
-     * @param username the username of the sender
-     * @param content the content of the direct message
-     */
-    public DM(String username, String content) {
-        this.username = username;
+
+    public DM(String sender, String receiver, int chatRoomId, String content) {
+	this.sender = sender;
+    this.receiver = receiver;
+	this.chatRoomId = chatRoomId;
         this.content = content;
     };
 

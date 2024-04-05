@@ -18,11 +18,11 @@
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/savedListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/saved_toolbar">
 
     </ListView>
 
@@ -30,11 +30,19 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/darkgray"
         app:itemIconSize="60dp"
-        app:itemIconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-
+        android:background="#000000"
+        app:itemTextColor="@color/white"
         app:menu="@menu/bottom_menu" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/saved_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
