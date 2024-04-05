@@ -9,6 +9,7 @@ import com.example.recipeapp.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 /**
  * Activity to view a single recipe in its entirety
@@ -22,6 +23,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private TextView authorTxt;
     /** TextView to display the description of the recipe */
     private TextView descriptionTxt;
+    /** TextView to display the rating of the recipe*/
+    private TextView ratingTxt;
+    /** TextView to display the instructions of the recipe*/
+    private TextView instructionsTxt;
+    /** TextView to display the ingredients of the recipe*/
+    private TextView ingredientsTxt;
     /** JSONObject to store the full recipe */
     private JSONObject fullRecipeJSON;
 
@@ -46,7 +53,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             //fill text with data from JSON recipe
             titleTxt.setText(fullRecipeJSON.getString("title"));
             authorTxt.setText(fullRecipeJSON.getString("author"));
-            descriptionTxt.setText(fullRecipeJSON.getString("description"));
+            ratingTxt.setText(fullRecipeJSON.getString("rating"));
+            instructionsTxt.setText(fullRecipeJSON.getString("instructions"));
+            ingredientsTxt.setText(fullRecipeJSON.getString("ingredients"));
         } catch (JSONException e) {
 
             throw new RuntimeException(e);
