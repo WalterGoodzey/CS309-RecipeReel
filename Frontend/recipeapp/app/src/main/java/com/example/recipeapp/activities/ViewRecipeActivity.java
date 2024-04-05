@@ -24,49 +24,78 @@ import java.util.Map;
 
 /**
  * Activity to view a single recipe in its entirety
- *
+ * <p>
  * TODO - Update to display the rest of the recipe's data
  */
 public class ViewRecipeActivity extends AppCompatActivity {
-    /** TextView to display the title of the recipe */
+    /**
+     * TextView to display the title of the recipe
+     */
     private TextView titleTxt;
-    /** TextView to display the author of the recipe */
+    /**
+     * TextView to display the author of the recipe
+     */
     private TextView authorTxt;
-    /** TextView to display the description of the recipe */
+    /**
+     * TextView to display the description of the recipe
+     */
     private TextView descriptionTxt;
-    /** TextView to display the rating of the recipe*/
+    /**
+     * TextView to display the rating of the recipe
+     */
     private TextView ratingTxt;
-    /** TextView to display the instructions of the recipe*/
+    /**
+     * TextView to display the instructions of the recipe
+     */
     private TextView instructionsTxt;
-    /** TextView to display the ingredients of the recipe*/
+    /**
+     * TextView to display the ingredients of the recipe
+     */
     private TextView ingredientsTxt;
-    /** JSONObject to store the full recipe */
+    /**
+     * JSONObject to store the full recipe
+     */
     private JSONObject fullRecipeJSON;
-    /** recipe's id */
+    /**
+     * recipe's id
+     */
     private int recipeId;
 
-    /** Button for giving recipe a 1 star rating - TEMPORARY */
+    /**
+     * Button for giving recipe a 1 star rating - TEMPORARY
+     */
     private Button rate1;
-    /** Button for giving recipe a 2 star rating - TEMPORARY */
+    /**
+     * Button for giving recipe a 2 star rating - TEMPORARY
+     */
     private Button rate2;
-    /** Button for giving recipe a 3 star rating - TEMPORARY */
+    /**
+     * Button for giving recipe a 3 star rating - TEMPORARY
+     */
     private Button rate3;
-    /** Button for giving recipe a 4 star rating - TEMPORARY */
+    /**
+     * Button for giving recipe a 4 star rating - TEMPORARY
+     */
     private Button rate4;
-    /** Button for giving recipe a 5 star rating - TEMPORARY */
+    /**
+     * Button for giving recipe a 5 star rating - TEMPORARY
+     */
     private Button rate5;
-    /** BASE URL for recipe rating requests */
+    /**
+     * BASE URL for recipe rating requests
+     */
     private String BASE_URL_RECIPES = "http://coms-309-018.class.las.iastate.edu:8080/recipes";
-    /** Specific URL for recipe rating requests */
+    /**
+     * Specific URL for recipe rating requests
+     */
     private String SPECIFIC_URL_RATING;
 
     /**
      * onCreate for ViewRecipeActivity
      *
      * @param savedInstanceState If the activity is being re-initialized after
-     *     previously being shut down then this Bundle contains the data it most
-     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
-     *
+     *                           previously being shut down then this Bundle contains the data it most
+     *                           recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +110,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
             //fill text with data from JSON recipe
             titleTxt.setText(fullRecipeJSON.getString("title"));
             authorTxt.setText(fullRecipeJSON.getString("author"));
-//            ratingTxt.setText(fullRecipeJSON.getString("rating"));
             instructionsTxt.setText(fullRecipeJSON.getString("instructions"));
             ingredientsTxt.setText(fullRecipeJSON.getString("ingredients"));
         } catch (JSONException e) {
@@ -97,64 +125,65 @@ public class ViewRecipeActivity extends AppCompatActivity {
 //            throw new RuntimeException(e);
 //        }
 
-        rate1 = findViewById(R.id.rate1_button);
-        rate2 = findViewById(R.id.rate2_button);
-        rate3 = findViewById(R.id.rate3_button);
-        rate4 = findViewById(R.id.rate4_button);
-        rate5 = findViewById(R.id.rate5_button);
+            rate1 = findViewById(R.id.rate1_button);
+            rate2 = findViewById(R.id.rate2_button);
+            rate3 = findViewById(R.id.rate3_button);
+            rate4 = findViewById(R.id.rate4_button);
+            rate5 = findViewById(R.id.rate5_button);
 
-        //get recipeId from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            recipeId = extras.getInt("recipeId");
+            //get recipeId from previous activity
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                recipeId = extras.getInt("recipeId");
+            }
+
+
+            /* click listener on rate1 button pressed */
+            rate1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
+                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 1;
+                    putRecipeRating();
+                }
+            });
+            /* click listener on rate2 button pressed */
+            rate2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
+                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 2;
+                    putRecipeRating();
+                }
+            });
+            /* click listener on rate3 button pressed */
+            rate3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
+                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 3;
+                    putRecipeRating();
+                }
+            });
+            /* click listener on rate4 button pressed */
+            rate4.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
+                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 4;
+                    putRecipeRating();
+                }
+            });
+            /* click listener on rate5 button pressed */
+            rate5.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
+                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 5;
+                    putRecipeRating();
+                }
+            });
         }
-
-
-        /* click listener on rate1 button pressed */
-        rate1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 1;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate2 button pressed */
-        rate2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 2;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate3 button pressed */
-        rate3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 3;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate4 button pressed */
-        rate4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 4;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate5 button pressed */
-        rate5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 5;
-                putRecipeRating();
-            }
-        });
     }
 
     /**
@@ -186,6 +215,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
