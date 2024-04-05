@@ -10,11 +10,11 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.recipeapp.adapters.MessageAdapter;
-import com.example.recipeapp.objects.MessageItemObject;
 import com.example.recipeapp.R;
 import com.example.recipeapp.WebSocketListener;
 import com.example.recipeapp.WebSocketManager;
+import com.example.recipeapp.adapters.MessageAdapter;
+import com.example.recipeapp.objects.MessageItemObject;
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -152,5 +152,56 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     @Override
     public void onWebSocketError(Exception ex) {}
 
+
+//    /**
+//     * Volley GET request to get list of user's active chats
+//     */
+//    private void getChatroomsReq() {
+//        JsonArrayRequest profileListReq = new JsonArrayRequest(
+//                Request.Method.GET,
+//                SPECIFIC_URL_CHATROOMS,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d("Volley Response", response.toString());
+//
+//                        // Parse the JSON array and add data to the adapter
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                String username = response.getString(i);
+//                                // Create a ProfileItemObject and add it to the adapter
+//                                ProfileItemObject item = new ProfileItemObject(username);
+//                                adapter.add(item);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("param1", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(profileListReq);
+//    }
 }
 
