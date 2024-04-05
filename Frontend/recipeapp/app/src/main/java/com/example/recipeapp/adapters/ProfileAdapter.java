@@ -1,5 +1,4 @@
-package com.example.recipeapp;
-
+package com.example.recipeapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,20 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import java.util.List;
 
+import com.example.recipeapp.objects.ProfileItemObject;
+import com.example.recipeapp.R;
+
+import java.util.List;
 /**
- * Adapter class for a list of recipes
+ * Adapter class for a list of profiles
  *
  * @author Ryan McFadden
  */
-public class RecipeAdapter extends ArrayAdapter<RecipeItemObject> {
+public class ProfileAdapter extends ArrayAdapter<ProfileItemObject> {
     /**
-     * Constructor for RecipeAdapter
+     * Constructor for ProfileAdapter
      * @param context application's current context
-     * @param items List of RecipeItemObjects
+     * @param items List of ProfileItemObjects
      */
-    public RecipeAdapter(Context context, List<RecipeItemObject> items) {
+    public ProfileAdapter(Context context, List<ProfileItemObject> items) {
         super(context, 0, items);
     }
 
@@ -41,22 +43,19 @@ public class RecipeAdapter extends ArrayAdapter<RecipeItemObject> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        RecipeItemObject item = getItem(position);
+        ProfileItemObject item = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.recipe_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.profile_item, parent, false);
         }
 
         // Lookup view for data population
-        TextView itemTitle = convertView.findViewById(R.id.itemTitle);
-        TextView itemAuthor = convertView.findViewById(R.id.itemAuthor);
-        TextView itemDescription = convertView.findViewById(R.id.itemDescription);
+        TextView itemUsername = convertView.findViewById(R.id.itemUsername);
+
 
         // Populate the data into the template view using the data object
-        itemTitle.setText(item.getTitle());
-        itemAuthor.setText(item.getAuthor());
-        itemDescription.setText(item.getDescription());
+        itemUsername.setText(item.getUsername());
 
         // Return the completed view to render on screen
         return convertView;

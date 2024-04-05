@@ -124,6 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
         //bottom navigation bar setup and functionality
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
+        bottomNavigationView.setItemIconTintList(null);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -180,11 +181,11 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection.
         int itemId = item.getItemId();
-        if(itemId == R.id.profile_options_create){
+        if (itemId == R.id.profile_options_create) {
             //go to CreateRecipeActivity
             startActivity(new Intent(getApplicationContext(), CreateRecipeActivity.class));
             return true;
-        } else if (itemId == R.id.profile_options_logout){
+        } else if (itemId == R.id.profile_options_logout) {
             /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
             // getting the data which is stored in shared preferences.
             SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
@@ -196,9 +197,19 @@ public class ProfileActivity extends AppCompatActivity {
             //go to EntryActivity
             startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
             return true;
-        } else if (itemId == R.id.profile_options_edit){ //Note: EditProfileActivity now includes the option to delete profile
+        } else if (itemId == R.id.profile_options_edit) { //Note: EditProfileActivity now includes the option to delete profile
             //go to password check
             startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
+            return true;
+        } else if (itemId == R.id.profile_options_myChats){
+            //go to myChats activity
+            startActivity(new Intent(ProfileActivity.this, MyChatsActivity.class));
+            return true;
+        } else if (itemId == R.id.profile_options_helperchat) { //Chat with helper "admin" user (possibly temporary to test chat websocket, possible new feature)
+            //go to chat, sending helper "admin" account username as an extra in intent
+            Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+            intent.putExtra("otherChatUser", "HELPERCHAT"); //hard set to HELPERCHAT for now
+            startActivity(intent);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

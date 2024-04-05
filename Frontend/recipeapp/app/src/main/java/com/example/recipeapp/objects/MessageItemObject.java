@@ -1,4 +1,4 @@
-package com.example.recipeapp;
+package com.example.recipeapp.objects;
 
 /**
  * Class to model a single chat message and its data
@@ -12,8 +12,8 @@ public class MessageItemObject {
     private String date;
     /** Time message was sent */
     private String timestamp;
-    /** userId of the sender of the message */
-    private int senderId;
+    /** username of the sender of the message */
+    private String senderUsername;
     /**
      * Boolean to determine whether message was sent or received by local user
      * true = local user sent message
@@ -26,14 +26,14 @@ public class MessageItemObject {
      * @param message body of message
      * @param date date the message is sent
      * @param timestamp time the message is sent
-     * @param senderId userId of the user sending the message
+     * @param senderUsername username of the user sending the message
      * @param sendingMessage Boolean stating whether local user is sent or received this message
      */
-    public MessageItemObject(String message, String date, String timestamp, int senderId, Boolean sendingMessage) {
+    public MessageItemObject(String message, String date, String timestamp, String senderUsername, Boolean sendingMessage) {
         this.message = message;
         this.date = date;
         this.timestamp = timestamp;
-        this.senderId = senderId;
+        this.senderUsername = senderUsername;
         this.sendingMessage = sendingMessage;
     }
 
@@ -53,10 +53,10 @@ public class MessageItemObject {
      */
     public String getTimestamp() { return timestamp; }
     /**
-     * Getter for the senderId of the MessageItemObject
-     * @return senderId
+     * Getter for the senderUsername of the MessageItemObject
+     * @return senderUsername
      */
-    public int getSenderId(){ return senderId; }
+    public String getSenderUsername(){ return senderUsername; }
     /**
      * Getter for the Boolean state of whether the object was
      * sent or received by the local user

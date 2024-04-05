@@ -3,27 +3,27 @@
 
     <item
         android:id="@+id/bottom_trending"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/trendingbutton"
         android:title="Trending" />
 
     <item
         android:id="@+id/bottom_following"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/followingbutton"
         android:title="Following" />
 
     <item
         android:id="@+id/bottom_search"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/searchbutton"
         android:title="Search" />
 
     <item
         android:id="@+id/bottom_saved"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/savedbutton"
         android:title="Saved" />
 
     <item
         android:id="@+id/bottom_profile"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/profilebutton"
         android:title="Profile" />
 
 </menu>

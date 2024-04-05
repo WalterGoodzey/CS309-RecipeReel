@@ -91,9 +91,8 @@
         android:layout_height="wrap_content"
         app:itemIconSize="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/darkgray"
-        app:itemIconTint="@color/white"
-
+        android:background="#000000"
+        app:itemTextColor="@color/white"
         app:menu="@menu/bottom_menu" />
 
     <androidx.appcompat.widget.Toolbar

@@ -60,7 +60,7 @@ public class Recipe {
 
 
     /** The rating of the recipe given by users. */
-    private double rating = 0.0;
+    private double rating = 0;
     private int ratingCount = 0;
     private int totalRating = 0;
 }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,8 +16,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class SearchActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
-    /** Button to bring user to ChatActivity - TEMPORARY (for testing) */
-    private Button chatButton;
 
     /**
      * onCreate method for SearchActivity
@@ -34,25 +30,14 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        chatButton = findViewById(R.id.search_chat_btn);
-
         //get userId from shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
-        /* click listener on chat button pressed */
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when chat button is pressed, use intent to switch to Chat Activity */
-                Intent intent = new Intent(SearchActivity.this, ChatActivity.class);
-                startActivity(intent);  // go to ChatActivity
-            }
-        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_search);
-
+        bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
             int id = item.getItemId();
