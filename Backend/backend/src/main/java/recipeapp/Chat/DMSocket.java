@@ -13,28 +13,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * WebSocket endpoint for handling direct messaging between users in the recipe sharing app.
  */
 @Controller      // Endpoint for springboot
-@ServerEndpoint(value = "/chat/{username}")  // Websocket URL
+@ServerEndpoint(value = "/chat/{username}/{sendToUsername}")  // Websocket URL
 public class DMSocket {
 
     private static DMRepository dmRepository;
+    String senderUsername;
+    String receiverUsername;
     @Autowired
     public void setDmRepository(DMRepository repository) {
         dmRepository = repository;
     }
+    private static ChatRoomRepository chatRoomRepository;
+    @Autowired
+    public void setChatRoomRepository(ChatRoomRepository chatRoomRepo) {
+        chatRoomRepository = chatRoomRepo;
+    }
+    int chatRoomID;
     /** Map to store session and associated username. */
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static Map<Session, String> sessionSendToUsernameMap = new Hashtable<>();
+
     /** Map to store username and associated session. */
-
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
-    /** Logger instance for logging messages. */
 
+    /** Logger instance for logging messages. */
     private final Logger logger = LoggerFactory.getLogger(DMSocket.class);
 
     /**
@@ -44,13 +52,32 @@ public class DMSocket {
      * @throws IOException If an I/O error occurs.
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+    public void onOpen(Session session, @PathParam("username") String username, @PathParam("sendToUsername") String sendToUsername) throws IOException {
+        senderUsername = username;
+        receiverUsername = sendToUsername;
+        List<String> pair = new ArrayList<>();
+        pair.add(username);
+        pair.add(sendToUsername);
+        pair.sort(null);
+        String pairString = pair.get(0) + "&" + pair.get(1);
+
+        ChatRoom chatRoomPossible = chatRoomRepository.findBySenderReceiver(pairString);
+
+        if (chatRoomPossible == null) {
+            ChatRoom newRoom = new ChatRoom(username, sendToUsername);
+            chatRoomRepository.save(newRoom);
+            chatRoomID = chatRoomRepository.findBySenderReceiver(pairString).getId();
+        } else {
+            chatRoomID = chatRoomPossible.getId();
+        }
+
         logger.info("User " + username + " entered onOpen()");
         sessionUsernameMap.put(session,username);
+        sessionSendToUsernameMap.put(session,sendToUsername);
         usernameSessionMap.put(username,session);
-        sendMessageToParticularUser(username,getChatHistory());
-        String msg = "User: " + username + " has entered the chat.";
-        broadcast(msg);
+        sendMessageToParticularUser(username,getChatHistory(username, sendToUsername));
+        String msg = "User: " + username + " is online in the chat room now.";
+	sendMessageToParticularUser(sendToUsername, msg);
     }
     /**
      * Invoked when a user sends a message in the chat.
@@ -61,9 +88,12 @@ public class DMSocket {
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
         logger.info("Entered onMessage(), got message '" + "'");
-        String username = sessionUsernameMap.get(session);
+        //String username = sessionUsernameMap.get(session);
+        String username = senderUsername;
+        //String sendToUsername = sessionSendToUsernameMap.get(session);
+        String sendToUsername = receiverUsername;
         broadcast(username + ": " + msg);
-        dmRepository.save(new DM(username, msg));
+        dmRepository.save(new DM(username, sendToUsername, chatRoomID, msg));
     }
     /**
      * Invoked when a user leaves the chat session.
@@ -95,7 +125,13 @@ public class DMSocket {
      */
     private void sendMessageToParticularUser(String username, String msg){
         try {
-            usernameSessionMap.get(username).getBasicRemote().sendText(msg);
+            if (username.equals(receiverUsername)) {
+                if (isReceiverOnline()) {
+                    usernameSessionMap.get(username).getBasicRemote().sendText(msg);
+                }
+            } else {
+                usernameSessionMap.get(username).getBasicRemote().sendText(msg);
+            }
         }
         catch (IOException e) {
             logger.info("Exception: " + e.getMessage().toString());
@@ -121,18 +157,27 @@ public class DMSocket {
      * Retrieves the chat history consisting of all previous messages.
      * @return The chat history as a string.
      */
-    private String getChatHistory() {
-        List<DM> msgs = dmRepository.findAll();
-
+    private String getChatHistory(String username, String sendToUsername) {
+        List<DM> msgs = dmRepository.findByChatRoomId(chatRoomID);
+        if (msgs == null){
+            return "No chat room found for provided pair of users.";
+        }
         // convert the list to a string
         StringBuilder sb = new StringBuilder();
         if(msgs != null && msgs.size() != 0) {
             for (DM msg : msgs) {
-                sb.append(msg.getUsername() + ": " + msg.getContent() + "\n");
+                sb.append(msg.getSender() + ": " + msg.getContent() + "\n");
             }
         }
         return sb.toString();
     }
+    boolean isReceiverOnline() {
+        if (usernameSessionMap.containsKey(receiverUsername)) {
+            return true;
+        }
+        return false;
+    }
+
 
 
 
