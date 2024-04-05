@@ -114,19 +114,19 @@ public class SavedActivity extends AppCompatActivity {
         for(int i = 0; i < 5; i++){
             String title = "Example" + i;
             // Create a ListItemObject and add it to the adapter
-            RecipeItemObject item = new RecipeItemObject(title, "author", "description", null);
+            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
             adapter.add(item);
         }
 
 
-        //Added to go to activity_view_recipe when an item in listview is clicked
+        //Added to go to ViewRecipeActivity when an item in listview is clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //intent to view single recipe
                 Intent intent = new Intent(SavedActivity.this, ViewRecipeActivity.class);
                 //send full JSON recipe as a string to be used in recipe view Activity
-                intent.putExtra("RecipeJsonAsString", adapter.getItem(i).getFullRecipe().toString());
+                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
@@ -151,12 +151,13 @@ public class SavedActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
+                                int recipeId = jsonObject.getInt("recipeId");
                                 String title = jsonObject.getString("title");
                                 String author = jsonObject.getString("author");
                                 String description = jsonObject.getString("description");
 
                                 // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(title, author, description, jsonObject);
+                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
                                 adapter.add(item);
 
                             } catch (JSONException e) {

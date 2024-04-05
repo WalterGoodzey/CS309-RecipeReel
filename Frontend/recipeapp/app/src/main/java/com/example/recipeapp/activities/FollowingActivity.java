@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,6 +90,19 @@ public class FollowingActivity extends AppCompatActivity {
         adapter = new RecipeAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
+        //Added to go to ViewRecipeActivity when an item in listview is clicked
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //intent to view single recipe
+                Intent intent = new Intent(FollowingActivity.this, ViewRecipeActivity.class);
+                //send full JSON recipe as a string to be used in recipe view Activity
+                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
+                //start ViewRecipeActivity
+                startActivity(intent);
+            }
+        });
+
 //        //make JSON array request on opening
 //        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
 //        makeRecipeListReq();
@@ -96,7 +111,7 @@ public class FollowingActivity extends AppCompatActivity {
         for(int i = 0; i < 5; i++){
             String title = "Example" + i;
             // Create a RecipeItemObject and add it to the adapter
-            RecipeItemObject item = new RecipeItemObject(title, "author", "description", null);
+            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
             adapter.add(item);
         }
     }
