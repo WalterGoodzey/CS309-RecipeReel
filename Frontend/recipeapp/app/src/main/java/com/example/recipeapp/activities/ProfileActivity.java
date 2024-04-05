@@ -10,8 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,14 +19,18 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
+import com.example.recipeapp.adapters.RecipeAdapter;
+import com.example.recipeapp.objects.RecipeItemObject;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView descriptionText;
     /** Button to go to EntryActivity if local user is not logged in */
     private Button entryButton;
-
+    /** RecipeAdapter for the ListView of RecipeItemObjects */
+    private RecipeAdapter adapter;
+    /** ListView to store list of RecipeItemObjects */
+    private ListView listView;
 
     /** Local user's userId */
     private int userId;
@@ -52,14 +59,12 @@ public class ProfileActivity extends AppCompatActivity {
     private String username;
     /** Local user's emailAddress */
     private String emailAddress;
-    /** Local user's password */
-    private String password;
 
 
     /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** Specific URL for local user's Volley requests with server */
-    private String URL_THIS_USER;
+    private String URL_GET_CREATED_ARRAY;
 
 
 
@@ -88,8 +93,13 @@ public class ProfileActivity extends AppCompatActivity {
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
         username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
         emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
-        password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
 
+        //recipe list setup and operation
+        listView = findViewById(R.id.profileListView);
+
+        // Initialize the adapter with an empty list (data will be added later)
+        adapter = new RecipeAdapter(this, new ArrayList<>());
+        listView.setAdapter(adapter);
 
         if(userId > 0) { //user is logged in
             guestText.setVisibility(View.INVISIBLE);
@@ -105,9 +115,24 @@ public class ProfileActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("My Profile");
             }
             toolbar.inflateMenu(R.menu.profile_menu);
+
+            //update URL and get user's created recipes
+            URL_GET_CREATED_ARRAY = URL_USERS + "/" + userId + "/recipes";
+            makeRecipeListReq();
+
+            //for example
+            for(int i = 0; i < 5; i++){
+                String title = "Example" + i;
+                // Create a ListItemObject and add it to the adapter
+                RecipeItemObject item = new RecipeItemObject(title, "author", "description", null);
+                adapter.add(item);
+            }
+
         } else { //user is not signed in
             usernameText.setVisibility(View.INVISIBLE);
             descriptionText.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+
             guestText.setText("You're not signed in!");
         }
 
@@ -216,36 +241,40 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-
     /**
-     * Volley GET request to get the local user's profile information
+     * Volley GET request to get a list of recipes, in this case used to get local user's created recipes
      */
-    private void getUserInfoReq() {
-        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
-                URL_THIS_USER,
+    private void makeRecipeListReq() {
+        JsonArrayRequest recipeListReq = new JsonArrayRequest(
+                Request.Method.GET,
+                URL_GET_CREATED_ARRAY,
                 null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONObject>() {
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
-//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
 
-                        String usernameResponse = "testusername";
-                        String emailResponse = "testemail";
-                        try{
-                            usernameResponse = response.getString("username");
-                            emailResponse = response.getString("emailAddress");
-                        }catch (JSONException e) {
-                            throw new RuntimeException(e);
+                        // Parse the JSON array and add data to the adapter
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(i);
+                                String title = jsonObject.getString("title");
+                                String author = jsonObject.getString("author");
+                                String description = jsonObject.getString("description");
+
+                                // Create a ListItemObject and add it to the adapter
+                                RecipeItemObject item = new RecipeItemObject(title, author, description, jsonObject);
+                                adapter.add(item);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        usernameText.setText(usernameResponse);
-                        descriptionText.setText(emailResponse);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
                         Log.e("Volley Error", error.toString());
                     }
                 }) {
@@ -256,18 +285,72 @@ public class ProfileActivity extends AppCompatActivity {
 //                headers.put("Content-Type", "application/json");
                 return headers;
             }
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
+//                params.put("param1", "value1");
 //                params.put("param2", "value2");
                 return params;
             }
         };
-
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
     }
+
+
+//    /**
+//     * Volley GET request to get the local user's profile information
+//     */
+//    private void getUserInfoReq() {
+//        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
+//                URL_THIS_USER,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        Log.d("Volley Response", response.toString());
+////                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+//
+//                        String usernameResponse = "testusername";
+//                        String emailResponse = "testemail";
+//                        try{
+//                            usernameResponse = response.getString("username");
+//                            emailResponse = response.getString("emailAddress");
+//                        }catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        usernameText.setText(usernameResponse);
+//                        descriptionText.setText(emailResponse);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("username", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//
+////        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+//    }
+
+
 }
