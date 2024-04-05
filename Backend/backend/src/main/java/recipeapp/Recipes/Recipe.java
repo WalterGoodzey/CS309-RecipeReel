@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
+import recipeapp.Tags.Tag;
 import recipeapp.Users.*;
+
+import java.util.List;
 
 /**
  * Represents a recipe in the recipe sharing app.
