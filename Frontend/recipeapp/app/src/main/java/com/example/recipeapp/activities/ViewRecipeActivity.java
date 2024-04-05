@@ -62,28 +62,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private int recipeId;
 
     /**
-     * Button for giving recipe a 1 star rating - TEMPORARY
+     * Button for giving recipe a 1star rating - TEMPORARY
      */
-    private Button rate1;
-    /**
-     * Button for giving recipe a 2 star rating - TEMPORARY
-     */
-    private Button rate2;
-    /**
-     * Button for giving recipe a 3 star rating - TEMPORARY
-     */
-    private Button rate3;
-    /**
-     * Button for giving recipe a 4 star rating - TEMPORARY
-     */
-    private Button rate4;
-    /**
-     * Button for giving recipe a 5 star rating - TEMPORARY
-     */
-    private Button rate5;
-    /**
-     * BASE URL for recipe rating requests
-     */
+    private Button rate1, rate2, rate3, rate4, rate5;
+
     private String BASE_URL_RECIPES = "http://coms-309-018.class.las.iastate.edu:8080/recipes";
     /**
      * Specific URL for recipe rating requests
@@ -104,6 +86,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         titleTxt = findViewById(R.id.titleText);
         authorTxt = findViewById(R.id.authorText);
         descriptionTxt = findViewById(R.id.descriptionText);
+        ingredientsTxt = findViewById(R.id.ingredientsText);
+        instructionsTxt = findViewById(R.id.instructionsText);
+
         try {
             //get full JSON from intent
             fullRecipeJSON = new JSONObject(getIntent().getStringExtra("RecipeJsonAsString"));
@@ -112,6 +97,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             authorTxt.setText(fullRecipeJSON.getString("author"));
             instructionsTxt.setText(fullRecipeJSON.getString("instructions"));
             ingredientsTxt.setText(fullRecipeJSON.getString("ingredients"));
+            descriptionTxt.setText(fullRecipeJSON.getString("description"));
         } catch (JSONException e) {
 //        try {
 //            //get full JSON from intent
@@ -122,8 +108,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
 //            descriptionTxt.setText(fullRecipeJSON.getString("description"));
 //        } catch (JSONException e) {
 //
-//            throw new RuntimeException(e);
-//        }
+            throw new RuntimeException(e);
+        }
 
             rate1 = findViewById(R.id.rate1_button);
             rate2 = findViewById(R.id.rate2_button);
@@ -184,7 +170,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+
 
     /**
      * Volley PUT request to PUT user's new recipe rating to the server
