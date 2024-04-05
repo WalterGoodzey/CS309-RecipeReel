@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import recipeapp.Tags.Tag;
+import recipeapp.Tags.TagRecipeConnecter;
+import recipeapp.Tags.TagRecipeConnecterRepository;
+import recipeapp.Tags.TagRepository;
 import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
 
@@ -32,6 +35,12 @@ public class RecipeController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    TagRecipeConnecterRepository tagRecipeConnecterRepository;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -60,11 +69,24 @@ public class RecipeController {
      * @param searchString
      * @return A list of recipes with searchString as a substring of the title and matching the tags
      */
-    @GetMapping(path = "/recipes/search/{searchString}")
-    List<Recipe> searchRecipes(@PathVariable String searchString, @RequestBody List<Tag> tags){
+    @GetMapping(path = "/recipes/search/string/{searchString}")
+    List<Recipe> searchRecipesByTitle(@PathVariable String searchString){
         return recipeRepository.findByTitleContainingIgnoreCase(searchString);
     }
 
+    @GetMapping(path = "recipes/search/tag/{tagName}")
+    List<Recipe> searchRecipesByTag(@PathVariable String tagName){
+//        Tag tag = tagRepository.findByTagName(tagName);
+//        List<TagRecipeConnecter> connectors = tagRecipeConnecterRepository.findByTagId(tag.getId());
+//        List<Recipe> out = null;
+//        for(TagRecipeConnecter trc : connectors){
+//            if(recipeRepository.findById(trc.getRecipeId()) != null){
+//                out.add(recipeRepository.findById(trc.getRecipeId()));
+//            }
+//        }
+//        return out;
+        return recipeRepository.findByTagsContaining(tagName);
+    }
 
 
     /**

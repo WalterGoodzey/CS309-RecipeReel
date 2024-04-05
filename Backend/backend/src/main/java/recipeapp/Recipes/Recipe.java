@@ -56,10 +56,11 @@ public class Recipe {
     private String instructions;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
-    @ElementCollection
-    private List<String> tags;
+    private String tags;
 
 
     /** The rating of the recipe given by users. */
     private double rating = 0.0;
+    private int ratingCount = 0;
+    private int totalRating = 0;
 }
