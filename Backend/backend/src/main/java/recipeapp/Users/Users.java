@@ -44,14 +44,9 @@ public class Users {
     /** The list of recipes saved by the user. */
     @OneToMany
     private List<Recipe> savedRecipes = new ArrayList<>();
+    @OneToMany
+    private List<Recipe> recipes = new ArrayList<>();
 
-    /**
-     * Gets the list of saved recipes by the user.
-     * @return The list of saved recipes.
-     */
-    public List<Recipe> getSavedRecipes() {
-        return savedRecipes;
-    }
 
     /**
      * Adds a recipe to the list of saved recipes.
@@ -60,6 +55,8 @@ public class Users {
     public void addSavedRecipe(Recipe r) {
         this.savedRecipes.add(r);
     }
+
+    public void addRecipe (Recipe r) { this.recipes.add(r);}
 
     /**
      * Deletes a recipe from the list of saved recipes.
