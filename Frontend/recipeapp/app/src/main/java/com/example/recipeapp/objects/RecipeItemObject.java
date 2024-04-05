@@ -7,6 +7,9 @@ import org.json.JSONObject;
  *  @author Ryan McFadden
  */
 public class RecipeItemObject {
+    /** recipe id */
+    private int recipeId;
+
     /** title of the recipe */
     private String title;
     /** author of the recipe */
@@ -23,13 +26,19 @@ public class RecipeItemObject {
      * @param description description of recipe
      * @param fullRecipe JSONObject which stores the full recipe
      */
-    public RecipeItemObject(String title, String author, String description, JSONObject fullRecipe) {
+    public RecipeItemObject(int recipeId, String title, String author, String description, JSONObject fullRecipe) {
+        this.recipeId = recipeId;
         this.title = title;
         this.author = author;
         this.description = description;
         this.fullRecipe = fullRecipe;
     }
 
+    /**
+     * Getter for the id of the RecipeItemObject
+     * @return recipeId
+     */
+    public int getRecipeId() { return recipeId; }
     /**
      * Getter for the title of the RecipeItemObject
      * @return title
