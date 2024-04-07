@@ -67,9 +67,9 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
 
             // Populate the data into the template view using the data object
             //populate sent message & timestamp
-            itemDate.setText(item.getDate());
+//            itemDate.setText(item.getDate());
             itemMessageSent.setText(item.getMessage());
-            itemTimestampSent.setText(item.getTimestamp());
+            itemTimestampSent.setText(item.getTimestamp().toString());
 
             //view sent message block
             itemMessageSent.setVisibility(View.VISIBLE);
@@ -110,8 +110,8 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
 
             //populate received user, message, & timestamp
             itemMessageReceived.setText(item.getMessage());
-            itemTimestampReceived.setText(item.getTimestamp());
-            itemDate.setText(item.getDate());
+            itemTimestampReceived.setText(item.getTimestamp().toString());
+//            itemDate.setText(item.getDate());
 
             //view received message block
             itemUserReceived.setVisibility(View.VISIBLE);
