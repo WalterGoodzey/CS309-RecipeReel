@@ -105,6 +105,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         JSONObject postBody = new JSONObject();
         try {
             postBody.put("title", input_title.getText().toString());
+            postBody.put("creatorUserId", userId);
             postBody.put("description", input_description.getText().toString());
             postBody.put("ingredients", input_ingredients.getText().toString());
             postBody.put("instructions", input_instructions.getText().toString());
