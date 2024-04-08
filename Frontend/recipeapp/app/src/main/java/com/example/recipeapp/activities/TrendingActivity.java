@@ -112,7 +112,7 @@ public class TrendingActivity extends AppCompatActivity {
                 Intent intent = new Intent(TrendingActivity.this, ViewRecipeActivity.class);
 //                //send full JSON recipe as a string to be used in recipe view Activity
 //                intent.putExtra("RecipeJsonAsString", adapter.getItem(i).getFullRecipe().toString());
-                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
+                intent.putExtra("id", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
