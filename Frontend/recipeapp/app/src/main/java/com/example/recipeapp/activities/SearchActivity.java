@@ -116,7 +116,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        /*searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /* searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // intent to view single recipe
