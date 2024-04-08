@@ -151,13 +151,15 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
             if(username.equals(localUsername + ":")){ //if it was a message sent by the local user
                 //Do nothing, this is a sent message
-            } else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
+            }
+            else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
                 //Create a MessageItemObject and add it to the adapter
-                MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                MessageItemObject item = new MessageItemObject(msg, null, otherUsername, false);
                 adapter.add(item);
-            } else {
+            }
+            else {
                 //Create a MessageItemObject and add it to the adapter
-                MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                MessageItemObject item = new MessageItemObject(msg, null, otherUsername, false);
                 adapter.add(item);
             }
         });
