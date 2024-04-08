@@ -140,11 +140,26 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
          * to occur safely from a background or non-UI thread.
          */
         runOnUiThread(() -> {
-            //add message to messageListView
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            Date date = new Date();
-            MessageItemObject item = new MessageItemObject(message, null, null, false);
-            adapter.add(item);
+            //split response by string in order to get username and message seperated
+            String fullString = message;
+            String[] arrayString = fullString.split(" ");
+            String username = arrayString[0];
+            String msg = "";
+            for(int j = 1; j < arrayString.length; j++){
+                msg += arrayString[j] + " ";
+            }
+
+            if(username.equals(localUsername + ":")){ //if it was a message sent by the local user
+                //Do nothing, this is a sent message
+            } else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
+                //Create a MessageItemObject and add it to the adapter
+                MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                adapter.add(item);
+            } else {
+                //Create a MessageItemObject and add it to the adapter
+                MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                adapter.add(item);
+            }
         });
     }
 
@@ -195,7 +210,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 //split response by string in order to get username and message seperated
-                                String fullString = response.getJSONObject(i).toString();
+                                String fullString = response.getString(i);
                                 String[] arrayString = fullString.split(" ");
                                 String username = arrayString[0];
                                 String message = "";
@@ -212,24 +227,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                                     MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
                                     adapter.add(item);
                                 }
-
-
-
-//                                String message = msgObject.getString("content");
-//                                Date timestamp = (Date) msgObject.get("sent");
-//                                String senderUsername = msgObject.getString("sender");
-//                                Boolean sendingMessage = false;
-//                                if(senderUsername.equals(localUsername)){
-//                                    sendingMessage = true;
-//                                }
-//                                //Create a MessageItemObject and add it to the adapter
-//                                MessageItemObject item = new MessageItemObject(message, timestamp, senderUsername, sendingMessage);
-//                                adapter.add(item);
-
-//                                String username = response.getString(i);
-//                                // Create a ProfileItemObject and add it to the adapter
-//                                MessageItemObject item = new MessageItemObject(username);
-//                                adapter.add(item);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 throw new RuntimeException(e);

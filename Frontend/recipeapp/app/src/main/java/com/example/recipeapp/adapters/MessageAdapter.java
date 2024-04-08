@@ -69,7 +69,7 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
             //populate sent message & timestamp
 //            itemDate.setText(item.getDate());
             itemMessageSent.setText(item.getMessage());
-            itemTimestampSent.setText(item.getTimestamp().toString());
+//            itemTimestampSent.setText(item.getTimestamp().toString());
 
             //view sent message block
             itemMessageSent.setVisibility(View.VISIBLE);
@@ -110,7 +110,7 @@ public class MessageAdapter extends ArrayAdapter<MessageItemObject> {
 
             //populate received user, message, & timestamp
             itemMessageReceived.setText(item.getMessage());
-            itemTimestampReceived.setText(item.getTimestamp().toString());
+//            itemTimestampReceived.setText(item.getTimestamp().toString());
 //            itemDate.setText(item.getDate());
 
             //view received message block
