@@ -24,7 +24,6 @@ import com.example.recipeapp.objects.MessageItemObject;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,7 +98,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         messageListView.setAdapter(adapter);
 
         //get the chat history
-        SPECIFIC_CHAT_HISTORY_URL = BASE_CHAT_HISTORY_URL + localUsername + "/" + otherUsername  + "/history";
+        SPECIFIC_CHAT_HISTORY_URL = BASE_CHAT_HISTORY_URL + otherUsername + "/" + localUsername  + "/history";
         getChatHistory();
 
         //for websocket connection
@@ -195,7 +194,27 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                         // Parse the JSON array and add data to the adapter
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject msgObject = response.getJSONObject(i);
+                                //split response by string in order to get username and message seperated
+                                String fullString = response.getJSONObject(i).toString();
+                                String[] arrayString = fullString.split(" ");
+                                String username = arrayString[0];
+                                String message = "";
+                                for(int j = 1; j < arrayString.length; j++){
+                                    message += arrayString[j] + " ";
+                                }
+
+                                if(username.equals(localUsername + ":")){ //if it was a message sent by the local user
+                                    //Create a MessageItemObject and add it to the adapter
+                                    MessageItemObject item = new MessageItemObject(message, null, localUsername, true);
+                                    adapter.add(item);
+                                } else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
+                                    //Create a MessageItemObject and add it to the adapter
+                                    MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                                    adapter.add(item);
+                                }
+
+
+
 //                                String message = msgObject.getString("content");
 //                                Date timestamp = (Date) msgObject.get("sent");
 //                                String senderUsername = msgObject.getString("sender");
