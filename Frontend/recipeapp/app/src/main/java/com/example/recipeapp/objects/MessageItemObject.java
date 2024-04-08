@@ -1,5 +1,7 @@
 package com.example.recipeapp.objects;
 
+import java.util.Date;
+
 /**
  * Class to model a single chat message and its data
  *
@@ -8,10 +10,8 @@ package com.example.recipeapp.objects;
 public class MessageItemObject {
     /** Body of the message */
     private String message;
-    /** Date message was sent */
-    private String date;
-    /** Time message was sent */
-    private String timestamp;
+    /** Time and date message was sent */
+    private Date timestamp;
     /** username of the sender of the message */
     private String senderUsername;
     /**
@@ -24,14 +24,12 @@ public class MessageItemObject {
     /**
      * Constructor for a MessageItemObject
      * @param message body of message
-     * @param date date the message is sent
-     * @param timestamp time the message is sent
+     * @param timestamp time and date the message was sent
      * @param senderUsername username of the user sending the message
      * @param sendingMessage Boolean stating whether local user is sent or received this message
      */
-    public MessageItemObject(String message, String date, String timestamp, String senderUsername, Boolean sendingMessage) {
+    public MessageItemObject(String message, Date timestamp, String senderUsername, Boolean sendingMessage) {
         this.message = message;
-        this.date = date;
         this.timestamp = timestamp;
         this.senderUsername = senderUsername;
         this.sendingMessage = sendingMessage;
@@ -43,15 +41,10 @@ public class MessageItemObject {
      */
     public String getMessage() { return message; }
     /**
-     * Getter for the date of MessageItemObject's message
-     * @return date
-     */
-    public String getDate() { return date; }
-    /**
      * Getter for the timestamp of MessageItemObject's message
      * @return timestamp
      */
-    public String getTimestamp() { return timestamp; }
+    public Date getTimestamp() { return timestamp; }
     /**
      * Getter for the senderUsername of the MessageItemObject
      * @return senderUsername

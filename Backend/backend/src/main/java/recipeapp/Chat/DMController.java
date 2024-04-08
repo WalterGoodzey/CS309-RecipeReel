@@ -17,9 +17,19 @@ public class DMController {
     @GetMapping(path = "/chatrooms/{username}")
     List<String> getUsersChatRooms(@PathVariable String username) {
         List<ChatRoom> chatRooms = chatRoomRepository.findBySender(username);
+        List<ChatRoom> chatRooms2 = chatRoomRepository.findByReceiver(username);
+        List<ChatRoom> chatRoomsBoth = new ArrayList<ChatRoom>();
+        chatRoomsBoth.addAll(chatRooms);
+        chatRoomsBoth.addAll(chatRooms2);
+
         List<String> ret = new ArrayList<>();
-        for (ChatRoom cr : chatRooms) {
-            ret.add(cr.getReceiver());
+        for (ChatRoom cr : chatRoomsBoth) {
+            if (cr.getReceiver().equals(username)) {
+                ret.add(cr.getSender());
+            } else if (cr.getSender().equals(username)) {
+                ret.add(cr.getReceiver());
+            }
+
         }
         return ret;
     }

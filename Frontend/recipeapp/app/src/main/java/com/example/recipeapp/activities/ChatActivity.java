@@ -10,15 +10,26 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.recipeapp.adapters.MessageAdapter;
-import com.example.recipeapp.objects.MessageItemObject;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.R;
+import com.example.recipeapp.VolleySingleton;
 import com.example.recipeapp.WebSocketListener;
 import com.example.recipeapp.WebSocketManager;
+import com.example.recipeapp.adapters.MessageAdapter;
+import com.example.recipeapp.objects.MessageItemObject;
 
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Activity used to display a chat interface between local user and
@@ -41,11 +52,17 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     /** Other user's username */
     private String otherUsername;
     /** Base URL of websocket connection */
-    private static final String BASE_URL = "ws://coms-309-018.class.las.iastate.edu:8080/chat/";
+    private static final String BASE_CHAT_URL = "ws://coms-309-018.class.las.iastate.edu:8080/chat/";
     /** Specific URL of this chat between local user and this specific other user
      *  Will be in the format: ws://coms-309-018.class.las.iastate.edu:8080/chat/{localUsername}/{otherUsername}
      */
-    private static final String SPECIFIC_URL = "";
+    private String SPECIFIC_CHAT_URL = "";
+    /** Base URL to get chat history */
+    private static final String BASE_CHAT_HISTORY_URL = "http://coms-309-018.class.las.iastate.edu:8080/chatrooms/";
+    /** Specific URL to get the history of this chat between local user and this specific other user
+     *  Will be in the format:
+     */
+    private String SPECIFIC_CHAT_HISTORY_URL = "";
     /** Message to fill next MessageItemObject (sent or received) */
     private String message;
 
@@ -80,10 +97,14 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         adapter = new MessageAdapter(this, new ArrayList<>());
         messageListView.setAdapter(adapter);
 
+        //get the chat history
+        SPECIFIC_CHAT_HISTORY_URL = BASE_CHAT_HISTORY_URL + otherUsername + "/" + localUsername  + "/history";
+        getChatHistory();
+
         //for websocket connection
-        String serverUrl = BASE_URL + localUsername + "/" + otherUsername;
+        SPECIFIC_CHAT_URL = BASE_CHAT_URL + localUsername + "/" + otherUsername;
         // Establish WebSocket connection and set listener
-        WebSocketManager.getInstance().connectWebSocket(serverUrl);
+        WebSocketManager.getInstance().connectWebSocket(SPECIFIC_CHAT_URL);
         WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
 
         /* send button listener */
@@ -95,7 +116,9 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                 WebSocketManager.getInstance().sendMessage(message);
 
                 //add message to messageListView
-                MessageItemObject item = new MessageItemObject(message, null, null, localUsername, true);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date date = new Date();
+                MessageItemObject item = new MessageItemObject(message,  date, localUsername, true);
                 adapter.add(item);
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
@@ -117,9 +140,28 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
          * to occur safely from a background or non-UI thread.
          */
         runOnUiThread(() -> {
-            //add message to messageListView
-            MessageItemObject item = new MessageItemObject(message, null, null, null, false);
-            adapter.add(item);
+            //split response by string in order to get username and message seperated
+            String fullString = message;
+            String[] arrayString = fullString.split(" ");
+            String username = arrayString[0];
+            String msg = "";
+            for(int j = 1; j < arrayString.length; j++){
+                msg += arrayString[j] + " ";
+            }
+
+            if(username.equals(localUsername + ":")){ //if it was a message sent by the local user
+                //Do nothing, this is a sent message
+            }
+            else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
+                //Create a MessageItemObject and add it to the adapter
+                MessageItemObject item = new MessageItemObject(msg, null, otherUsername, false);
+                adapter.add(item);
+            }
+            else {
+                //Create a MessageItemObject and add it to the adapter
+                MessageItemObject item = new MessageItemObject(msg, null, otherUsername, false);
+                adapter.add(item);
+            }
         });
     }
 
@@ -152,5 +194,71 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     @Override
     public void onWebSocketError(Exception ex) {}
 
+
+    /**
+     * Volley GET to get list of this chatroom's past messages
+     */
+    private void getChatHistory() {
+        JsonArrayRequest chatHistoryReq = new JsonArrayRequest(
+                Request.Method.GET,
+                SPECIFIC_CHAT_HISTORY_URL,
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("Volley Response", response.toString());
+
+                        // Parse the JSON array and add data to the adapter
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                //split response by string in order to get username and message seperated
+                                String fullString = response.getString(i);
+                                String[] arrayString = fullString.split(" ");
+                                String username = arrayString[0];
+                                String message = "";
+                                for(int j = 1; j < arrayString.length; j++){
+                                    message += arrayString[j] + " ";
+                                }
+
+                                if(username.equals(localUsername + ":")){ //if it was a message sent by the local user
+                                    //Create a MessageItemObject and add it to the adapter
+                                    MessageItemObject item = new MessageItemObject(message, null, localUsername, true);
+                                    adapter.add(item);
+                                } else if(username.equals(otherUsername  + ":")){ //if it was a message sent by the other user
+                                    //Create a MessageItemObject and add it to the adapter
+                                    MessageItemObject item = new MessageItemObject(message, null, otherUsername, false);
+                                    adapter.add(item);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(chatHistoryReq);
+    }
 }
 
