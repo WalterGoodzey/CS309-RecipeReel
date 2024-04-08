@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
      */
     private String SPECIFIC_CHAT_URL = "";
     /** Base URL to get chat history */
-    private static final String BASE_CHAT_HISTORY_URL = "http://coms-309-018.class.las.iastate.edu:8080/chat/";
+    private static final String BASE_CHAT_HISTORY_URL = "http://coms-309-018.class.las.iastate.edu:8080/chatrooms/";
     /** Specific URL to get the history of this chat between local user and this specific other user
      *  Will be in the format:
      */
@@ -98,7 +99,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         messageListView.setAdapter(adapter);
 
         //get the chat history
-        SPECIFIC_CHAT_HISTORY_URL = BASE_CHAT_HISTORY_URL + localUsername + "/" + otherUsername;
+        SPECIFIC_CHAT_HISTORY_URL = BASE_CHAT_HISTORY_URL + localUsername + "/" + otherUsername  + "/history";
         getChatHistory();
 
         //for websocket connection
@@ -116,7 +117,9 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                 WebSocketManager.getInstance().sendMessage(message);
 
                 //add message to messageListView
-                MessageItemObject item = new MessageItemObject(message,  null, localUsername, true);
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date date = new Date();
+                MessageItemObject item = new MessageItemObject(message,  date, localUsername, true);
                 adapter.add(item);
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
@@ -139,6 +142,8 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
          */
         runOnUiThread(() -> {
             //add message to messageListView
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
             MessageItemObject item = new MessageItemObject(message, null, null, false);
             adapter.add(item);
         });
@@ -191,16 +196,16 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject msgObject = response.getJSONObject(i);
-                                String message = msgObject.getString("content");
-                                Date timestamp = (Date) msgObject.get("sent");
-                                String senderUsername = msgObject.getString("sender");
-                                Boolean sendingMessage = false;
-                                if(senderUsername.equals(localUsername)){
-                                    sendingMessage = true;
-                                }
-                                //Create a MessageItemObject and add it to the adapter
-                                MessageItemObject item = new MessageItemObject(message, timestamp, senderUsername, sendingMessage);
-                                adapter.add(item);
+//                                String message = msgObject.getString("content");
+//                                Date timestamp = (Date) msgObject.get("sent");
+//                                String senderUsername = msgObject.getString("sender");
+//                                Boolean sendingMessage = false;
+//                                if(senderUsername.equals(localUsername)){
+//                                    sendingMessage = true;
+//                                }
+//                                //Create a MessageItemObject and add it to the adapter
+//                                MessageItemObject item = new MessageItemObject(message, timestamp, senderUsername, sendingMessage);
+//                                adapter.add(item);
 
 //                                String username = response.getString(i);
 //                                // Create a ProfileItemObject and add it to the adapter
