@@ -119,15 +119,6 @@ public class TrendingActivity extends AppCompatActivity {
         });
 
         makeRecipeListReq();
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(TrendingActivity.this, ViewRecipeActivity.class);
-                intent.putExtra("RecipeJsonAsString", adapter.getItem(position).getFullRecipe().toString());
-                startActivity(intent);
-            }
-        });
     }
 
     /**
