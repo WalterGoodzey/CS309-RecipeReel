@@ -13,12 +13,34 @@ import java.util.List;
 @RestController
 public class DMController {
     @Autowired ChatRoomRepository chatRoomRepository;
+    @Autowired DMRepository dmRepository;
     @GetMapping(path = "/chatrooms/{username}")
     List<String> getUsersChatRooms(@PathVariable String username) {
         List<ChatRoom> chatRooms = chatRoomRepository.findBySender(username);
         List<String> ret = new ArrayList<>();
         for (ChatRoom cr : chatRooms) {
             ret.add(cr.getReceiver());
+        }
+        return ret;
+    }
+    @GetMapping(path = "/chatrooms/{username}/{receiver}/history")
+    List<String> getChatHistoryWithUsername(@PathVariable String username, @PathVariable String receiver) {
+        List<String> ret = new ArrayList<>();
+        List<String> pair = new ArrayList<>();
+        pair.add(username);
+        pair.add(receiver);
+        pair.sort(null);
+        String pairString = pair.get(0) + "&" + pair.get(1);
+
+        ChatRoom chatRoomPossible = chatRoomRepository.findBySenderReceiver(pairString);
+        int chatRoomID = chatRoomPossible.getId();
+
+        List<DM>  msgs = dmRepository.findByChatRoomId(chatRoomID);
+
+        if(msgs != null && msgs.size() != 0) {
+            for (DM msg : msgs) {
+                ret.add(msg.getSender() + ": " + msg.getContent());
+            }
         }
         return ret;
     }

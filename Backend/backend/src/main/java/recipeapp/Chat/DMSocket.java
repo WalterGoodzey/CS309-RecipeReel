@@ -75,7 +75,7 @@ public class DMSocket {
         sessionUsernameMap.put(session,username);
         sessionSendToUsernameMap.put(session,sendToUsername);
         usernameSessionMap.put(username,session);
-        sendMessageToParticularUser(username,getChatHistory(username, sendToUsername));
+        //sendMessageToParticularUser(username,getChatHistory(username, sendToUsername));
         String msg = "User: " + username + " is online in the chat room now.";
 	sendMessageToParticularUser(sendToUsername, msg);
     }
@@ -171,6 +171,19 @@ public class DMSocket {
         }
         return sb.toString();
     }
+//    private List<String> getChatHistory(String username, String sendToUsername, int id) {
+//        List<DM> msgs = dmRepository.findByChatRoomId(chatRoomID);
+//        List<String> ret = new ArrayList<>();
+//        if (msgs == null){
+//            return null;
+//        }
+//        if(msgs != null && msgs.size() != 0) {
+//            for (DM msg : msgs) {
+//                ret.add(msg.getSender() + ": " + msg.getContent());
+//            }
+//        }
+//        return ret;
+//    }
     boolean isReceiverOnline() {
         if (usernameSessionMap.containsKey(receiverUsername)) {
             return true;
