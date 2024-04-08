@@ -67,6 +67,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private Button rate1, rate2, rate3, rate4, rate5;
 
     private String BASE_URL_RECIPES = "http://coms-309-018.class.las.iastate.edu:8080/recipes";
+//    private String BASE_URL_RECIPES = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/recipes";
     /**
      * Specific URL for recipe rating requests
      */
@@ -88,88 +89,68 @@ public class ViewRecipeActivity extends AppCompatActivity {
         descriptionTxt = findViewById(R.id.descriptionText);
         ingredientsTxt = findViewById(R.id.ingredientsText);
         instructionsTxt = findViewById(R.id.instructionsText);
-
-        try {
-            //get full JSON from intent
-            fullRecipeJSON = new JSONObject(getIntent().getStringExtra("RecipeJsonAsString"));
-            //fill text with data from JSON recipe
-            titleTxt.setText(fullRecipeJSON.getString("title"));
-            authorTxt.setText(fullRecipeJSON.getString("author"));
-            instructionsTxt.setText(fullRecipeJSON.getString("instructions"));
-            ingredientsTxt.setText(fullRecipeJSON.getString("ingredients"));
-            descriptionTxt.setText(fullRecipeJSON.getString("description"));
-        } catch (JSONException e) {
-//        try {
-//            //get full JSON from intent
-//            fullRecipeJSON = new JSONObject(getIntent().getStringExtra("RecipeJsonAsString"));
-//            //fill text with data from JSON recipe
-//            titleTxt.setText(fullRecipeJSON.getString("title"));
-//            authorTxt.setText(fullRecipeJSON.getString("author"));
-//            descriptionTxt.setText(fullRecipeJSON.getString("description"));
-//        } catch (JSONException e) {
-//
-            throw new RuntimeException(e);
+        //get recipeId from previous activity
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            recipeId = extras.getInt("id");
         }
 
-            rate1 = findViewById(R.id.rate1_button);
-            rate2 = findViewById(R.id.rate2_button);
-            rate3 = findViewById(R.id.rate3_button);
-            rate4 = findViewById(R.id.rate4_button);
-            rate5 = findViewById(R.id.rate5_button);
+        getRecipe();
 
-            //get recipeId from previous activity
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                recipeId = extras.getInt("recipeId");
+        rate1 = findViewById(R.id.rate1_button);
+        rate2 = findViewById(R.id.rate2_button);
+        rate3 = findViewById(R.id.rate3_button);
+        rate4 = findViewById(R.id.rate4_button);
+        rate5 = findViewById(R.id.rate5_button);
+
+
+
+        /* click listener on rate1 button pressed */
+        rate1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
+                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 1;
+                putRecipeRating();
             }
-
-
-            /* click listener on rate1 button pressed */
-            rate1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
-                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 1;
-                    putRecipeRating();
-                }
-            });
-            /* click listener on rate2 button pressed */
-            rate2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
-                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 2;
-                    putRecipeRating();
-                }
-            });
-            /* click listener on rate3 button pressed */
-            rate3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
-                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 3;
-                    putRecipeRating();
-                }
-            });
-            /* click listener on rate4 button pressed */
-            rate4.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
-                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 4;
-                    putRecipeRating();
-                }
-            });
-            /* click listener on rate5 button pressed */
-            rate5.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
-                    SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 5;
-                    putRecipeRating();
-                }
-            });
-        }
+        });
+        /* click listener on rate2 button pressed */
+        rate2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
+                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 2;
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate3 button pressed */
+        rate3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
+                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 3;
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate4 button pressed */
+        rate4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
+                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 4;
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate5 button pressed */
+        rate5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
+                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 5;
+                putRecipeRating();
+            }
+        });
+    }
 
 
     /**
@@ -211,5 +192,31 @@ public class ViewRecipeActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+    }
+
+    private void getRecipe() {
+        String url = BASE_URL_RECIPES + "/" + recipeId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                response -> {
+                    Log.d("GetRecipe", "Response: " + response.toString());
+                    updateUI(response);
+                }, error -> Log.e("GetRecipe", "Error Response", error));
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void updateUI(JSONObject response) {
+        try {
+            titleTxt.setText(response.optString("title", "Title not found"));
+            authorTxt.setText(response.optString("username", "Author not found"));
+            instructionsTxt.setText(response.optString("instructions", "Instructions not found"));
+            ingredientsTxt.setText(response.optString("ingredients", "Ingredients not found"));
+            descriptionTxt.setText(response.optString("description", "Description not found"));
+        } catch (Exception e) {
+            Log.e("UpdateUI", "Error parsing response", e);
+        }
     }
 }
