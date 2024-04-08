@@ -9,9 +9,18 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
     <string name="profile_options_logout">Logout</string>
     <string name="profile_options_edit">Edit Profile</string>
     <string name="profile_options_delete">Delete Profile</string>
     <string name="profile_options_create">Create Recipe</string>
+    <string name="profile_options_myChats">My Chats</string>
+    <string name="profile_options_helperchat">Chat with Helper</string>
+
+    <string name="PREF_KEY">shared_prefs</string>
+    <string name="USERID_KEY">userid_key</string>
+    <string name="USERNAME_KEY">username_key</string>
+    <string name="EMAIL_KEY">email_key</string>
+    <string name="PASSWORD_KEY">password_key</string>
 
 </resources>

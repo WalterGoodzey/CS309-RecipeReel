@@ -1,6 +1,8 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,13 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.example.recipeapp.RecipeAdapter;
-import com.example.recipeapp.RecipeItemObject;
+import com.example.recipeapp.adapters.RecipeAdapter;
+import com.example.recipeapp.objects.RecipeItemObject;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -55,31 +58,34 @@ public class SavedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved);
 
-        //get username from previous activity
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            userId = extras.getInt("id");
-        }
+        //get userId from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
+
+        /* options toolbar at top */
+        Toolbar toolbar = (Toolbar) findViewById(R.id.saved_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Saved Recipes");
+        }
         //bottom navigation setup and operation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_saved);
+        bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
             int id = item.getItemId();
             if (id == R.id.bottom_trending) {
                 Intent intent = new Intent(getApplicationContext(), TrendingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_following) {
                 Intent intent = new Intent(getApplicationContext(), FollowingActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_search) {
                 Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_saved) {
@@ -87,7 +93,6 @@ public class SavedActivity extends AppCompatActivity {
                 return true;
             } else if (id == R.id.bottom_profile) {
                 Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-                intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
             }
@@ -95,24 +100,33 @@ public class SavedActivity extends AppCompatActivity {
         });
 
         //recipe list setup and operation
-        listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.savedListView);
 
         // Initialize the adapter with an empty list (data will be added later)
         adapter = new RecipeAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
-        //make JSON array request on opening
-        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
-        makeRecipeListReq();
+//        //make JSON array request on opening
+//        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
+//        makeRecipeListReq();
 
-        //Added to go to activity_view_recipe when an item in listview is clicked
+        //for example
+        for(int i = 0; i < 5; i++){
+            String title = "Example" + i;
+            // Create a ListItemObject and add it to the adapter
+            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
+            adapter.add(item);
+        }
+
+
+        //Added to go to ViewRecipeActivity when an item in listview is clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //intent to view single recipe
                 Intent intent = new Intent(SavedActivity.this, ViewRecipeActivity.class);
                 //send full JSON recipe as a string to be used in recipe view Activity
-                intent.putExtra("RecipeJsonAsString", adapter.getItem(i).getFullRecipe().toString());
+                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
@@ -137,12 +151,13 @@ public class SavedActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
+                                int recipeId = jsonObject.getInt("recipeId");
                                 String title = jsonObject.getString("title");
                                 String author = jsonObject.getString("author");
                                 String description = jsonObject.getString("description");
 
                                 // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(title, author, description, jsonObject);
+                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
                                 adapter.add(item);
 
                             } catch (JSONException e) {

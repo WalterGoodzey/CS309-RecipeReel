@@ -50,7 +50,7 @@ public class EntryActivity extends AppCompatActivity {
         guestButton = findViewById(R.id.entry_guest_btn);  // link to logout button in the entry activity XML - ADDED
         subText = findViewById(R.id.entry_sub_msg_txt);      // link to sub message textview in the entry activity XML
 
-        messageText.setText("Welcome Message");
+        messageText.setText("Welcome to RecipeReel!");
         subText.setText("Login or Signup");
 
         /* click listener on login button pressed */

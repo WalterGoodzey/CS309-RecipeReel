@@ -17,8 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.R;
-import com.example.recipeapp.RecipeAdapter;
-import com.example.recipeapp.RecipeItemObject;
+import com.example.recipeapp.adapters.RecipeAdapter;
+import com.example.recipeapp.objects.RecipeItemObject;
 import com.example.recipeapp.VolleySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -83,11 +83,15 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        adapter = new RecipeAdapter(this, new ArrayList<>());
+
         searchButton = findViewById(R.id.search_button);
         searchString = findViewById(R.id.search_bar);
         searchTagsButton = findViewById(R.id.tag_search_button);
         searchTags = findViewById(R.id.search_tag);
 
+        searchList = findViewById(R.id.search_results);
+        searchList.setAdapter(adapter);
 
         //get username from previous activity
         Bundle extras = getIntent().getExtras();
@@ -116,19 +120,19 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        /* searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // intent to view single recipe
+                //intent to view single recipe
                 Intent intent = new Intent(SearchActivity.this, ViewRecipeActivity.class);
-                //send full JSON recipe as a string to be used in recipe view Activity
+//                //send full JSON recipe as a string to be used in recipe view Activity
+//                intent.putExtra("RecipeJsonAsString", adapter.getItem(i).getFullRecipe().toString());
                 intent.putExtra("id", adapter.getItem(i).getRecipeId());
-                // start ViewRecipeActivity
+                //start ViewRecipeActivity
                 startActivity(intent);
             }
-        });*/
-
-        searchList = findViewById(R.id.search_results);
+        });
 
         adapter = new RecipeAdapter(this, new ArrayList<>());
         searchList.setAdapter(adapter);
@@ -189,12 +193,13 @@ public class SearchActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
+                                int recipeId = Integer.valueOf(jsonObject.getString("id"));
                                 String title = jsonObject.getString("title");
                                 String author = jsonObject.getString("username");
                                 String description = jsonObject.getString("description");
 
                                 // Create a RecipeItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(title, author, description, jsonObject);
+                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
                                 adapter.add(item);
 
                             } catch (JSONException e) {

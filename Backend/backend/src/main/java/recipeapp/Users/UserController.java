@@ -96,7 +96,7 @@ public class UserController {
             loginRepository.save(nuser1);
             return nuser;
         }
-        return null;
+        return new Users();
     }
 
     /**
@@ -105,13 +105,13 @@ public class UserController {
      * @return String of success or failure. If user is found and usernames/passwords match, success. Else failure
      */
     @PostMapping(path = "/login")
-    String login(@RequestBody Users user) {
+    Users login(@RequestBody Users user) {
         List<Users> existingUsers = getAllUsers();
         for (Users e : existingUsers) {
             if (e.getUsername().equals(user.getUsername()) && e.getPassword().equals(user.getPassword()))
-                return success;
+                return e;
         }
-        return failure;
+        return new Users();
     }
 
     /**
@@ -134,6 +134,12 @@ public class UserController {
     List<Users> getAllUsers(){
         return userRepository.findAll();
     }
+    @GetMapping(path = "/users/{id}/recipes")
+    List<Recipe> getUsersRecipes(@PathVariable int id) {
+        Users u = getUserById(id);
+        return u.getRecipes();
+    }
+
     /**
      * GET - get saved recipes of a user.
      * @param id The ID of the user.
@@ -169,7 +175,7 @@ public class UserController {
      * @return A success message if the update is successful, otherwise a failure message.
      */
     @PutMapping("/users/{id}")
-    String updateUser(@PathVariable int id, @RequestBody Users updatedUser){
+    Users updateUser(@PathVariable int id, @RequestBody Users updatedUser){
         System.out.println(updatedUser.toString());
         Users user = userRepository.findById(id);
         System.out.println(user.toString());
@@ -192,7 +198,7 @@ public class UserController {
         }
         userRepository.save(user);
         loginRepository.save(userOne);
-        return success;
+        return user;
     }
     /**
      * DELETE - delete a user by ID.

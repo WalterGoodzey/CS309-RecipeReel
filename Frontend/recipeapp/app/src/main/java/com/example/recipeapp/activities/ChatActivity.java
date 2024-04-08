@@ -1,5 +1,7 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -8,8 +10,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.recipeapp.MessageAdapter;
-import com.example.recipeapp.MessageItemObject;
+import com.example.recipeapp.adapters.MessageAdapter;
+import com.example.recipeapp.objects.MessageItemObject;
 import com.example.recipeapp.R;
 import com.example.recipeapp.WebSocketListener;
 import com.example.recipeapp.WebSocketManager;
@@ -34,10 +36,16 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     private EditText messageEditText;
     /** Button to send message typed in messageEditText to websocket */
     private Button sendButton;
-    /** Local user's userId */
-    private int userId;
+    /** Local user's username */
+    private String localUsername;
+    /** Other user's username */
+    private String otherUsername;
     /** Base URL of websocket connection */
-    private static final String BASE_URL = "ws://10.0.2.2:8080/chat/";
+    private static final String BASE_URL = "ws://coms-309-018.class.las.iastate.edu:8080/chat/";
+    /** Specific URL of this chat between local user and this specific other user
+     *  Will be in the format: ws://coms-309-018.class.las.iastate.edu:8080/chat/{localUsername}/{otherUsername}
+     */
+    private static final String SPECIFIC_URL = "";
     /** Message to fill next MessageItemObject (sent or received) */
     private String message;
 
@@ -55,10 +63,14 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         sendButton = findViewById(R.id.button_chat_send);
         messageEditText = findViewById(R.id.edit_chat_message);
 
-        //get username from previous activity
+        //get local username from shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        localUsername = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+
+        //get other username from intent
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            userId = extras.getInt("id");
+            otherUsername = extras.getString("otherChatUser");
         }
 
         //message list setup and operation
@@ -69,7 +81,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         messageListView.setAdapter(adapter);
 
         //for websocket connection
-        String serverUrl = BASE_URL + "ryanm";
+        String serverUrl = BASE_URL + localUsername + "/" + otherUsername;
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
@@ -83,7 +95,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                 WebSocketManager.getInstance().sendMessage(message);
 
                 //add message to messageListView
-                MessageItemObject item = new MessageItemObject(message, null, null, userId, true);
+                MessageItemObject item = new MessageItemObject(message, null, null, localUsername, true);
                 adapter.add(item);
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
@@ -106,7 +118,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
          */
         runOnUiThread(() -> {
             //add message to messageListView
-            MessageItemObject item = new MessageItemObject(message, null, null, -1, false);
+            MessageItemObject item = new MessageItemObject(message, null, null, null, false);
             adapter.add(item);
         });
     }

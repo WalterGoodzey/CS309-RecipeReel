@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import recipeapp.Tags.Tag;
+import recipeapp.Tags.TagRecipeConnecter;
+import recipeapp.Tags.TagRecipeConnecterRepository;
+import recipeapp.Tags.TagRepository;
 import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
 
@@ -30,8 +34,15 @@ public class RecipeController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    TagRepository tagRepository;
+
+    @Autowired
+    TagRecipeConnecterRepository tagRecipeConnecterRepository;
+
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
+
     /**
      * Retrieves all recipes stored in the system.
      * @return List of Recipe objects representing all recipes.
@@ -40,6 +51,7 @@ public class RecipeController {
     List<Recipe> getAllRecipes(){
         return recipeRepository.findAll();
     }
+
     /**
      * Retrieves a recipe by its ID.
      * @param id The ID of the recipe to retrieve.
@@ -49,18 +61,48 @@ public class RecipeController {
     Recipe getRecipeById(@PathVariable int id){
         return recipeRepository.findById(id);
     }
+
+    /**
+     * Retrieves all recipes from the repo matching the search
+     * @param searchString
+     * @return A list of recipes with searchString as a substring of the title and matching the tags
+     */
+    @GetMapping(path = "/recipes/search/string/{searchString}")
+    List<Recipe> searchRecipesByTitle(@PathVariable String searchString){
+        return recipeRepository.findByTitleContainingIgnoreCase(searchString);
+    }
+
+    @GetMapping(path = "recipes/search/tag/{tagName}")
+    List<Recipe> searchRecipesByTag(@PathVariable String tagName){
+//        Tag tag = tagRepository.findByTagName(tagName);
+//        List<TagRecipeConnecter> connectors = tagRecipeConnecterRepository.findByTagId(tag.getId());
+//        List<Recipe> out = null;
+//        for(TagRecipeConnecter trc : connectors){
+//            if(recipeRepository.findById(trc.getRecipeId()) != null){
+//                out.add(recipeRepository.findById(trc.getRecipeId()));
+//            }
+//        }
+//        return out;
+        return recipeRepository.findByTagsContaining(tagName);
+    }
+
+
     /**
      * Creates a new recipe.
-     * @param Recipe The Recipe object representing the new recipe.
+     * @param recipe The Recipe object representing the new recipe.
      * @return A success message if the creation is successful, otherwise a failure message.
      */
     @PostMapping(path = "/recipes")
-    String createRecipe(@RequestBody Recipe Recipe){
-        if (Recipe == null)
+    String createRecipe(@RequestBody Recipe recipe){
+        if (recipe == null)
             return failure;
-        recipeRepository.save(Recipe);
+        recipe.setUsername(userRepository.findById(recipe.getCreatorUserId()).getUsername());
+        Users u = userRepository.findByUsername(recipe.getUsername());
+        u.addRecipe(recipe);
+        recipeRepository.save(recipe);
         return success;
     }
+
     /**
      * Updates an existing recipe.
      * @param id The ID of the recipe to update.
@@ -75,6 +117,21 @@ public class RecipeController {
         recipeRepository.save(request);
         return recipeRepository.findById(id);
     }
+
+    @PutMapping(path = "/recipes/{id}/rate/{rating}")
+    String addRating (@PathVariable int id, @PathVariable int rating) {
+        Recipe recipe = recipeRepository.findById(id);
+        recipe.setRatingCount(recipe.getRatingCount() + 1);
+        int newCount = recipe.getRatingCount()+1;
+        recipe.setTotalRating(recipe.getTotalRating() + rating);
+        int newTotalRating = recipe.getTotalRating() + rating;
+        int newRating = newTotalRating / newCount;
+        recipe.setRating(newRating);
+        recipeRepository.save(recipe);
+
+        return success;
+    }
+
     /**
      * Deletes a recipe by its ID.
      * @param id The ID of the recipe to delete.
