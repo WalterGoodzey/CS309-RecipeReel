@@ -61,7 +61,7 @@ public class Recipe {
 
 
     /** The rating of the recipe given by users. */
-    @OneToMany (mappedBy = "recipe")
+    @OneToMany
     private List<Rating> ratings;
     private double recipeRating = 0.0;
     private int ratingCount = 0;

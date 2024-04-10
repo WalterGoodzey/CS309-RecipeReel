@@ -9,6 +9,7 @@ import recipeapp.Users.Users;
 @Entity
 @Getter
 @Setter
+@Table(name = "rating")
 @RequiredArgsConstructor
 @NoArgsConstructor
 public class Rating {
