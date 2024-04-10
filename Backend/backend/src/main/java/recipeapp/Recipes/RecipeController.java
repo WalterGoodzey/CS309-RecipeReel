@@ -119,24 +119,8 @@ public class RecipeController {
         return recipeRepository.findById(id);
     }
 
-    @PutMapping(path = "/recipes/{id}/rate/{rating}")
-    String addRating (@PathVariable int id, @PathVariable int rating) {
-//        Recipe recipe = recipeRepository.findById(id);
-//        recipe.setRatingCount(recipe.getRatingCount() + 1);
-//        int newCount = recipe.getRatingCount()+1;
-//        recipe.setTotalRating(recipe.getTotalRating() + rating);
-//        int newTotalRating = recipe.getTotalRating() + rating;
-//        int newRating = newTotalRating / newCount;
-//        recipe.setRating(newRating);
-//        recipeRepository.save(recipe);
-//
-//        return success;
-        Recipe recipe = recipeRepository.findById(id);
-        Rating rating1 = new Rating(recipe, rating);
-        rating1.addRating(recipe, rating);
-
-        return success;
-    }
+//    @PutMapping(path = "/recipes/{id}/rate/{rating}")
+//    Method Found in RatingController
 
     /**
      * Deletes a recipe by its ID.
