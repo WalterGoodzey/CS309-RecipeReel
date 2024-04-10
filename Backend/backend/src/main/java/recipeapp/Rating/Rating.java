@@ -29,4 +29,18 @@ public class Rating {
     @NonNull
     private int rating;
 
+    public void addRating (Recipe recipeToRate, int rating) {
+
+        /* Updates Values in Recipe */
+        recipeToRate.setRatingCount(recipeToRate.getRatingCount() + 1);
+        recipeToRate.setTotalRating(recipeToRate.getTotalRating() + rating);
+        double newRatingDouble = recipeToRate.getTotalRating() / recipeToRate.getRatingCount();
+        recipeToRate.setRecipeRating(newRatingDouble);
+
+        /*Adds Rating Object to List in Recipe*/
+        Rating ratingObj = new Rating(recipeToRate, rating);
+        recipeToRate.getRatings().add(ratingObj);
+
+    }
+
 }

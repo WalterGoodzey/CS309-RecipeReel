@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import recipeapp.Rating.Rating;
 import recipeapp.Tags.Tag;
 import recipeapp.Tags.TagRecipeConnecter;
 import recipeapp.Tags.TagRecipeConnecterRepository;
@@ -120,14 +121,19 @@ public class RecipeController {
 
     @PutMapping(path = "/recipes/{id}/rate/{rating}")
     String addRating (@PathVariable int id, @PathVariable int rating) {
+//        Recipe recipe = recipeRepository.findById(id);
+//        recipe.setRatingCount(recipe.getRatingCount() + 1);
+//        int newCount = recipe.getRatingCount()+1;
+//        recipe.setTotalRating(recipe.getTotalRating() + rating);
+//        int newTotalRating = recipe.getTotalRating() + rating;
+//        int newRating = newTotalRating / newCount;
+//        recipe.setRating(newRating);
+//        recipeRepository.save(recipe);
+//
+//        return success;
         Recipe recipe = recipeRepository.findById(id);
-        recipe.setRatingCount(recipe.getRatingCount() + 1);
-        int newCount = recipe.getRatingCount()+1;
-        recipe.setTotalRating(recipe.getTotalRating() + rating);
-        int newTotalRating = recipe.getTotalRating() + rating;
-        int newRating = newTotalRating / newCount;
-        recipe.setRating(newRating);
-        recipeRepository.save(recipe);
+        Rating rating1 = new Rating(recipe, rating);
+        rating1.addRating(recipe, rating);
 
         return success;
     }
