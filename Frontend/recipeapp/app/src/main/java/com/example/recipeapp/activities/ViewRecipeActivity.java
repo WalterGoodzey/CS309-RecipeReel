@@ -60,19 +60,24 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * recipe's id
      */
     private int recipeId;
-
+    /**
+     * Button for saving recipe
+     */
+    private Button saveButton;
     /**
      * Button for giving recipe a 1star rating - TEMPORARY
      */
     private Button rate1, rate2, rate3, rate4, rate5;
 
-    private String BASE_URL_RECIPES = "http://coms-309-018.class.las.iastate.edu:8080/recipes";
-//    private String BASE_URL_RECIPES = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/recipes";
+    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+//    private String URL_SERVER = "recipeshttps://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/recipes";
     /**
      * Specific URL for recipe rating requests
      */
     private String SPECIFIC_URL_RATING;
 
+    /** Local user's userId */
+    private int userId;
     /**
      * onCreate for ViewRecipeActivity
      *
@@ -95,7 +100,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             recipeId = extras.getInt("id");
         }
 
-        getRecipe();
+        saveButton = findViewById(R.id.saveButton);
 
         rate1 = findViewById(R.id.rate1_button);
         rate2 = findViewById(R.id.rate2_button);
@@ -103,6 +108,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         rate4 = findViewById(R.id.rate4_button);
         rate5 = findViewById(R.id.rate5_button);
 
+        getRecipe();
 
 
         /* click listener on rate1 button pressed */
@@ -110,7 +116,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 1;
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 1;
                 putRecipeRating();
             }
         });
@@ -119,7 +125,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 2;
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 2;
                 putRecipeRating();
             }
         });
@@ -128,7 +134,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 3;
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 3;
                 putRecipeRating();
             }
         });
@@ -137,7 +143,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 4;
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 4;
                 putRecipeRating();
             }
         });
@@ -146,8 +152,22 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
-                SPECIFIC_URL_RATING = BASE_URL_RECIPES + "/" + recipeId + "/rate/" + 5;
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 5;
                 putRecipeRating();
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                saveRecipe();
+            }
+        });
+
+        authorTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -194,8 +214,13 @@ public class ViewRecipeActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
+
+    private void saveRecipe() {
+        String url = URL_SERVER + "users/";
+    }
+
     private void getRecipe() {
-        String url = BASE_URL_RECIPES + "/" + recipeId;
+        String url = URL_SERVER + "recipes/" + recipeId;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

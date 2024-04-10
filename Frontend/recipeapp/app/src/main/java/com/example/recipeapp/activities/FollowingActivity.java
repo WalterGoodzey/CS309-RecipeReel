@@ -111,7 +111,7 @@ public class FollowingActivity extends AppCompatActivity {
                 //intent to view single recipe
                 Intent intent = new Intent(FollowingActivity.this, ViewRecipeActivity.class);
                 //send full JSON recipe as a string to be used in recipe view Activity
-                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
+                intent.putExtra("id", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
@@ -128,60 +128,61 @@ public class FollowingActivity extends AppCompatActivity {
             RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
             adapter.add(item);
         }
+//        makeRecipeListReq();
     }
 
-    private void makeRecipeListReq() {
-        JsonArrayRequest recipeListReq = new JsonArrayRequest(
-                Request.Method.GET,
-                SERVER_URL + "saved/" + userId,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("Volley Response", response.toString());
-
-                        // Parse the JSON array and add data to the adapter
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("param1", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
-    }
+//    private void makeRecipeListReq() {
+//        JsonArrayRequest recipeListReq = new JsonArrayRequest(
+//                Request.Method.GET,
+//                SERVER_URL + "saved/" + userId,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d("Volley Response", response.toString());
+//
+//                        // Parse the JSON array and add data to the adapter
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                JSONObject jsonObject = response.getJSONObject(i);
+//                                int recipeId = jsonObject.getInt("id");
+//                                String title = jsonObject.getString("title");
+//                                String author = jsonObject.getString("username");
+//                                String description = jsonObject.getString("description");
+//
+//                                // Create a ListItemObject and add it to the adapter
+//                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
+//                                adapter.add(item);
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("param1", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+//    }
 
 }
