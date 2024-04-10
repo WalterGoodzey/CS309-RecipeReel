@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.recipeapp"},{"l":"com.example.recipeapp.activities"},{"l":"com.example.recipeapp.adapters"},{"l":"com.example.recipeapp.objects"}];updateSearchResults();
