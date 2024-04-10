@@ -62,6 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String emailAddress;
 
 
+    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
     /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** Specific URL for local user's Volley requests with server */
@@ -135,12 +136,14 @@ public class ProfileActivity extends AppCompatActivity {
             makeRecipeListReq();
 
             //for example
-            for(int i = 0; i < 5; i++){
-                String title = "Example" + i;
-                // Create a ListItemObject and add it to the adapter
-                RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
-                adapter.add(item);
-            }
+//            for(int i = 0; i < 5; i++){
+//                String title = "Example" + i;
+//                // Create a ListItemObject and add it to the adapter
+//                RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
+//                adapter.add(item);
+//            }
+
+            makeRecipeListReq();
 
         } else { //user is not signed in
             usernameText.setVisibility(View.INVISIBLE);
@@ -261,7 +264,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void makeRecipeListReq() {
         JsonArrayRequest recipeListReq = new JsonArrayRequest(
                 Request.Method.GET,
-                URL_GET_CREATED_ARRAY,
+                URL_SERVER + "users/" + userId + "/recipes",
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -272,9 +275,9 @@ public class ProfileActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("recipeId");
+                                int recipeId = jsonObject.getInt("id");
                                 String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("author");
+                                String author = jsonObject.getString("username");
                                 String description = jsonObject.getString("description");
 
                                 // Create a ListItemObject and add it to the adapter
