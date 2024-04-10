@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
+import recipeapp.Rating.Rating;
 import recipeapp.Tags.Tag;
 import recipeapp.Users.*;
 
@@ -60,7 +61,9 @@ public class Recipe {
 
 
     /** The rating of the recipe given by users. */
-    private double rating = 0;
+    @OneToMany (mappedBy = "recipe")
+    private List<Rating> ratings;
+    private double recipeRating = 0.0;
     private int ratingCount = 0;
     private int totalRating = 0;
 }
