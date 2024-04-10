@@ -49,7 +49,7 @@ public class TrendingRecipeController {
 //        for (TrendingRecipe trendingRecipe : trendingList) {
 //            out.add(trendingRecipe.getRecipe());
 //        }
-        List<Recipe> ret = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "rating"));
+        List<Recipe> ret = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "recipeRating"));
 
         return ret;
     }
