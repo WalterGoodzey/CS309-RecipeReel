@@ -2,12 +2,15 @@ package com.example.recipeapp.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,10 +31,6 @@ import java.util.Map;
  * TODO - Update to display the rest of the recipe's data
  */
 public class ViewRecipeActivity extends AppCompatActivity {
-    /**
-     * TextView to display the title of the recipe
-     */
-    private TextView titleTxt;
     /**
      * TextView to display the author of the recipe
      */
@@ -61,10 +60,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     private int recipeId;
     /**
-     * Button for saving recipe
-     */
-    private Button saveButton;
-    /**
      * Button for giving recipe a 1star rating - TEMPORARY
      */
     private Button rate1, rate2, rate3, rate4, rate5;
@@ -76,8 +71,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     private String SPECIFIC_URL_RATING;
 
-    /** Local user's userId */
+    /**
+     * Local user's userId
+     */
     private int userId;
+
     /**
      * onCreate for ViewRecipeActivity
      *
@@ -89,8 +87,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
-        titleTxt = findViewById(R.id.titleText);
+
         authorTxt = findViewById(R.id.authorText);
+        ratingTxt = findViewById(R.id.ratingText);
         descriptionTxt = findViewById(R.id.descriptionText);
         ingredientsTxt = findViewById(R.id.ingredientsText);
         instructionsTxt = findViewById(R.id.instructionsText);
@@ -99,8 +98,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         if (extras != null) {
             recipeId = extras.getInt("id");
         }
-
-        saveButton = findViewById(R.id.saveButton);
 
         rate1 = findViewById(R.id.rate1_button);
         rate2 = findViewById(R.id.rate2_button);
@@ -154,20 +151,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
                 SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 5;
                 putRecipeRating();
-            }
-        });
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                saveRecipe();
-            }
-        });
-
-        authorTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -235,13 +218,25 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
     private void updateUI(JSONObject response) {
         try {
-            titleTxt.setText(response.optString("title", "Title not found"));
-            authorTxt.setText(response.optString("username", "Author not found"));
-            instructionsTxt.setText(response.optString("instructions", "Instructions not found"));
-            ingredientsTxt.setText(response.optString("ingredients", "Ingredients not found"));
-            descriptionTxt.setText(response.optString("description", "Description not found"));
+            Toolbar toolbar = (Toolbar) findViewById(R.id.view_toolbar);
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(response.optString("title",
+                        "Title not found"));
+            }
+
+            authorTxt.setText("Author:\n" + response.optString("username", "Author not found"));
+            ratingTxt.setText("Rating: " + response.optString("rating", "Rating not found"));
+            instructionsTxt.setText("Instructions:\n" + response.optString("instructions", "Instructions not found"));
+            ingredientsTxt.setText("Ingredients:\n" + response.optString("ingredients", "Ingredients not found"));
+            descriptionTxt.setText("Description:\n" + response.optString("description", "Description not found"));
         } catch (Exception e) {
             Log.e("UpdateUI", "Error parsing response", e);
         }
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.view_menu, menu);
+        return true;
     }
 }
