@@ -209,8 +209,8 @@ public class UserController {
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         Users u = userRepository.findById(id);
-        LoginUsers u1 = new LoginUsers(u.getUsername(),u.getPassword());
-        loginRepository.delete(u1);
+        LoginUsers lU = u.getLoginUsers();
+        lU.setUser(null);
         userRepository.delete(u);
         return success;
     }
