@@ -109,8 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //intent to view single recipe
                 Intent intent = new Intent(ProfileActivity.this, ViewRecipeActivity.class);
-                //send full JSON recipe as a string to be used in recipe view Activity
-                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
+                intent.putExtra("id", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
@@ -133,15 +132,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             //update URL and get user's created recipes
             URL_GET_CREATED_ARRAY = URL_USERS + "/" + userId + "/recipes";
-            makeRecipeListReq();
-
-            //for example
-//            for(int i = 0; i < 5; i++){
-//                String title = "Example" + i;
-//                // Create a ListItemObject and add it to the adapter
-//                RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
-//                adapter.add(item);
-//            }
 
             makeRecipeListReq();
 
