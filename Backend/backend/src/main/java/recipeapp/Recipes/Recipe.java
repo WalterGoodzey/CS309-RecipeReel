@@ -61,6 +61,7 @@ public class Recipe {
 
 
     /** The rating of the recipe given by users. */
+    @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Rating> ratings;
     private double recipeRating = 0.0;
