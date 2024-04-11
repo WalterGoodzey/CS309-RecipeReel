@@ -41,6 +41,11 @@ public class Users {
     @NonNull
     private String password;
 
+    @OneToOne (cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinColumn(name = "login_users_id", referencedColumnName = "id")
+    private LoginUsers loginUsers;
+
     /** The list of recipes saved by the user. */
     @OneToMany
     private List<Recipe> savedRecipes = new ArrayList<>();
