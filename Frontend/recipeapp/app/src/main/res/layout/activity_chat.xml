@@ -6,36 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".activities.ChatActivity">
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/layout_group_chat"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_chat"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/Widget.AppCompat.Toolbar"
+        style="@style/UpperToolbar"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/Theme.AppCompat.Light">
+        app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.Toolbar>
 
-
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/text_chat_indicator"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/view"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
     <ListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
