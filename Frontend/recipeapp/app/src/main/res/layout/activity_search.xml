@@ -25,6 +25,8 @@
         android:layout_marginTop="10dp"
         android:textSize="25dp"
         android:hint="Recipe Name"
+        android:textColor="@color/light_gray"
+        android:textColorHint="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_toolbar" />
 
@@ -33,7 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
-        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/search_bar"
         app:layout_constraintTop_toBottomOf="@id/search_bar"/>
@@ -42,13 +43,14 @@
         android:id="@+id/search_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:textSize="25dp"
         android:hint="Tags"
+        android:textColor="@color/light_gray"
+        android:textColorHint="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_button" />
 
@@ -57,7 +59,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search Tags"
-        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/search_bar"
         app:layout_constraintTop_toBottomOf="@id/search_tag"/>
@@ -74,9 +75,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#000000"
+        style="@style/bottomNavStyle"
         app:itemIconSize="60dp"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
