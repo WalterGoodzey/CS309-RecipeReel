@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.SearchActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/search_toolbar"
+        style="@style/UpperToolbar"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
@@ -18,30 +25,32 @@
         android:layout_marginTop="10dp"
         android:textSize="25dp"
         android:hint="Recipe Name"
+        android:textColor="@color/light_gray"
+        android:textColorHint="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/search_toolbar" />
 
     <Button
         android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
-        android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/search_bar"
-        app:layout_constraintTop_toBottomOf="@id/search_bar"></Button>
+        app:layout_constraintTop_toBottomOf="@id/search_bar"/>
 
     <EditText
         android:id="@+id/search_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:textSize="25dp"
         android:hint="Tags"
+        android:textColor="@color/light_gray"
+        android:textColorHint="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_button" />
 
@@ -50,38 +59,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search Tags"
-        android:textColor="#ffffff"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/search_bar"
-        app:layout_constraintTop_toBottomOf="@id/search_tag"></Button>
-
-<!--    <Button-->
-<!--        android:id="@+id/search_chat_btn"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="To ChatActivity"-->
-<!--        android:textColor="#ffffff"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"></Button>-->
+        app:layout_constraintTop_toBottomOf="@id/search_tag"/>
 
     <ListView
         android:id="@+id/search_results"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="375dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tag_search_button">
 
     </ListView>
 
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/bottomNavStyle"
         app:itemIconSize="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#000000"
         app:itemTextColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

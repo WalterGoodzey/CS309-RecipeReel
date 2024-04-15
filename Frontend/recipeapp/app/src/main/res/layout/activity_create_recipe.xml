@@ -16,7 +16,8 @@
             android:id="@+id/input_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Recipe Title" />
+            android:hint="Recipe Title"
+            android:textColorHint="@color/light_gray" />
     </LinearLayout>
 
     <LinearLayout
@@ -29,7 +30,8 @@
             android:id="@+id/input_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Description" />
+            android:hint="Description"
+            android:textColorHint="@color/light_gray" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +44,8 @@
             android:id="@+id/input_ingredients"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Ingredients" />
+            android:hint="Ingredients"
+            android:textColorHint="@color/light_gray"/>
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +58,8 @@
             android:id="@+id/input_steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Steps" />
+            android:hint="Steps"
+            android:textColorHint="@color/light_gray" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,7 +72,8 @@
             android:id="@+id/input_tags"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Tags" />
+            android:hint="Tags"
+            android:textColorHint="@color/light_gray" />
     </LinearLayout>
 
     <Button
