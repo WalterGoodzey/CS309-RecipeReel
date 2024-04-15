@@ -224,6 +224,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(response.optString("title",
                         "Title not found"));
             }
+            toolbar.inflateMenu(R.menu.view_menu);
+
 
             authorTxt.setText("Author:\n" + response.optString("username", "Author not found"));
             ratingTxt.setText("Rating: " + response.optString("rating", "Rating not found"));
