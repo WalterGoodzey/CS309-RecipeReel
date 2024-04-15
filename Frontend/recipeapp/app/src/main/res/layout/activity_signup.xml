@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".activities.SignupActivity">
 
@@ -15,7 +14,6 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="80dp"
         android:text="Signup"
-        android:textColor="#673AB7"
         android:textSize="40dp"></TextView>
 
 <!--    USERNAME    -->
@@ -30,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="username: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -38,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="Enter Username Here"
+            android:textColorHint="@color/light_gray"
             android:inputType="text"
             android:maxLines="1"></EditText>
     </LinearLayout>
@@ -54,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="email: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -62,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Enter Email Here"
+            android:textColorHint="@color/light_gray"
             android:inputType="text"
             android:maxLines="1"></EditText>
     </LinearLayout>
@@ -77,7 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="password: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -85,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="Enter Password Here"
+            android:textColorHint="@color/light_gray"
             android:inputType="textPassword"></EditText>
     </LinearLayout>
 
@@ -99,7 +97,6 @@
             android:layout_width="wrap_content"
             android:layout_height="70sp"
             android:text="confirm\npassword: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -107,6 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:hint="Enter Password Here"
+            android:textColorHint="@color/light_gray"
             android:inputType="textPassword"></EditText>
 
     </LinearLayout>

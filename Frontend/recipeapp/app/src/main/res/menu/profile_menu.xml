@@ -12,7 +12,7 @@
         android:id="@+id/profile_options_myChats"
         android:orderInCategory="2"
         android:title="@string/profile_options_myChats"
-        android:icon="@drawable/mychatsbutton"
+        android:icon="@drawable/mychatsbutton2"
         android:actionLayout="@layout/activity_profile"
         app:showAsAction="always"/>
 <!--    Options submenu -->
