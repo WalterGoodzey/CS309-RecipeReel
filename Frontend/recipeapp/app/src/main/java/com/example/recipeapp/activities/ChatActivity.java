@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     /** Message to fill next MessageItemObject (sent or received) */
     private String message;
 
+    
     /**
      * onCreate method for ChatActivity
      * @param savedInstanceState If the activity is being re-initialized after
