@@ -67,7 +67,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     /**
      * Button for giving recipe a 1star rating - TEMPORARY
      */
-    private Button rate1, rate2, rate3, rate4, rate5;
+    private Button rate1, rate2, rate3, rate4, rate5, cancelRate;
 
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
 //    private String URL_SERVER = "recipeshttps://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/recipes";
@@ -117,6 +117,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         rate3 = findViewById(R.id.rate3_button);
         rate4 = findViewById(R.id.rate4_button);
         rate5 = findViewById(R.id.rate5_button);
+        cancelRate = findViewById(R.id.cancel_rate);
 
         getRecipe();
 
@@ -269,6 +270,14 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 popupCard.setVisibility(View.INVISIBLE);
                 popupMessage.setVisibility(View.INVISIBLE);
                 putRecipeRating();
+            }
+        });
+        /* click listener on cancelRate button pressed */
+        cancelRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
             }
         });
     }
