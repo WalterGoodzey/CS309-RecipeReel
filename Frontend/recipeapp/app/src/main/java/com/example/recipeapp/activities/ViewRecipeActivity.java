@@ -70,7 +70,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
     private Button rate1, rate2, rate3, rate4, rate5, cancelRate;
 
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
-//    private String URL_SERVER = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/recipes";
+//    private String URL_SERVER = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/";
     /**
      * Specific URL for recipe rating requests
      */
@@ -197,10 +197,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 1;
+                putRecipeRating(URL_SERVER + "recipes/" + recipeId + "/rate/" + 1);
                 popupCard.setVisibility(View.INVISIBLE);
                 popupRatingMessage.setVisibility(View.INVISIBLE);
-                putRecipeRating();
             }
         });
         /* click listener on rate2 button pressed */
@@ -208,10 +207,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 2;
+                putRecipeRating(URL_SERVER + "recipes/" + recipeId + "/rate/" + 2);
                 popupCard.setVisibility(View.INVISIBLE);
                 popupRatingMessage.setVisibility(View.INVISIBLE);
-                putRecipeRating();
             }
         });
         /* click listener on rate3 button pressed */
@@ -219,10 +217,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 3;
+                putRecipeRating(URL_SERVER + "recipes/" + recipeId + "/rate/" + 3);
                 popupCard.setVisibility(View.INVISIBLE);
                 popupRatingMessage.setVisibility(View.INVISIBLE);
-                putRecipeRating();
             }
         });
         /* click listener on rate4 button pressed */
@@ -230,10 +227,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 4;
+                putRecipeRating(URL_SERVER + "recipes/" + recipeId + "/rate/" + 4);
                 popupCard.setVisibility(View.INVISIBLE);
                 popupRatingMessage.setVisibility(View.INVISIBLE);
-                putRecipeRating();
             }
         });
         /* click listener on rate5 button pressed */
@@ -241,10 +237,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 5;
+                putRecipeRating(URL_SERVER + "recipes/" + recipeId + "/rate/" + 5);
                 popupCard.setVisibility(View.INVISIBLE);
                 popupRatingMessage.setVisibility(View.INVISIBLE);
-                putRecipeRating();
             }
         });
         /* click listener on cancelRate button pressed */
@@ -259,10 +254,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
     /**
      * Volley PUT request to PUT user's new recipe rating to the server
+     *
+     * @param url rating url
      */
-    private void putRecipeRating() {
+    private void putRecipeRating(String url) {
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
-                SPECIFIC_URL_RATING,
+                url,
                 null, // request body for PUT request
                 new Response.Listener<JSONObject>() {
                     @Override
