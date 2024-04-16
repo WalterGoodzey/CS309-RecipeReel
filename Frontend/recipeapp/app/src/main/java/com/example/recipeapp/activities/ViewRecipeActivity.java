@@ -1,9 +1,13 @@
 package com.example.recipeapp.activities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,6 +26,7 @@ import com.example.recipeapp.VolleySingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +34,6 @@ import java.util.Map;
 /**
  * Activity to view a single recipe in its entirety
  * <p>
- * TODO - Update to display the rest of the recipe's data
  */
 public class ViewRecipeActivity extends AppCompatActivity {
     /**
@@ -76,6 +81,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     private int userId;
 
+    private CardView popupCard;
+    private TextView popupMessage;
+
     /**
      * onCreate for ViewRecipeActivity
      *
@@ -93,11 +101,16 @@ public class ViewRecipeActivity extends AppCompatActivity {
         descriptionTxt = findViewById(R.id.descriptionText);
         ingredientsTxt = findViewById(R.id.ingredientsText);
         instructionsTxt = findViewById(R.id.instructionsText);
+        popupCard = findViewById(R.id.rate_recipe_popup_card);
+        popupMessage = findViewById(R.id.view_rate_popup);
         //get recipeId from previous activity
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             recipeId = extras.getInt("id");
         }
+
+        popupCard.setVisibility(View.INVISIBLE);
+        popupMessage.setVisibility(View.INVISIBLE);
 
         rate1 = findViewById(R.id.rate1_button);
         rate2 = findViewById(R.id.rate2_button);
@@ -107,52 +120,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
         getRecipe();
 
-
-        /* click listener on rate1 button pressed */
-        rate1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 1;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate2 button pressed */
-        rate2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 2;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate3 button pressed */
-        rate3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 3;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate4 button pressed */
-        rate4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 4;
-                putRecipeRating();
-            }
-        });
-        /* click listener on rate5 button pressed */
-        rate5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
-                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 5;
-                putRecipeRating();
-            }
-        });
     }
 
 
@@ -197,9 +164,113 @@ public class ViewRecipeActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
+    /**
+     * Handler for when an option from the toolbar is selected
+     *
+     * @param item The menu item that was selected.
+     * @return true if applicable option is selected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection.
+        int itemId = item.getItemId();
+        if (itemId == R.id.view_options_save_recipe) {
+            saveRecipe();
+            return true;
+        } else if (itemId == R.id.view_options_comments) {
+            // TODO - implement new activity to view comments
+            return true;
+        } else if (itemId == R.id.view_options_rate) {
+            rateRecipe();
+            return true;
+        } else if (itemId == R.id.view_options_view_author) {
+            // TODO - implement view author
+            return true;
+        } else if (itemId == R.id.view_options_chat_with_author) {
+            // TODO - implement chat with author
+            return true;
+          // need this for later viewing and making comments, updating recipe
+//        } else if (itemId == R.id.profile_options_logout) {
+//            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
+//            // getting the data which is stored in shared preferences.
+//            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+//            //make editor for shared preferences
+//            SharedPreferences.Editor editor = saved_values.edit();
+//            //clear and save shared preferences
+//            editor.clear();
+//            editor.apply();
+//            //go to EntryActivity
+////            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
+//            return true;
+//
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
     private void saveRecipe() {
         String url = URL_SERVER + "users/";
+        // TODO - implement save recipe
+    }
+
+    private void rateRecipe() {
+        popupCard.setVisibility(View.VISIBLE);
+        popupMessage.setVisibility(View.VISIBLE);
+        /* click listener on rate1 button pressed */
+        rate1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 1 star */
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 1;
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate2 button pressed */
+        rate2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 2 stars */
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 2;
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate3 button pressed */
+        rate3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 3 stars */
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 3;
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate4 button pressed */
+        rate4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 4 stars */
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 4;
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                putRecipeRating();
+            }
+        });
+        /* click listener on rate5 button pressed */
+        rate5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* when rate button is pressed, use Volley request to rate the recipe at 5 stars */
+                SPECIFIC_URL_RATING = URL_SERVER + "recipes/" + recipeId + "/rate/" + 5;
+                popupCard.setVisibility(View.INVISIBLE);
+                popupMessage.setVisibility(View.INVISIBLE);
+                putRecipeRating();
+            }
+        });
     }
 
     private void getRecipe() {
@@ -236,6 +307,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             Log.e("UpdateUI", "Error parsing response", e);
         }
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
