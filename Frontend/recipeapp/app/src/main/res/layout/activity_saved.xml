@@ -28,18 +28,21 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        style="@style/bottomNavStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:itemIconSize="60dp"
-        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="#000000"
+        app:itemTextColor="@color/white"
         app:menu="@menu/bottom_menu" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/saved_toolbar"
-        style="@style/UpperToolbar"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

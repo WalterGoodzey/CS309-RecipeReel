@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
     tools:context=".activities.EntryActivity">
 
@@ -14,6 +15,7 @@
         android:layout_marginTop="120dp"
         android:layout_marginBottom="50dp"
         android:text="Welcome to RecipeReel!"
+        android:textColor="#673AB7"
         android:textSize="35dp"></TextView>
 
     <TextView
@@ -24,6 +26,7 @@
         android:layout_gravity="center"
         android:text="Login or Signup"
         android:textAlignment="center"
+        android:textColor="#673AB7"
         android:textSize="20dp"
         android:translationY="-30dp" />
 
