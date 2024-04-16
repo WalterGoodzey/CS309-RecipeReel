@@ -11,7 +11,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -100,13 +99,6 @@ public class SearchActivity extends AppCompatActivity {
             userId = extras.getInt("id");
         }
 
-        /* options toolbar at top */
-        Toolbar toolbar = (Toolbar) findViewById(R.id.search_toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Search");
-        }
-
         /* click listener on search button pressed */
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +139,6 @@ public class SearchActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_search);
-        bottomNavigationView.setItemIconTintList(null);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
 

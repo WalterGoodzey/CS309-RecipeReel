@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -89,13 +88,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             otherUsername = extras.getString("otherChatUser");
-        }
-
-        /* options toolbar at top */
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_chat);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Chat with " + otherUsername);
         }
 
         //message list setup and operation
