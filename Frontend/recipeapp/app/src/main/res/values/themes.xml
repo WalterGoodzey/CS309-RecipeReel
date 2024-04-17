@@ -9,6 +9,7 @@
         <item name="android:textColorSecondary">@color/light_gray</item>
     </style>
 
+
     <style name="toolbarTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize app theme here. -->
         <item name="colorPrimary">@color/black</item>
