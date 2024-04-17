@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_centerHorizontal="false"
-    android:background="#FFFFFF"
     android:orientation="vertical"
     android:textAlignment="center"
     tools:context=".activities.EditProfileActivity">
@@ -99,7 +98,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="username: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -107,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="Current Username"
+            android:textColorHint="@color/light_gray"
             android:inputType="text"
             android:maxLines="1"></EditText>
 
@@ -123,12 +122,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="email: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
             android:id="@+id/editprofile_email_edt"
             android:layout_width="wrap_content"
+            android:textColorHint="@color/light_gray"
             android:layout_height="50dp"
             android:hint="Current Email"
             android:inputType="text"
@@ -147,7 +146,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="password: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -155,6 +153,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="Current Password"
+            android:textColorHint="@color/light_gray"
             android:inputType="textPassword"></EditText>
 
     </LinearLayout>
@@ -170,7 +169,6 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:text="confirm\npassword: "
-            android:textColor="#000000"
             android:textSize="20dp"></TextView>
 
         <EditText
@@ -178,6 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:hint="Current Password"
+            android:textColorHint="@color/light_gray"
             android:inputType="textPassword"></EditText>
 
     </LinearLayout>
@@ -196,7 +195,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:text="Save Changes"
-            android:textColor="#ffffff"
             android:textSize="20sp"></Button>
 
         <Button
@@ -204,7 +202,6 @@
             android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:text="Exit Without Saving"
-            android:textColor="#ffffff"
             android:textSize="20sp"></Button>
         <Button
             android:id="@+id/editprofile_delete_btn"
@@ -212,7 +209,6 @@
             android:backgroundTint="#FF0000"
             android:layout_height="wrap_content"
             android:text="Delete Account"
-            android:textColor="#ffffff"
             android:textSize="20sp"></Button>
 
     </LinearLayout>
@@ -230,7 +226,6 @@
             android:layout_marginTop="-10dp"
             android:layout_marginBottom="0dp"
             android:text="Edit My Profile"
-            android:textColor="#000000"
             android:textSize="50sp"></TextView>
 
     </LinearLayout>
