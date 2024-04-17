@@ -101,11 +101,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/view_toolbar"
+        style="@style/UpperToolbar"
+        app:popupTheme="@style/DarkToolbarPopupStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/ratingText"
@@ -127,7 +127,6 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
         android:textSize="20dp"
         android:text="Author"
         app:layout_constraintStart_toStartOf="parent"

@@ -364,7 +364,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
             }
             toolbar.inflateMenu(R.menu.view_menu);
 
-
             authorTxt.setText("Author:\n" + response.optString("username", "Author not found"));
             ratingTxt.setText("Rating: " + response.optString("rating", "Rating not found"));
             instructionsTxt.setText("Instructions:\n" + response.optString("instructions", "Instructions not found"));
