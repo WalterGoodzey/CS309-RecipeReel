@@ -189,9 +189,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     private void saveRecipe() {
         // TODO - implement save recipe
+        String url = URL_SERVER + "users/" + userId + "/savedrecipes";
         JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
-                URL_SERVER + "users/" + userId + "/savedrecipes",
-                null, // request body for PUT request
+                url,
+                fullRecipeJSON, // request body for PUT request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
