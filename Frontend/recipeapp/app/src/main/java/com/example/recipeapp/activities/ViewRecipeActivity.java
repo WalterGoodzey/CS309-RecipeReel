@@ -128,6 +128,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * TODO - add documentation for onCreateOptionsMenu
+     * @param menu The options menu in which you place your items.
+     *
+     * @return
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
@@ -182,8 +188,37 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * TODO - add documentation for saveRecipe
      */
     private void saveRecipe() {
-        String url = URL_SERVER + "users/";
         // TODO - implement save recipe
+        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
+                URL_SERVER + "users/" + userId + "/savedrecipes",
+                null, // request body for PUT request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Recipe Saved!", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Saving Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
     }
 
     /**
@@ -306,6 +341,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 null,
                 response -> {
                     Log.d("GetRecipe", "Response: " + response.toString());
+                    fullRecipeJSON = response;
                     updateUI(response);
                 }, error -> Log.e("GetRecipe", "Error Response", error));
 
