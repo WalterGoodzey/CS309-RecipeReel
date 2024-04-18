@@ -41,9 +41,10 @@ public class SavedActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
     /** Base URL for Volley GET request with Volley server (TODO - Update to our server)*/
-    private static final String URL_SERVER = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/";
+//    private static final String URL_SERVER = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/";
+    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+
     /** Local user's specific URL for Volley GET request with Volley server (TODO - Update to our server)*/
-    private static String URL_SAVED_ARRAY = "";
 
     /**
      * onCreate method for SavedActivity
@@ -111,12 +112,14 @@ public class SavedActivity extends AppCompatActivity {
 //        makeRecipeListReq();
 
         //for example
-        for(int i = 0; i < 5; i++){
-            String title = "Example" + i;
-            // Create a ListItemObject and add it to the adapter
-            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
-            adapter.add(item);
-        }
+//        for(int i = 0; i < 5; i++){
+//            String title = "Example" + i;
+//            // Create a ListItemObject and add it to the adapter
+//            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
+//            adapter.add(item);
+//        }
+
+        makeRecipeListReq();
 
 
         //Added to go to ViewRecipeActivity when an item in listview is clicked
@@ -126,7 +129,7 @@ public class SavedActivity extends AppCompatActivity {
                 //intent to view single recipe
                 Intent intent = new Intent(SavedActivity.this, ViewRecipeActivity.class);
                 //send full JSON recipe as a string to be used in recipe view Activity
-                intent.putExtra("recipeId", adapter.getItem(i).getRecipeId());
+                intent.putExtra("id", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
             }
@@ -140,7 +143,7 @@ public class SavedActivity extends AppCompatActivity {
     private void makeRecipeListReq() {
         JsonArrayRequest recipeListReq = new JsonArrayRequest(
                 Request.Method.GET,
-                URL_SAVED_ARRAY,
+                URL_SERVER + "users/" + userId + "/savedrecipes/",
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -151,9 +154,9 @@ public class SavedActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("recipeId");
+                                int recipeId = jsonObject.getInt("id");
                                 String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("author");
+                                String author = jsonObject.getString("username");
                                 String description = jsonObject.getString("description");
 
                                 // Create a ListItemObject and add it to the adapter
@@ -187,6 +190,8 @@ public class SavedActivity extends AppCompatActivity {
                 return params;
             }
         };
+
+
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
     }

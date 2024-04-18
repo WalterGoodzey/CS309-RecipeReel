@@ -4,19 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rate_recipe_popup_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#D5D5D5"
+        android:translationY="250dp"
+        tools:ignore="MissingConstraints">
 
-    <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp">
 
-        android:id="@+id/titleText"
+            <TextView
+                android:id="@+id/view_rate_popup"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Rate this recipe: (1-5 stars)"
+                android:textAlignment="center"
+                android:textSize="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearlayout_of_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_rate_popup">
+
+                <Button
+                    android:id="@+id/rate1_button"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:layout_margin="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/rate2_button"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:layout_margin="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rate1_button" />
+
+                <Button
+                    android:id="@+id/rate3_button"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:layout_margin="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rate2_button" />
+
+                <Button
+                    android:id="@+id/rate4_button"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:layout_margin="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rate3_button" />
+
+                <Button
+                    android:id="@+id/rate5_button"
+                    android:layout_width="60dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content"
+                    android:text="5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/rate4_button" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/cancel_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/linearlayout_of_buttons"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/view_toolbar"
+        style="@style/UpperToolbar"
+        app:popupTheme="@style/DarkToolbarPopupStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_centerInParent="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="50dp"
-        android:text="Title"
-        app:layout_constraintStart_toStartOf="parent"
+        android:minHeight="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/ratingText"
@@ -29,7 +118,7 @@
         android:textSize="10dp"
         android:text="Rating"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText"
+        app:layout_constraintTop_toBottomOf="@+id/view_toolbar"
         />
     <TextView
         android:id="@+id/authorText"
@@ -51,7 +140,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:text="Description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/authorText"
@@ -64,7 +153,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:text="Instructions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionText"
@@ -77,65 +166,10 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:text="Ingredients"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructionsText"
         />
-
-    <Button
-        android:id="@+id/rate1_button"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/rate2_button"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="2"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rate1_button" />
-
-    <Button
-        android:id="@+id/rate3_button"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="3"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rate2_button" />
-
-    <Button
-        android:id="@+id/rate4_button"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:text="4"
-        android:layout_margin="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rate3_button" />
-
-    <Button
-        android:id="@+id/rate5_button"
-        android:layout_width="75dp"
-        android:layout_margin="5dp"
-        android:layout_height="wrap_content"
-        android:text="5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rate4_button" />
-
-    <TextView
-        android:id="@+id/rating_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_marginBottom="42dp"
-        android:text="Rate this recipe: (1-5 stars)"
-        app:layout_constraintBottom_toTopOf="@+id/rate2_button"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
