@@ -193,7 +193,7 @@ public class SignupActivity extends AppCompatActivity {
                             // to save our new key-value data
                             editor.apply();
                             // go to ProfileActivity
-                            startActivity(new Intent(SignupActivity.this, ProfileActivity.class));
+                            startActivity(new Intent(SignupActivity.this, MyProfileActivity.class));
                         }
                     }
                 },

@@ -170,7 +170,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // go to ProfileActivity
-                startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                startActivity(new Intent(EditProfileActivity.this, MyProfileActivity.class));
             }
         });
 
@@ -280,7 +280,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             // to save our new key-value data
                             editor.apply();
                             // go to ProfileActivity
-                            startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                            startActivity(new Intent(EditProfileActivity.this, MyProfileActivity.class));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }

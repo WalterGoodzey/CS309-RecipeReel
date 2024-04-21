@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(new Intent(SplashActivity.this, EntryActivity.class));
                     } else {
                         //user is logged in, send them to their profile page
-                        startActivity(new Intent(SplashActivity.this, ProfileActivity.class));
+                        startActivity(new Intent(SplashActivity.this, MyProfileActivity.class));
                     }
                 }
             }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,23 +11,12 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.R;
-import com.example.recipeapp.VolleySingleton;
 import com.example.recipeapp.adapters.RecipeAdapter;
 import com.example.recipeapp.objects.RecipeItemObject;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Activity to display recent recipes published by users that the
@@ -90,7 +78,7 @@ public class FollowingActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
                 startActivity(intent);
                 return true;
             }

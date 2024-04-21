@@ -171,7 +171,7 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (id == R.id.bottom_profile) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
                 intent.putExtra("id", userId);
                 startActivity(intent);
                 return true;
