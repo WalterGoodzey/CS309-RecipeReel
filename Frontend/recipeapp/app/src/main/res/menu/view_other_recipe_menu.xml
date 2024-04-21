@@ -6,7 +6,7 @@
         android:id="@+id/view_options_overflow"
         android:orderInCategory="1"
         android:title="Overflow"
-        android:icon="@drawable/ic_options"
+        android:icon="@drawable/options_nobackground"
         android:actionLayout="@layout/activity_view_recipe"
         app:showAsAction="always">
         <menu>
