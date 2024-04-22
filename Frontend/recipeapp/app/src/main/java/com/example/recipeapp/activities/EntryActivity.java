@@ -81,7 +81,7 @@ public class EntryActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 /* when continue as guest button is pressed, use intent to switch to ProfileActivity without pass a user as an extra*/
-                Intent intent = new Intent(EntryActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(EntryActivity.this, MyProfileActivity.class);
                 startActivity(intent);
             }
         });

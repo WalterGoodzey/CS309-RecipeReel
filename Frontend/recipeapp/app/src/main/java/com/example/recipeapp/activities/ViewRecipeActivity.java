@@ -26,14 +26,12 @@ import com.example.recipeapp.VolleySingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Activity to view a single recipe in its entirety
- * <p>
  */
 public class ViewRecipeActivity extends AppCompatActivity {
     /**
@@ -80,6 +78,10 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * Local user's userId
      */
     private int userId;
+    /** UserId of the author of this recipe */
+    private int authorUserId;
+    /** Author's username (for going to a chat with the author) */
+    private String authorUsername;
     /**
      * CardView to display popupCard
      */
@@ -113,6 +115,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         if (extras != null) {
             recipeId = extras.getInt("id");
         }
+        //initializing our shared preferences
+        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
         popupCard.setVisibility(View.INVISIBLE);
         popupRatingMessage.setVisibility(View.INVISIBLE);
@@ -125,7 +130,6 @@ public class ViewRecipeActivity extends AppCompatActivity {
         cancelRate = findViewById(R.id.cancel_rate);
 
         getRecipe();
-
     }
 
     /**
@@ -136,7 +140,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.view_menu, menu);
+        if(authorUserId == userId){
+            inflater.inflate(R.menu.view_my_recipe_menu, menu);
+        } else {
+            inflater.inflate(R.menu.view_other_recipe_menu, menu);
+        }
         return true;
     }
 
@@ -160,10 +168,20 @@ public class ViewRecipeActivity extends AppCompatActivity {
             rateRecipe();
             return true;
         } else if (itemId == R.id.view_options_view_author) {
-            // TODO - implement view author
+            //intent to selected profile
+            Intent intent = new Intent(ViewRecipeActivity.this, OtherProfileActivity.class);
+            //send other profile's userId as an extra in intent
+            intent.putExtra("viewingUserId", authorUserId);
+            //start ChatActivity
+            startActivity(intent);
             return true;
         } else if (itemId == R.id.view_options_chat_with_author) {
-            // TODO - implement chat with author
+            //intent to selected chatroom
+            Intent intent = new Intent(ViewRecipeActivity.this, ChatActivity.class);
+            //send other chat users username as an extra in intent
+            intent.putExtra("otherChatUser", authorUsername);
+            //start ChatActivity
+            startActivity(intent);
             return true;
             // need this for later viewing and making comments, updating recipe
 //        } else if (itemId == R.id.profile_options_logout) {
@@ -343,6 +361,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 response -> {
                     Log.d("GetRecipe", "Response: " + response.toString());
                     fullRecipeJSON = response;
+                    try {
+                        authorUserId = response.getInt("creatorUserId");
+                        authorUsername = response.getString("username");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                     updateUI(response);
                 }, error -> Log.e("GetRecipe", "Error Response", error));
 
@@ -362,7 +386,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(response.optString("title",
                         "Title not found"));
             }
-            toolbar.inflateMenu(R.menu.view_menu);
+            toolbar.inflateMenu(R.menu.view_other_recipe_menu);
 
             authorTxt.setText("Author:\n" + response.optString("username", "Author not found"));
             ratingTxt.setText("Rating: " + response.optString("rating", "Rating not found"));

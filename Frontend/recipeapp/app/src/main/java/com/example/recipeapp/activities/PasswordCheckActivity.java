@@ -43,7 +43,7 @@ public class PasswordCheckActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //go back to profile activity
-                startActivity(new Intent(PasswordCheckActivity.this, ProfileActivity.class));
+                startActivity(new Intent(PasswordCheckActivity.this, MyProfileActivity.class));
 
             }
         });

@@ -148,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // to save our new key-value data
                                 editor.apply();
                                 // go to ProfileActivity
-                                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                startActivity(new Intent(LoginActivity.this, MyProfileActivity.class));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }

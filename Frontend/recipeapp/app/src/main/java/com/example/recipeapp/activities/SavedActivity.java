@@ -93,7 +93,7 @@ public class SavedActivity extends AppCompatActivity {
                 //current activity, do nothing
                 return true;
             } else if (id == R.id.bottom_profile) {
-                Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyProfileActivity.class);
                 startActivity(intent);
                 return true;
             }

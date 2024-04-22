@@ -16,6 +16,8 @@
     <string name="profile_options_create">Create Recipe</string>
     <string name="profile_options_myChats">My Chats</string>
     <string name="profile_options_helperchat">Chat with Helper</string>
+    <string name="profile_options_follow">Follow Account</string>
+    <string name="profile_options_chat">Chat</string>
 
     <string name="PREF_KEY">shared_prefs</string>
     <string name="USERID_KEY">userid_key</string>

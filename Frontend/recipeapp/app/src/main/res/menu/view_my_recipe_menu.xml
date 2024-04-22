@@ -6,37 +6,22 @@
         android:id="@+id/view_options_overflow"
         android:orderInCategory="1"
         android:title="Overflow"
-        android:icon="@drawable/ic_options"
+        android:icon="@drawable/options_nobackground"
         android:actionLayout="@layout/activity_view_recipe"
         app:showAsAction="always">
         <menu>
-            <item
-                android:id="@+id/view_options_save_recipe"
-                android:orderInCategory="1"
-                android:title="Save Recipe"
-                app:showAsAction="never"/>
             <item
                 android:id="@+id/view_options_comments"
                 android:orderInCategory="2"
                 android:title="Comments"
                 app:showAsAction="never"/>
             <item
-                android:id="@+id/view_options_rate"
-                android:orderInCategory="3"
-                android:title="Rate"
-                app:showAsAction="never"/>
-            <item
-                android:id="@+id/view_options_view_author"
-                android:orderInCategory="4"
-                android:title="View Author"
-                app:showAsAction="never"/>
-            <item
-                android:id="@+id/view_options_chat_with_author"
-                android:orderInCategory="5"
-                android:title="Chat with Author"
-                app:showAsAction="never"/>
-            <item
                 android:id="@+id/view_edit_recipe"
+                android:orderInCategory="6"
+                android:title="Edit Recipe"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/view_delete_recipe"
                 android:orderInCategory="6"
                 android:title="Edit Recipe"
                 app:showAsAction="never"/>
