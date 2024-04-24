@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,6 +43,8 @@ public class SignupActivity extends AppCompatActivity {
     private Button entryButton;
     /** Button to make Volley request to attempt to create account */
     private Button signupButton;
+    /** TextView for invalid possword errors */
+    private TextView passwordErrorText;
     /** URL for signup Volley POST request */
     private static final String URL_SIGNUP = "http://coms-309-018.class.las.iastate.edu:8080/newuser";
     /** JSONObject to store signup info for POST request */
@@ -67,6 +70,8 @@ public class SignupActivity extends AppCompatActivity {
         confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edittext in the Signup activity XML
         entryButton = findViewById(R.id.signup_entry_btn);          // link to return to login button in the Signup activity XML
         signupButton = findViewById(R.id.signup_signup_btn);        // link to signup button in the Signup activity XML
+        passwordErrorText = findViewById(R.id.signup_error_txt);    // link to error text in the Signup activity XML
+        passwordErrorText.setVisibility(View.INVISIBLE);
 
         /* click listener on login button pressed */
         entryButton.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                 /* if passwords match and meet requirements, make volley signup request */
                 if (password.equals(confirm)){
                     if(isValidPassword(password)) {
+                        passwordErrorText.setVisibility(View.INVISIBLE);
                         Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
                         user = new JSONObject();
                         try {
@@ -104,11 +110,15 @@ public class SignupActivity extends AppCompatActivity {
                         makeSignupRequest();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Password must be 8-15 characters long & contain a number or special character", Toast.LENGTH_LONG).show();
+                        passwordErrorText.setText(R.string.invalid_password_msg);
+                        passwordErrorText.setVisibility(View.VISIBLE);
+//                        Toast.makeText(getApplicationContext(), "Password must be 8+ characters long & contain a number or special character", Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_LONG).show();
+                    passwordErrorText.setText(R.string.mismatch_password_msg);
+                    passwordErrorText.setVisibility(View.VISIBLE);
+//                    Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -135,13 +145,13 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * Helper function that checks whether a string is a valid password
-     * Requirements for a valid password include being 8-15 characters in length and
+     * Requirements for a valid password include be at least characters in length and
      * containing at least one special character or number
      * @param s - string to be checked
      * @return true if string s meets password requirements, false otherwise
      */
     private Boolean isValidPassword(String s){
-        if(s.length() > 7 && s.length() < 16 && containsNumberOrSpecial(s)){
+        if(s.length() > 7  && containsNumberOrSpecial(s)){
             return true;
         } else {
             return false;

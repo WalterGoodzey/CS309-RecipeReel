@@ -140,7 +140,7 @@ public class MyProfileActivity extends AppCompatActivity {
             descriptionText.setVisibility(View.INVISIBLE);
             listView.setVisibility(View.INVISIBLE);
 
-            guestText.setText("You're not signed in!");
+            guestText.setText(R.string.profile_guest_text);
         }
 
         /* click listener on entry button pressed */

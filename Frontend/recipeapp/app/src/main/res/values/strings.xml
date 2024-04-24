@@ -10,6 +10,9 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
 
+    <string name="entry_main_msg">Welcome to RecipeReel!</string>
+    <string name="entry_sub_msg">Login or Signup</string>
+
     <string name="profile_options_logout">Logout</string>
     <string name="profile_options_edit">Edit Profile</string>
     <string name="profile_options_delete">Delete Profile</string>
@@ -18,11 +21,16 @@
     <string name="profile_options_helperchat">Chat with Helper</string>
     <string name="profile_options_follow">Follow Account</string>
     <string name="profile_options_chat">Chat</string>
+    <string name="profile_guest_text">"You\'re not signed in!"</string>
+
+    <string name="invalid_password_msg">Password must be 8+ characters &amp; contain a number or special character</string>
+    <string name="mismatch_password_msg">Passwords don\'t match!</string>
 
     <string name="PREF_KEY">shared_prefs</string>
     <string name="USERID_KEY">userid_key</string>
     <string name="USERNAME_KEY">username_key</string>
     <string name="EMAIL_KEY">email_key</string>
     <string name="PASSWORD_KEY">password_key</string>
-
+    <string name="RECIPES_KEY">recipes_key</string>
+    <string name="SAVED_RECIPES_KEY">saved_recipes_key</string>
 </resources>

@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="RyanSystemTest">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.recipeapp'">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="continueAsGuest()">
+        <State />
+      </entry>
+      <entry key="editProfile()">
         <State />
       </entry>
     </value>
