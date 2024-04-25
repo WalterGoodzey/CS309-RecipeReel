@@ -145,10 +145,11 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
                                 editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
                                 editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
+
                                 // to save our new key-value data
                                 editor.apply();
                                 // go to ProfileActivity
-                                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                startActivity(new Intent(LoginActivity.this, MyProfileActivity.class));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }

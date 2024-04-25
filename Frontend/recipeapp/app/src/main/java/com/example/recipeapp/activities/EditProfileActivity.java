@@ -156,7 +156,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         putUserInfoReq();
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Password must be 8-15 characters long and contain a number or special character", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Password must be 8+ characters long & contain a number or special character", Toast.LENGTH_LONG).show();
                     }
                 }
                 else {
@@ -170,7 +170,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // go to ProfileActivity
-                startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                startActivity(new Intent(EditProfileActivity.this, MyProfileActivity.class));
             }
         });
 
@@ -242,13 +242,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     /**
      * Helper function that checks whether a string is a valid password
-     * Requirements for a valid password include being 8-15 characters in length and
+     * Requirements for a valid password include being at least 8 characters in length and
      * containing at least one special character or number
      * @param s - string to be checked
      * @return true if string s meets password requirements, false otherwise
      */
     private Boolean isValidPassword(String s){
-        if(s.length() > 7 && s.length() < 16 && containsNumberOrSpecial(s)){
+        if(s.length() > 7 && containsNumberOrSpecial(s)){
             return true;
         } else {
             return false;
@@ -280,7 +280,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             // to save our new key-value data
                             editor.apply();
                             // go to ProfileActivity
-                            startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
+                            startActivity(new Intent(EditProfileActivity.this, MyProfileActivity.class));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }

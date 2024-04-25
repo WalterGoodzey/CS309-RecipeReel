@@ -74,6 +74,7 @@ public class MyChatsActivity extends AppCompatActivity {
 //            adapter.add(item);
 //        }
 
+
         //Added to go to ChatActivity when an item in listview is clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

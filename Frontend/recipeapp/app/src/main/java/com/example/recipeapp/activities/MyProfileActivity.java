@@ -40,7 +40,7 @@ import java.util.Map;
  *
  * @author Ryan McFadden
  */
-public class ProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity {
     /** TextView to display message if local user is not logged in */
     private TextView guestText;
     /** TextView to display local user's username */
@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_my_profile);
 
         usernameText = findViewById(R.id.profile_username_txt);
         guestText = findViewById(R.id.profile_guest_txt);
@@ -108,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //intent to view single recipe
-                Intent intent = new Intent(ProfileActivity.this, ViewRecipeActivity.class);
+                Intent intent = new Intent(MyProfileActivity.this, ViewRecipeActivity.class);
                 intent.putExtra("id", adapter.getItem(i).getRecipeId());
                 //start ViewRecipeActivity
                 startActivity(intent);
@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setTitle("My Profile");
             }
-            toolbar.inflateMenu(R.menu.profile_menu);
+            toolbar.inflateMenu(R.menu.my_profile_menu);
 
             //update URL and get user's created recipes
             URL_GET_CREATED_ARRAY = URL_USERS + "/" + userId + "/recipes";
@@ -140,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
             descriptionText.setVisibility(View.INVISIBLE);
             listView.setVisibility(View.INVISIBLE);
 
-            guestText.setText("You're not signed in!");
+            guestText.setText(R.string.profile_guest_text);
         }
 
         /* click listener on entry button pressed */
@@ -148,7 +148,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /* when entry button is pressed, use intent to switch to Entry Activity without sending any extras (logging user out) */
-                Intent intent = new Intent(ProfileActivity.this, EntryActivity.class);
+                Intent intent = new Intent(MyProfileActivity.this, EntryActivity.class);
                 startActivity(intent);
             }
         });
@@ -198,7 +198,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.profile_menu, menu);
+        inflater.inflate(R.menu.my_profile_menu, menu);
         return true;
     }
 
@@ -227,19 +227,19 @@ public class ProfileActivity extends AppCompatActivity {
             editor.clear();
             editor.apply();
             //go to EntryActivity
-            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
+            startActivity(new Intent(MyProfileActivity.this, EntryActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_edit) { //Note: EditProfileActivity now includes the option to delete profile
             //go to password check
-            startActivity(new Intent(ProfileActivity.this, PasswordCheckActivity.class));
+            startActivity(new Intent(MyProfileActivity.this, PasswordCheckActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_myChats){
             //go to myChats activity
-            startActivity(new Intent(ProfileActivity.this, MyChatsActivity.class));
+            startActivity(new Intent(MyProfileActivity.this, MyChatsActivity.class));
             return true;
         } else if (itemId == R.id.profile_options_helperchat) { //Chat with helper "admin" user (possibly temporary to test chat websocket, possible new feature)
             //go to chat, sending helper "admin" account username as an extra in intent
-            Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+            Intent intent = new Intent(MyProfileActivity.this, ChatActivity.class);
             intent.putExtra("otherChatUser", "HELPERCHAT"); //hard set to HELPERCHAT for now
             startActivity(intent);
             return true;

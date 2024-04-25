@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/profile_options_follow"
+        android:orderInCategory="1"
+        android:title="@string/profile_options_follow"
+        android:icon="@drawable/profilebutton"
+        android:actionLayout="@layout/activity_my_profile"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/profile_options_chat"
+        android:orderInCategory="2"
+        android:title="@string/profile_options_myChats"
+        android:icon="@drawable/mychatsbutton2"
+        android:actionLayout="@layout/activity_my_profile"
+        app:showAsAction="always"/>
+    <!--    Options submenu -->
+    <item
+        android:id="@+id/profile_options_overflow"
+        android:orderInCategory="3"
+        android:title="Overflow"
+        android:icon="@drawable/options_nobackground"
+        android:actionLayout="@layout/activity_my_profile"
+        app:showAsAction="always">
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/profile_options_edit"-->
+<!--                android:orderInCategory="1"-->
+<!--                android:title="@string/profile_options_edit"-->
+<!--                app:showAsAction="never"/>-->
+<!--            <item-->
+<!--                android:id="@+id/profile_options_logout"-->
+<!--                android:orderInCategory="2"-->
+<!--                android:title="@string/profile_options_logout"-->
+<!--                app:showAsAction="never"/>-->
+<!--            <item-->
+<!--                android:id="@+id/profile_options_helperchat"-->
+<!--                android:orderInCategory="3"-->
+<!--                android:title="@string/profile_options_helperchat"-->
+<!--                app:showAsAction="never"/>-->
+<!--        </menu>-->
+    </item>
+</menu>

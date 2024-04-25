@@ -50,8 +50,8 @@ public class EntryActivity extends AppCompatActivity {
         guestButton = findViewById(R.id.entry_guest_btn);  // link to logout button in the entry activity XML - ADDED
         subText = findViewById(R.id.entry_sub_msg_txt);      // link to sub message textview in the entry activity XML
 
-        messageText.setText("Welcome to RecipeReel!");
-        subText.setText("Login or Signup");
+        messageText.setText(R.string.entry_main_msg);
+        subText.setText(R.string.entry_sub_msg);
 
         /* click listener on login button pressed */
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +81,7 @@ public class EntryActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 /* when continue as guest button is pressed, use intent to switch to ProfileActivity without pass a user as an extra*/
-                Intent intent = new Intent(EntryActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(EntryActivity.this, MyProfileActivity.class);
                 startActivity(intent);
             }
         });
