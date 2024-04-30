@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 
 @RestController
+@RequestMapping("db")
 public class ImageController {
     @Autowired
     ImageDBRepository imageDBRepository;

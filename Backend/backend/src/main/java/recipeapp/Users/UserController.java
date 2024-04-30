@@ -165,6 +165,8 @@ public class UserController {
      * @param id The ID of the user.
      * @return The user object.
      */
+    @GetMapping(path = "/users/{id}/image")
+    Long getUserPhotoID(@PathVariable int id) { return userRepository.findById(id).getPhotoID();}
     @GetMapping(path = "/users/{id}")
     Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
@@ -200,6 +202,14 @@ public class UserController {
         userRepository.save(user);
         //loginRepository.save(userOne);
         return user;
+    }
+    @PutMapping(path="/users/{id}/image/{photoID}")
+    Users updateUsersPhotoID(@PathVariable int id, @PathVariable Long photoID) {
+        Users u = userRepository.findById(id);
+        if (u == null)
+            return null;
+        u.setPhotoID(photoID);
+        return userRepository.save(u);
     }
     /**
      * DELETE - delete a user by ID.

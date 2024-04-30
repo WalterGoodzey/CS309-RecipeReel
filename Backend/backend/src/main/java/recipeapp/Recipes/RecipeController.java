@@ -53,6 +53,9 @@ public class RecipeController {
         return recipeRepository.findAll();
     }
 
+    @GetMapping(path = "/recipes/{id}/image")
+    Long getRecipePhotoID(@PathVariable int id) { return recipeRepository.findById(id).getPhotoID();}
+
     /**
      * Retrieves a recipe by its ID.
      * @param id The ID of the recipe to retrieve.
@@ -117,6 +120,14 @@ public class RecipeController {
             return null;
         recipeRepository.save(request);
         return recipeRepository.findById(id);
+    }
+    @PutMapping(path="/recipes/{id}/image/{photoID}")
+    Recipe updateRecipePhotoID(@PathVariable int id, @PathVariable Long photoID) {
+        Recipe recipe = recipeRepository.findById(id);
+        if (recipe == null)
+            return null;
+        recipe.setPhotoID(photoID);
+        return recipeRepository.save(recipe);
     }
 
 //    @PutMapping(path = "/recipes/{id}/rate/{rating}")
