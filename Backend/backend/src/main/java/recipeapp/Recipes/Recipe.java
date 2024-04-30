@@ -56,7 +56,7 @@ public class Recipe {
     @NonNull
     private String instructions;
 
-    private Long photoID;
+    private Long photoID = (long) -1;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     private String tags;
