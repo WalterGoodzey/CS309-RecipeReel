@@ -26,7 +26,7 @@ public class ImageUploadActivity extends AppCompatActivity {
 
     Button selectBtn, uploadBtn, cancelBtn;
     ImageView mImageView;
-    Uri selectiedUri;
+    Uri selectedUri;
 
     // replace this with the actual address
     // 10.0.2.2 to be used for localhost if running springboot on the same host
@@ -63,16 +63,21 @@ public class ImageUploadActivity extends AppCompatActivity {
             uri -> {
                 // Handle the returned Uri
                 if (uri != null) {
-                    selectiedUri = uri;
+                    selectedUri = uri;
                     ImageView imageView = findViewById(R.id.imageSelView);
                     imageView.setImageURI(uri);
                 }
         });
 
-
         selectBtn.setOnClickListener(v -> mGetContent.launch("image/*"));
-        uploadBtn.setOnClickListener(v -> uploadImage());
         uploadBtn.setOnClickListener(v -> {
+            if(selectedUri != null) {
+                uploadImage();
+            } else {
+                Toast.makeText(getApplicationContext(), "No image selected", Toast.LENGTH_LONG).show();
+            }
+        });
+        cancelBtn.setOnClickListener(v -> {
             if(recipeId > 0){
                 //TODO
             } else {
@@ -84,49 +89,6 @@ public class ImageUploadActivity extends AppCompatActivity {
         });
     }
 
-
-//    private void uploadImageRequest(){
-//        ImageRequest imageRequest = new ImageRequest(
-//                Request.Method.POST,
-//                UPLOAD_URL,
-//                new Response.Listener<Bitmap>() {
-//                    @Override
-//                    public void onResponse(Bitmap response) {
-//                        // Display the image in the ImageView
-//                        mImageView.setImageBitmap(response);
-//                    }
-//                },
-//                0, // Width, set to 0 to get the original width
-//                0, // Height, set to 0 to get the original height
-//                ImageView.ScaleType.FIT_XY, // ScaleType
-//                Bitmap.Config.RGB_565, // Bitmap config
-//
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        // Handle errors here
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-////                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("param1", "value1");
-////                params.put("param2", "value2");
-//                return params;
-//            }
-//        };
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
-//    }
-//
     /**
      * Uploads an image to a remote server using a multipart Volley request.
      *
@@ -138,7 +100,7 @@ public class ImageUploadActivity extends AppCompatActivity {
      */
     private void uploadImage(){
 
-        byte[] imageData = convertImageUriToBytes(selectiedUri);
+        byte[] imageData = convertImageUriToBytes(selectedUri);
         MultipartRequest multipartRequest = new MultipartRequest(
                 Request.Method.POST,
                 UPLOAD_URL,

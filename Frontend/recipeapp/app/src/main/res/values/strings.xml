@@ -28,6 +28,7 @@
 
     <string name="PREF_KEY">shared_prefs</string>
     <string name="USERID_KEY">userid_key</string>
+    <string name="PHOTOID_KEY">photoid_key</string>
     <string name="USERNAME_KEY">username_key</string>
     <string name="EMAIL_KEY">email_key</string>
     <string name="PASSWORD_KEY">password_key</string>

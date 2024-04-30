@@ -87,7 +87,6 @@ public class MyChatsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         SPECIFIC_URL_CHATROOMS = BASE_URL_CHATROOMS + username;
         getChatroomsReq();
     }

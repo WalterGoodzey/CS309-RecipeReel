@@ -3,6 +3,7 @@ package com.example.recipeapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
@@ -34,6 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Activity to display local user's profile
@@ -53,9 +57,13 @@ public class MyProfileActivity extends AppCompatActivity {
     private RecipeAdapter adapter;
     /** ListView to store list of RecipeItemObjects */
     private ListView listView;
+    /** ImageView for local user's profile picture */
+    private ImageView profilePictureView;
 
     /** Local user's userId */
     private int userId;
+    /** Local user's profile picture photoID */
+    private long photoID;
     /** Local user's username */
     private String username;
     /** Local user's emailAddress */
@@ -88,13 +96,17 @@ public class MyProfileActivity extends AppCompatActivity {
         guestText = findViewById(R.id.profile_guest_txt);
         descriptionText = findViewById(R.id.profile_description_txt);
         entryButton = findViewById(R.id.profile_entry_btn);
+        profilePictureView = findViewById(R.id.profile_image);
 
         //initializing our shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
 
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
+        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1);
         username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
         emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
+
+
 
         //recipe list setup and operation
         listView = findViewById(R.id.profileListView);
@@ -122,6 +134,12 @@ public class MyProfileActivity extends AppCompatActivity {
             usernameText.setText(username);
             descriptionText.setText(emailAddress);
 
+            //get their profile picture from the server and set it if they have one
+            if(photoID > 0 && !Objects.isNull(photoID)){
+                makeImageRequest();
+            }
+
+
             /* options toolbar at top */
             Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
             setSupportActionBar(toolbar);
@@ -134,6 +152,8 @@ public class MyProfileActivity extends AppCompatActivity {
             URL_GET_CREATED_ARRAY = URL_USERS + "/" + userId + "/recipes";
 
             makeRecipeListReq();
+
+
 
         } else { //user is not signed in
             usernameText.setVisibility(View.INVISIBLE);
@@ -305,6 +325,39 @@ public class MyProfileActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
     }
 
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                //URL_SERVER + "image/" + photoID,
+                "http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        profilePictureView.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
 
 //    /**
 //     * Volley GET request to get the local user's profile information

@@ -47,6 +47,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText passwordEditText;
     /** EditText for local user to confirm their new password */
     private EditText confirmEditText;
+    /** Button for local user to upload a new profile picture */
+    private Button imageButton;
     /** Button for local user to save their changes */
     private Button saveButton;
     /** Button for local user to exit EditProfileActivity and go to their ProfileActivity */
@@ -72,7 +74,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private String emailAddress;
     /** Local user's password */
     private String password;
-
+    /** The photoID of the new uploaded image (if applicable) */
+    private long photoID;
     /** Base URL for Volley GET and PUT requests */
     private String URL_EDIT_BASE = "http://coms-309-018.class.las.iastate.edu:8080/users";
     /** URL for Volley GET and PUT requests for this specific local user */
@@ -98,6 +101,7 @@ public class EditProfileActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.editprofile_email_edt);           // link to email editor in the EditProfile activity XML
         passwordEditText = findViewById(R.id.editprofile_password_edt);     // link to password editor in the EditProfile activity XML
         confirmEditText = findViewById(R.id.editprofile_confirm_edt);       // link to confirm password editor in the EditProfile activity XML
+        imageButton = findViewById(R.id.editprofile_image_btn);             // link to image button in the EditProfile activity XML
         saveButton = findViewById(R.id.editprofile_save_btn);               // link to save button in the EditProfile activity XML
         exitButton = findViewById(R.id.editprofile_exit_btn);               // link to exit button in the EditProfile activity XML
         deleteAccountButton = findViewById(R.id.editprofile_delete_btn);    // link to delete button in the EditProfile activity XML
@@ -118,6 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
         username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
         emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
         password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
+        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1);
 
 
         usernameEditText.setText(username);
@@ -139,7 +144,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
 
-                /* if passwords match and meet requirements, make volley signup request */
+                /* if passwords match and meet requirements, make volley edit profile request */
                 if (password.equals(confirm)){
                     if(isValidPassword(password)) {
                         Toast.makeText(getApplicationContext(), "Saving info", Toast.LENGTH_LONG).show();
@@ -149,12 +154,12 @@ public class EditProfileActivity extends AppCompatActivity {
                             user.put("username", username);
                             user.put("emailAddress", email);
                             user.put("password", password);
+                            user.put("photoID", photoID);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         //make PUT request
                         putUserInfoReq();
-
                     } else {
                         Toast.makeText(getApplicationContext(), "Password must be 8+ characters long & contain a number or special character", Toast.LENGTH_LONG).show();
                     }
@@ -171,6 +176,17 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // go to ProfileActivity
                 startActivity(new Intent(EditProfileActivity.this, MyProfileActivity.class));
+            }
+        });
+
+        /* click listener on image button */
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to ProfileActivity
+                Intent intent = new Intent(EditProfileActivity.this, ImageUploadActivity.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
             }
         });
 
@@ -274,9 +290,11 @@ public class EditProfileActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = saved_values.edit();
                             // put values into sharedPreferences
                             editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
+                            editor.putLong(getString(R.string.PHOTOID_KEY), response.getInt("photoID"));
                             editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
                             editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
                             editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));
+
                             // to save our new key-value data
                             editor.apply();
                             // go to ProfileActivity
