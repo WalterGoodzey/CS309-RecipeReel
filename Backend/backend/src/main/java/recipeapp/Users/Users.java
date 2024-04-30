@@ -41,6 +41,8 @@ public class Users {
     @NonNull
     private String password;
 
+    private Long photoID;
+
     @OneToOne (cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "login_users_id", referencedColumnName = "id")
