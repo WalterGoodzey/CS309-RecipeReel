@@ -40,6 +40,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findByTitleContainingIgnoreCase(String searchString);
 
     List<Recipe> findByTagsContaining(String tags);
+    List<Recipe> findAllByOrderByRecipeRatingDesc();
 
 
     /**

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import recipeapp.Rating.Rating;
 import recipeapp.Tags.Tag;
 import recipeapp.Tags.TagRecipeConnecter;
 import recipeapp.Tags.TagRecipeConnecterRepository;
@@ -51,6 +52,9 @@ public class RecipeController {
     List<Recipe> getAllRecipes(){
         return recipeRepository.findAll();
     }
+
+    @GetMapping(path = "/recipes/{id}/image")
+    Long getRecipePhotoID(@PathVariable int id) { return recipeRepository.findById(id).getPhotoID();}
 
     /**
      * Retrieves a recipe by its ID.
@@ -117,20 +121,17 @@ public class RecipeController {
         recipeRepository.save(request);
         return recipeRepository.findById(id);
     }
-
-    @PutMapping(path = "/recipes/{id}/rate/{rating}")
-    String addRating (@PathVariable int id, @PathVariable int rating) {
+    @PutMapping(path="/recipes/{id}/image/{photoID}")
+    Recipe updateRecipePhotoID(@PathVariable int id, @PathVariable Long photoID) {
         Recipe recipe = recipeRepository.findById(id);
-        recipe.setRatingCount(recipe.getRatingCount() + 1);
-        int newCount = recipe.getRatingCount()+1;
-        recipe.setTotalRating(recipe.getTotalRating() + rating);
-        int newTotalRating = recipe.getTotalRating() + rating;
-        int newRating = newTotalRating / newCount;
-        recipe.setRating(newRating);
-        recipeRepository.save(recipe);
-
-        return success;
+        if (recipe == null)
+            return null;
+        recipe.setPhotoID(photoID);
+        return recipeRepository.save(recipe);
     }
+
+//    @PutMapping(path = "/recipes/{id}/rate/{rating}")
+//    Method Found in RatingController
 
     /**
      * Deletes a recipe by its ID.

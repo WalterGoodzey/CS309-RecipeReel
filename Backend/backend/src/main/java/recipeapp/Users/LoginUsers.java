@@ -34,5 +34,6 @@ public class LoginUsers{
     @NonNull
     private String password;
 
-
+    @OneToOne(mappedBy = "loginUsers")
+    private Users user;
 }

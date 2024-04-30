@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
+import recipeapp.Rating.Rating;
 import recipeapp.Tags.Tag;
 import recipeapp.Users.*;
 
@@ -55,12 +56,17 @@ public class Recipe {
     @NonNull
     private String instructions;
 
+    private Long photoID = (long) -1;
+
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     private String tags;
 
 
     /** The rating of the recipe given by users. */
-    private double rating = 0;
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Rating> ratings;
+    private double recipeRating = 0.0;
     private int ratingCount = 0;
     private int totalRating = 0;
 }

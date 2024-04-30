@@ -43,15 +43,9 @@ public class TrendingRecipeController {
      */
     @GetMapping(path = "/trending")
     List<Recipe> getAllTrending(){
-        List<Recipe> out = new ArrayList<>();
-//        List<TrendingRecipe> trendingList = trendingRecipeRepository.findAll();
-//
-//        for (TrendingRecipe trendingRecipe : trendingList) {
-//            out.add(trendingRecipe.getRecipe());
-//        }
-        List<Recipe> ret = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "rating"));
+        //List<Recipe> ret = recipeRepository.findAll(Sort.by(Sort.Direction.DESC, "recipeRating"));
 
-        return ret;
+        return recipeRepository.findAllByOrderByRecipeRatingDesc();
     }
 
     /**

@@ -92,8 +92,9 @@ public class UserController {
         }
         if (!exists) {
             LoginUsers nuser1 = new LoginUsers(nuser.getUsername(),nuser.getPassword());
-            userRepository.save(nuser);
             loginRepository.save(nuser1);
+            nuser.setLoginUsers(nuser1);
+            userRepository.save(nuser);
             return nuser;
         }
         return new Users();
@@ -164,6 +165,8 @@ public class UserController {
      * @param id The ID of the user.
      * @return The user object.
      */
+    @GetMapping(path = "/users/{id}/image")
+    Long getUserPhotoID(@PathVariable int id) { return userRepository.findById(id).getPhotoID();}
     @GetMapping(path = "/users/{id}")
     Users getUserById(@PathVariable int id){
         return userRepository.findById(id);
@@ -176,11 +179,11 @@ public class UserController {
      */
     @PutMapping("/users/{id}")
     Users updateUser(@PathVariable int id, @RequestBody Users updatedUser){
-        System.out.println(updatedUser.toString());
+        //System.out.println(updatedUser.toString());
         Users user = userRepository.findById(id);
-        System.out.println(user.toString());
-        LoginUsers userOne = loginRepository.findById(updatedUser.getId());
-        System.out.println(userOne.toString());
+        //System.out.println(user.toString());
+        LoginUsers userOne = user.getLoginUsers();
+       // System.out.println(userOne.toString());
 
         if(user == null) {
             throw new RuntimeException("user id does not exist");
@@ -197,8 +200,16 @@ public class UserController {
             userOne.setPassword(updatedUser.getPassword());
         }
         userRepository.save(user);
-        loginRepository.save(userOne);
+        //loginRepository.save(userOne);
         return user;
+    }
+    @PutMapping(path="/users/{id}/image/{photoID}")
+    Users updateUsersPhotoID(@PathVariable int id, @PathVariable Long photoID) {
+        Users u = userRepository.findById(id);
+        if (u == null)
+            return null;
+        u.setPhotoID(photoID);
+        return userRepository.save(u);
     }
     /**
      * DELETE - delete a user by ID.
@@ -208,9 +219,9 @@ public class UserController {
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id){
         Users u = userRepository.findById(id);
-        LoginUsers u1 = new LoginUsers(u.getUsername(),u.getPassword());
+        LoginUsers lU = u.getLoginUsers();
+        lU.setUser(null);
         userRepository.delete(u);
-        loginRepository.delete(u1);
         return success;
     }
 
