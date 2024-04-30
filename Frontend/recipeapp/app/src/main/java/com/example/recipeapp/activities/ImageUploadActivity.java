@@ -13,13 +13,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipeapp.MultipartRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
 
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ImageUploadActivity extends AppCompatActivity {
@@ -30,14 +37,14 @@ public class ImageUploadActivity extends AppCompatActivity {
 
     // replace this with the actual address
     // 10.0.2.2 to be used for localhost if running springboot on the same host
-    private static String UPLOAD_URL = "http://coms-309-018.class.las.iastate.edu:8080/image";
+    private static String SERVER_URL = "http://coms-309-018.class.las.iastate.edu:8080";
 
     /** UserId of profile if we came from edit profile, will be -1 if we came from edit recipe*/
     private int userId;
     /** RecipeId of recipe if we came from edit recipe, will be -1 if we came from edit profile*/
     private int recipeId;
-    /** imageId of the image on the server (after uploading it) */
-    private int imageId;
+    /** photoID of the image on the server (after uploading it) */
+    private long photoID;
     private ActivityResultLauncher<String> mGetContent;
 
     @Override
@@ -49,7 +56,7 @@ public class ImageUploadActivity extends AppCompatActivity {
         selectBtn = findViewById(R.id.selectBtn);
         cancelBtn = findViewById(R.id.cancelBtn);
         uploadBtn = findViewById(R.id.uploadBtn);
-        imageId = 0;
+        photoID = 0;
 
         //get userId or recipeId from intent - set whichever we don't get to -1
         Bundle extras = getIntent().getExtras();
@@ -80,11 +87,15 @@ public class ImageUploadActivity extends AppCompatActivity {
         cancelBtn.setOnClickListener(v -> {
             if(recipeId > 0){
                 //TODO
-            } else {
+            } else if (userId > 0){
                 Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
-                if(imageId > 0) {
-                    intent.putExtra("imageId", imageId);
+                if(photoID > 0) {
+                    intent.putExtra("photoID", photoID);
                 }
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }
@@ -103,12 +114,13 @@ public class ImageUploadActivity extends AppCompatActivity {
         byte[] imageData = convertImageUriToBytes(selectedUri);
         MultipartRequest multipartRequest = new MultipartRequest(
                 Request.Method.POST,
-                UPLOAD_URL,
+                SERVER_URL + "/images",
                 imageData,
                 response -> {
                     // Handle response
                     Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
                     Log.d("Upload", "Response: " + response);
+                    putPhotoID();
                 },
                 error -> {
                     // Handle error
@@ -153,6 +165,47 @@ public class ImageUploadActivity extends AppCompatActivity {
         return null;
     }
 
+    private void putPhotoID(){
+        String PUT_PHOTOID_URL = "";
+        if(userId > 0){
+            PUT_PHOTOID_URL += SERVER_URL + "/users/" + userId + "/image/" + photoID;
+        } else if (recipeId > 0) {
+            PUT_PHOTOID_URL += SERVER_URL + "/recipes/" + recipeId + "/image/" + photoID;
+        }
+        JsonObjectRequest photoIDPUTReq = new JsonObjectRequest(Request.Method.PUT,
+                PUT_PHOTOID_URL,
+                null, // request body for PUT request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+//                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Update Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(photoIDPUTReq);
+    }
 }
 
 

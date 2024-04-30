@@ -351,6 +351,8 @@ public class MyProfileActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         // Handle errors here
                         Log.e("Volley Error", error.toString());
+                        //Display default image
+                        profilePictureView.setImageDrawable(getDrawable(R.drawable.ic_launcher_foreground));
                     }
                 }
         );

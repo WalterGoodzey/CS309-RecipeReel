@@ -104,12 +104,13 @@ public class MyChatsActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
 
+                        Long testPhotoID = -1L;
                         // Parse the JSON array and add data to the adapter
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 String username = response.getString(i);
                                 // Create a ProfileItemObject and add it to the adapter
-                                ProfileItemObject item = new ProfileItemObject(username);
+                                ProfileItemObject item = new ProfileItemObject(username, testPhotoID);
                                 adapter.add(item);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -141,4 +142,5 @@ public class MyChatsActivity extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(profileListReq);
     }
+
 }
