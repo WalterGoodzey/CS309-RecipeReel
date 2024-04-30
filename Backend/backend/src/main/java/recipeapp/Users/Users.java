@@ -41,7 +41,7 @@ public class Users {
     @NonNull
     private String password;
 
-    private Long photoID;
+    private Long photoID = (long) -1;
 
     @OneToOne (cascade = CascadeType.ALL)
     @JsonIgnore
