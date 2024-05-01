@@ -42,6 +42,7 @@ public class Users {
     private String password;
 
     private Long photoID = (long) -1;
+    private boolean isAdmin = false;
 
     @OneToOne (cascade = CascadeType.ALL)
     @JsonIgnore
