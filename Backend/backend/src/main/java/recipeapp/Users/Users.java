@@ -78,13 +78,13 @@ public class Users {
     /** The list of users added */
     @ManyToMany
     @JsonIgnore
-    private List<Users> friendedUsers = new ArrayList<>();
+    private List<Users> followedUsers = new ArrayList<>();
 
-    public void addFriend(Users u){
-        this.friendedUsers.add(u);
+    public void follow(Users u){
+        this.followedUsers.add(u);
     }
 
-    public void removeFriend(Users u){
-        this.friendedUsers.remove(u);
+    public void unfollow(Users u){
+        this.followedUsers.remove(u);
     }
 }

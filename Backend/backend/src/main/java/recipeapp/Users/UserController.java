@@ -214,7 +214,7 @@ public class UserController {
         return userRepository.save(u);
     }
 
-    @GetMapping(path = "/users/{id}/friends")
+    @GetMapping(path = "/users/{id}/following")
     List<Users> getFriends(@PathVariable int id){
         Users u = userRepository.findById(id);
         if (u == null){
@@ -228,29 +228,29 @@ public class UserController {
 //        }
 //        return out;
 
-        return u.getFriendedUsers();
+        return u.getFollowedUsers();
     }
 
-    @PostMapping(path = "/users/{id}/friends/{friendId}")
-    Users addFriend(@PathVariable int id, @PathVariable int friendId){
+    @PostMapping(path = "/users/{id}/following/{followId}")
+    Users addFriend(@PathVariable int id, @PathVariable int followId){
         Users u = userRepository.findById(id);
-        Users friend = userRepository.findById(friendId);
+        Users friend = userRepository.findById(followId);
         if(u == null || friend == null){
             return null;
         }
-        u.addFriend(friend);
+        u.follow(friend);
         userRepository.save(u);
         return friend;
     }
 
-    @DeleteMapping(path = "/users/{id}/friends/{friendId}")
-    String deleteFriend(@PathVariable int id, @PathVariable int friendId){
+    @DeleteMapping(path = "/users/{id}/following/{followId}")
+    String deleteFriend(@PathVariable int id, @PathVariable int followId){
         Users u = userRepository.findById(id);
-        Users friend = userRepository.findById(friendId);
+        Users friend = userRepository.findById(followId);
         if(u == null || friend == null){
             return failure;
         }
-        u.removeFriend(friend);
+        u.unfollow(friend);
         userRepository.save(u);
         return success;
     }
