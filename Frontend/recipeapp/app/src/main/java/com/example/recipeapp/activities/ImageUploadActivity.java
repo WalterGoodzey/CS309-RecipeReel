@@ -1,6 +1,9 @@
 package com.example.recipeapp.activities;
 
+import static java.lang.Long.parseLong;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipeapp.MultipartRequest;
 import com.example.recipeapp.R;
@@ -58,12 +62,16 @@ public class ImageUploadActivity extends AppCompatActivity {
         uploadBtn = findViewById(R.id.uploadBtn);
         photoID = 0;
 
-        //get userId or recipeId from intent - set whichever we don't get to -1
+
+        //get userId or recipeId from intent - set whichever we don't get to -1, get previous photoID
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             userId = extras.getInt("userId", -1);
             recipeId = extras.getInt("recipeId", -1);
+            photoID = extras.getLong("photoID", -1);
         }
+        //fill image view with current photo
+        makeImageRequest();
 
         // select image from gallery
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -89,9 +97,9 @@ public class ImageUploadActivity extends AppCompatActivity {
                 //TODO
             } else if (userId > 0){
                 Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
-                if(photoID > 0) {
-                    intent.putExtra("photoID", photoID);
-                }
+                //if(photoID > 0) {
+                intent.putExtra("photoID", photoID);
+                //}
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
@@ -114,13 +122,28 @@ public class ImageUploadActivity extends AppCompatActivity {
         byte[] imageData = convertImageUriToBytes(selectedUri);
         MultipartRequest multipartRequest = new MultipartRequest(
                 Request.Method.POST,
-                SERVER_URL + "/images",
+                SERVER_URL + "/image",
                 imageData,
                 response -> {
                     // Handle response
-                    Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
+                    photoID = parseLong(response);
+                    //Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
+
                     Log.d("Upload", "Response: " + response);
                     putPhotoID();
+                    //return to previous activity
+                    if(recipeId > 0){
+                        //TODO
+                    } else if (userId > 0){
+                        Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
+                        //if(photoID > 0) {
+                        intent.putExtra("photoID", photoID);
+                        //}
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
                 },
                 error -> {
                     // Handle error
@@ -205,6 +228,42 @@ public class ImageUploadActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(photoIDPUTReq);
+    }
+
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                SERVER_URL + "/image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        mImageView.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                        //Display default image
+                        //mImageView.setImageDrawable(getDrawable(R.drawable.ic_launcher_foreground));
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
 }
 

@@ -37,7 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Activity to display local user's profile
@@ -69,7 +68,7 @@ public class MyProfileActivity extends AppCompatActivity {
     /** Local user's emailAddress */
     private String emailAddress;
 
-
+    /** Base URL for Volley requests with server */
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
     /** Base URL for user Volley requests with server */
     private String URL_USERS = "http://coms-309-018.class.las.iastate.edu:8080/users";
@@ -135,9 +134,7 @@ public class MyProfileActivity extends AppCompatActivity {
             descriptionText.setText(emailAddress);
 
             //get their profile picture from the server and set it if they have one
-            if(photoID > 0 && !Objects.isNull(photoID)){
-                makeImageRequest();
-            }
+            makeImageRequest();
 
 
             /* options toolbar at top */
@@ -331,8 +328,8 @@ public class MyProfileActivity extends AppCompatActivity {
     private void makeImageRequest() {
 
         ImageRequest imageRequest = new ImageRequest(
-                //URL_SERVER + "image/" + photoID,
-                "http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
 
                 new Response.Listener<Bitmap>() {
                     @Override

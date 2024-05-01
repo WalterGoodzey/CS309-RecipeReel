@@ -186,6 +186,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 // go to ProfileActivity
                 Intent intent = new Intent(EditProfileActivity.this, ImageUploadActivity.class);
                 intent.putExtra("userId", userId);
+                intent.putExtra("photoID", photoID);
                 startActivity(intent);
             }
         });
