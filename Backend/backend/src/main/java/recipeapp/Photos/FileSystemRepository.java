@@ -15,7 +15,7 @@ import java.util.Date;
 public class FileSystemRepository {
 
     //String RESOURCES_DIR = FileSystemRepository.class.getResource("/").getPath();
-    String RESOURCES_DIR = System.getProperty("user.home") + File.separator + "dborucki" + File.separator + "images";
+    String RESOURCES_DIR = System.getProperty("user.home") + File.separator + "dborucki" + File.separator + "images" + File.separator;
 
     String save(byte[] content, String imageName) throws Exception {
         Path newFile = Paths.get(RESOURCES_DIR + new Date().getTime() + "-" + imageName);
