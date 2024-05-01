@@ -1,14 +1,13 @@
 package recipeapp.Tags;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.NonNull;
 import recipeapp.Recipes.*;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,4 +24,7 @@ public class Tag {
 
     @NonNull
     private String tagName;
+
+    @OneToMany(mappedBy ="tag")
+    Set<TagRecipeConnector> recipeConnectorSet;
 }

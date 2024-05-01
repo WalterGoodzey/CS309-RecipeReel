@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import recipeapp.Rating.Rating;
-import recipeapp.Tags.Tag;
-import recipeapp.Tags.TagRecipeConnecter;
-import recipeapp.Tags.TagRecipeConnecterRepository;
+import recipeapp.Tags.TagRecipeConnectorRepository;
 import recipeapp.Tags.TagRepository;
 import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
@@ -39,7 +36,7 @@ public class RecipeController {
     TagRepository tagRepository;
 
     @Autowired
-    TagRecipeConnecterRepository tagRecipeConnecterRepository;
+    TagRecipeConnectorRepository tagRecipeConnecterRepository;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
