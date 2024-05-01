@@ -183,7 +183,7 @@ public class EditProfileActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // go to ProfileActivity
+                // go to ImageUploadActivity
                 Intent intent = new Intent(EditProfileActivity.this, ImageUploadActivity.class);
                 intent.putExtra("userId", userId);
                 intent.putExtra("photoID", photoID);

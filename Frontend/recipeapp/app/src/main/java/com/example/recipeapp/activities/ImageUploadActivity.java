@@ -94,12 +94,13 @@ public class ImageUploadActivity extends AppCompatActivity {
         });
         cancelBtn.setOnClickListener(v -> {
             if(recipeId > 0){
-                //TODO
+                Intent intent = new Intent();
+                intent.putExtra("photoID", photoID);
+//                startActivity(intent);
+                finish();
             } else if (userId > 0){
                 Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
-                //if(photoID > 0) {
                 intent.putExtra("photoID", photoID);
-                //}
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
@@ -130,11 +131,15 @@ public class ImageUploadActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
 
                     Log.d("Upload", "Response: " + response);
-                    putPhotoID();
+
+
                     //return to previous activity
                     if(recipeId > 0){
-                        //TODO
+                        Intent intent = new Intent();
+                        intent.putExtra("photoID", photoID);
+                        finish();
                     } else if (userId > 0){
+                        putPhotoID();
                         Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
                         //if(photoID > 0) {
                         intent.putExtra("photoID", photoID);

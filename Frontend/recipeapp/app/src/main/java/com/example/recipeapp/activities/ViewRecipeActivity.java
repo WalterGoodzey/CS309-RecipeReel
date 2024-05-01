@@ -3,6 +3,7 @@ package com.example.recipeapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import androidx.cardview.widget.CardView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
@@ -54,6 +57,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * TextView to display the ingredients of the recipe
      */
     private TextView ingredientsTxt;
+    /** ImageView for recipe's photo */
+    private ImageView recipePhoto;
     /**
      * JSONObject to store the full recipe
      */
@@ -62,6 +67,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * recipe's id
      */
     private int recipeId;
+    /** photoID of recipe*/
+    private long photoID;
     /**
      * Buttons for giving recipe a ratings as well as cancel rating process
      */
@@ -108,6 +115,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         descriptionTxt = findViewById(R.id.descriptionText);
         ingredientsTxt = findViewById(R.id.ingredientsText);
         instructionsTxt = findViewById(R.id.instructionsText);
+        recipePhoto = findViewById(R.id.recipe_image);
         popupCard = findViewById(R.id.rate_recipe_popup_card);
         popupRatingMessage = findViewById(R.id.view_rate_popup);
         //get recipeId from previous activity
@@ -393,8 +401,46 @@ public class ViewRecipeActivity extends AppCompatActivity {
             instructionsTxt.setText("Instructions:\n" + response.optString("instructions", "Instructions not found"));
             ingredientsTxt.setText("Ingredients:\n" + response.optString("ingredients", "Ingredients not found"));
             descriptionTxt.setText("Description:\n" + response.optString("description", "Description not found"));
+            photoID = response.optLong("photoID", -2L);
+            makeImageRequest();
         } catch (Exception e) {
             Log.e("UpdateUI", "Error parsing response", e);
         }
+    }
+
+    /**
+     * Making image request to fill recipe image for given global photoID
+     * */
+    private void makeImageRequest() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        recipePhoto.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                        //Display default error image
+                        recipePhoto.setImageDrawable(getDrawable(R.drawable.ic_launcher_foreground));
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
 }
