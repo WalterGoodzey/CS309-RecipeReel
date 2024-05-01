@@ -28,9 +28,13 @@
 
     <string name="PREF_KEY">shared_prefs</string>
     <string name="USERID_KEY">userid_key</string>
+    <string name="PHOTOID_KEY">photoid_key</string>
     <string name="USERNAME_KEY">username_key</string>
     <string name="EMAIL_KEY">email_key</string>
     <string name="PASSWORD_KEY">password_key</string>
     <string name="RECIPES_KEY">recipes_key</string>
     <string name="SAVED_RECIPES_KEY">saved_recipes_key</string>
+    <string name="CURRENT_PHOTOID_KEY">current_photoID_key</string>
+    <string name="CURRENT_PHOTOID_BOOLEAN_KEY">current_photoID_boolean_key</string>
+
 </resources>

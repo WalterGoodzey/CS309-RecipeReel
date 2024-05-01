@@ -77,18 +77,25 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/create_upload_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Image"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp" />
+    <Button
         android:id="@+id/button_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
-        tools:layout_editor_absoluteX="259dp"
-        tools:layout_editor_absoluteY="647dp" />
+        android:text="Post Recipe"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"  />
 
-    <TextView
-        android:id="@+id/server_response"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+<!--    <TextView-->
+<!--        android:id="@+id/server_response"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="TextView" />-->
 
     <!--    <Button-->
 <!--        android:id="@+id/button_image_upload"-->

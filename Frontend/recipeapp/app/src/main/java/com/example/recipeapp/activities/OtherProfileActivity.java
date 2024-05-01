@@ -1,6 +1,7 @@
 package com.example.recipeapp.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipeapp.R;
@@ -47,15 +50,20 @@ public class OtherProfileActivity extends AppCompatActivity {
     private RecipeAdapter adapter;
     /** ListView to store list of RecipeItemObjects */
     private ListView listView;
+    /** ImageView for user's profile picture */
+    private ImageView profilePictureView;
 
 
     /** User ID of the profile being view */
     private int viewingUserId;
+    /** User's profile picture photoID */
+    private long photoID;
     /** Profile's username */
     private String username;
     /** Profile's emailAddress */
     private String emailAddress;
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+
 
     /**
      * onCreate method for ProfileActivity
@@ -72,6 +80,8 @@ public class OtherProfileActivity extends AppCompatActivity {
 
         usernameText = findViewById(R.id.profile_username_txt);
         descriptionText = findViewById(R.id.profile_description_txt);
+        profilePictureView = findViewById(R.id.profile_image);
+
 
         //get other username from intent
         Bundle extras = getIntent().getExtras();
@@ -177,15 +187,16 @@ public class OtherProfileActivity extends AppCompatActivity {
                         Log.d("Volley Response", response.toString());
 //                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
 
-                        String emailResponse = "testemail";
                         try{
                             username = response.getString("username");
-                            emailResponse = response.getString("emailAddress");
+                            emailAddress = response.getString("emailAddress");
+                            photoID = response.getLong("photoID");
                         }catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
                         usernameText.setText(username);
-                        descriptionText.setText(emailResponse);
+                        descriptionText.setText(emailAddress);
+                        makeImageRequest();
                         /* options toolbar at top */
                         Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
                         setSupportActionBar(toolbar);
@@ -236,19 +247,10 @@ public class OtherProfileActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
 
-                        // Parse the JSON array and add data to the adapter
+                        // Parse the JSON array and add data to the adapter using makeItemRequestAndAdd
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
+                                makeItemRequestAndAdd(response.getJSONObject(i));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -278,5 +280,91 @@ public class OtherProfileActivity extends AppCompatActivity {
         };
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+    }
+
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
+
+        ImageRequest imageRequest = new ImageRequest(
+                //URL_SERVER + "image/" + photoID,
+                "http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Display the image in the ImageView
+                        profilePictureView.setImageBitmap(response);
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+                        //Display default image
+                        profilePictureView.setImageDrawable(getDrawable(R.drawable.ic_launcher_foreground));
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
+
+    /**
+     * Making image request for the current item and adding the finished item to the adapter
+     * */
+    private void makeItemRequestAndAdd(JSONObject recipeObj) {
+        long photoID = -2L;
+        try{
+            photoID = recipeObj.getLong("photoID");
+        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+        }
+
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        try {
+                            int recipeId = recipeObj.getInt("id");
+                            String title = recipeObj.getString("title");
+                            String author = recipeObj.getString("username");
+                            String description = recipeObj.getString("description");
+                            // Create a ListItemObject and add it to the adapter
+                            RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, recipeObj, response);
+                            adapter.add(item);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
 }

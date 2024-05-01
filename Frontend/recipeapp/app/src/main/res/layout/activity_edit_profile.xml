@@ -9,30 +9,6 @@
     android:textAlignment="center"
     tools:context=".activities.EditProfileActivity">
 
-<!--    <androidx.cardview.widget.CardView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="#9B9B9B">-->
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/editprofile_confirm_delete_message"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Are you sure you want to delete your account?"-->
-<!--            android:layout_marginTop="20dp" -->
-<!--            android:textSize="30dp"-->
-<!--            android:textAlignment="center"-->
-<!--        />-->
-<!--        -->
-<!--    </androidx.cardview.widget.CardView>-->
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/editprofile_popup_card"
         android:layout_width="wrap_content"
@@ -190,8 +166,15 @@
         android:translationY="0dp">
 
         <Button
+            android:id="@+id/editprofile_image_btn"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Upload Profile Picture"
+            android:textSize="20sp"></Button>
+        <Button
             android:id="@+id/editprofile_save_btn"
-            android:layout_width="175dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:text="Save Changes"
@@ -199,13 +182,13 @@
 
         <Button
             android:id="@+id/editprofile_exit_btn"
-            android:layout_width="175dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="Exit Without Saving"
             android:textSize="20sp"></Button>
         <Button
             android:id="@+id/editprofile_delete_btn"
-            android:layout_width="175dp"
+            android:layout_width="200dp"
             android:backgroundTint="#FF0000"
             android:layout_height="wrap_content"
             android:text="Delete Account"
@@ -215,7 +198,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="75dp"
         android:orientation="vertical"
         android:translationY="-600dp">
 
