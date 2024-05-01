@@ -58,7 +58,7 @@ public class Recipe {
     @NonNull
     private String instructions;
 
-    private Long photoID = (long) -1;
+    private Long photoID = (long) -2;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     @ManyToMany
