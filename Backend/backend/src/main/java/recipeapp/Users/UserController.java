@@ -1,5 +1,7 @@
 package recipeapp.Users;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.catalina.User;
@@ -135,6 +137,7 @@ public class UserController {
     List<Users> getAllUsers(){
         return userRepository.findAll();
     }
+
     @GetMapping(path = "/users/{id}/recipes")
     List<Recipe> getUsersRecipes(@PathVariable int id) {
         Users u = getUserById(id);
@@ -211,6 +214,59 @@ public class UserController {
         u.setPhotoID(photoID);
         return userRepository.save(u);
     }
+
+    @GetMapping(path = "/users/{id}/following")
+    List<Users> getFriends(@PathVariable int id){
+        Users u = userRepository.findById(id);
+        if (u == null){
+            return null;
+        }
+        //Option to only output usernames
+//        List<String> out = new ArrayList<>();
+//        List<Users> friends = u.getFriendedUsers();
+//        for(Users friend : friends){
+//            out.add(friend.getUsername());
+//        }
+//        return out;
+
+        return u.getFollowedUsers();
+    }
+
+    @GetMapping(path = "/users/{id}/following-recipes")
+    List<Recipe> getFollowingUsersRecipes(@PathVariable int id){
+        List<Users> friends = userRepository.findById(id).getFollowedUsers();
+        List<Recipe> allFriendsRecipes = new ArrayList<>();
+        for (Users u : friends) {
+            allFriendsRecipes.addAll(u.getRecipes());
+        }
+        allFriendsRecipes.sort(Comparator.comparingInt(Recipe::getId).reversed());
+        return allFriendsRecipes;
+    }
+
+    @PostMapping(path = "/users/{id}/following/{followId}")
+    Users addFriend(@PathVariable int id, @PathVariable int followId){
+        Users u = userRepository.findById(id);
+        Users friend = userRepository.findById(followId);
+        if(u == null || friend == null){
+            return null;
+        }
+        u.follow(friend);
+        userRepository.save(u);
+        return friend;
+    }
+
+    @DeleteMapping(path = "/users/{id}/following/{followId}")
+    String deleteFriend(@PathVariable int id, @PathVariable int followId){
+        Users u = userRepository.findById(id);
+        Users friend = userRepository.findById(followId);
+        if(u == null || friend == null){
+            return failure;
+        }
+        u.unfollow(friend);
+        userRepository.save(u);
+        return success;
+    }
+
     /**
      * DELETE - delete a user by ID.
      * @param id The ID of the user.
