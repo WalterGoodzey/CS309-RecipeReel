@@ -231,6 +231,18 @@ public class UserController {
         return u.getFollowedUsers();
     }
 
+    /**
+     * I WAS WORKING ON THIS
+     * @param id
+     * @return
+     */
+    @GetMapping(path = "/users/{id}/following-recipes")
+    List<Recipe> getFollowingUsersRecipes(@PathVariable int id){
+        List<Users> friends = userRepository.findById(id).getFollowedUsers();
+        List<Recipe> r = friends.get(1).getRecipes();
+        return r;
+    }
+
     @PostMapping(path = "/users/{id}/following/{followId}")
     Users addFriend(@PathVariable int id, @PathVariable int followId){
         Users u = userRepository.findById(id);
