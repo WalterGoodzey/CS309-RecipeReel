@@ -60,6 +60,7 @@ public class Recipe {
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     private String tags;
+    private int rating = 0;
 
 
     /** The rating of the recipe given by users. */
