@@ -1,8 +1,6 @@
 package com.example.recipeapp.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -51,7 +48,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     /** ListView to store list of RecipeItemObjects */
     private ListView listView;
 
-    private int userId;
+
     /** User ID of the profile being view */
     private int viewingUserId;
     /** Profile's username */
@@ -59,8 +56,6 @@ public class OtherProfileActivity extends AppCompatActivity {
     /** Profile's emailAddress */
     private String emailAddress;
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
-
-    private boolean isFollowing = false;
 
     /**
      * onCreate method for ProfileActivity
@@ -74,11 +69,6 @@ public class OtherProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_profile);
-
-        SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
-        userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
-
-        checkIfFollowing();
 
         usernameText = findViewById(R.id.profile_username_txt);
         descriptionText = findViewById(R.id.profile_description_txt);
@@ -157,12 +147,7 @@ public class OtherProfileActivity extends AppCompatActivity {
         // Handle item selection.
         int itemId = item.getItemId();
         if (itemId == R.id.profile_options_follow) {
-            checkIfFollowing();
-            if (isFollowing) {
-                unfollow();
-            } else {
-                follow();
-            }
+            //TODO - follow user
             return true;
         } else if (itemId == R.id.profile_options_chat) {
             /* go to a new chat with the other user */
@@ -294,123 +279,4 @@ public class OtherProfileActivity extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
     }
-
-    private void follow() {
-            JsonObjectRequest userReq = new JsonObjectRequest(
-                    Request.Method.POST,
-                    URL_SERVER + "users/" + userId + "/following/" + viewingUserId,
-                    null, // Pass null as the request body since it's a GET request
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d("Volley Response", response.toString());
-                            Toast.makeText(getApplicationContext(), "Profile followed", Toast.LENGTH_LONG).show();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), "Following Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
-                            Log.e("Volley Error", error.toString());
-                        }
-                    }) {
-                @Override
-                public Map<String, String> getHeaders() {
-                    Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                    return headers;
-                }
-
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
-//                params.put("param2", "value2");
-                    return params;
-                }
-            };
-
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-            // Adding request to request queue
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-        }
-
-    private void unfollow() {
-        JsonObjectRequest userReq = new JsonObjectRequest(
-                Request.Method.DELETE,
-                URL_SERVER + "users/" + userId + "/following/" + viewingUserId,
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Volley Response", response.toString());
-                        Toast.makeText(getApplicationContext(), "Profile unfollowed", Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "Unfollowing Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
-                        Log.e("Volley Error", error.toString());
-                    }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("username", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
-
-//        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-        // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-    }
-
-    private void checkIfFollowing() {
-        JsonArrayRequest followingReq = new JsonArrayRequest(
-                Request.Method.GET,
-                URL_SERVER + "users/" + userId + "/following",
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject profile = response.getJSONObject(i);
-                                int followedUserId = profile.getInt("id");
-                                if (followedUserId == viewingUserId) {
-                                    isFollowing = true;
-                                    return;
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        // User is not following the target profile
-                        // Update your UI accordingly
-                        // e.g., updateFollowButtonAppearance(false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                    }
-                });
-
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(followingReq);
-    }
-
-
 }
