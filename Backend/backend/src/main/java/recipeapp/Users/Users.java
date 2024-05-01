@@ -63,7 +63,9 @@ public class Users {
         this.savedRecipes.add(r);
     }
 
-    public void addRecipe (Recipe r) { this.recipes.add(r);}
+    public void addRecipe (Recipe r) {
+        this.recipes.add(r);
+    }
 
     /**
      * Deletes a recipe from the list of saved recipes.
@@ -71,5 +73,18 @@ public class Users {
      */
     public void deleteSavedRecipe(Recipe r) {
         this.savedRecipes.remove(r);
+    }
+
+    /** The list of users added */
+    @ManyToMany
+    @JsonIgnore
+    private List<Users> friendedUsers = new ArrayList<>();
+
+    public void addFriend(Users u){
+        this.friendedUsers.add(u);
+    }
+
+    public void removeFriend(Users u){
+        this.friendedUsers.remove(u);
     }
 }
