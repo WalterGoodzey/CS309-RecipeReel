@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,17 +22,18 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * Activity for a user to create a recipe
  *
  * @author Walter Goodzey
  */
 
-public class CreateRecipeActivity extends AppCompatActivity {
+public class EditRecipeActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
-    /** Button to post new created recipe (initiates Volley request) */
-    private Button button_post;
+    /** Button to update recipe (initiates Volley request) */
+    private Button button_update;
 //    private Button button_image_upload;
     /** EditText to input recipe's title */
     private EditText input_title;
@@ -60,7 +60,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_recipe);
+        setContentView(R.layout.activity_edit_recipe);
 
 //        Bundle extras = getIntent().getExtras();
 //        if(extras != null){
@@ -71,14 +71,14 @@ public class CreateRecipeActivity extends AppCompatActivity {
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
 
 
-        button_post = findViewById(R.id.button_post);
+        button_update = findViewById(R.id.button_update);
 //        button_image_upload = findViewById(R.id.button_image_upload);
 
-        input_title = findViewById(R.id.input_title);
-        input_description = findViewById(R.id.input_description);
-        input_ingredients = findViewById(R.id.input_ingredients);
-        input_instructions = findViewById(R.id.input_steps);
-        input_tags = findViewById(R.id.input_tags);
+        input_title = findViewById(R.id.input_edit_title);
+        input_description = findViewById(R.id.input_edit_description);
+        input_ingredients = findViewById(R.id.input_edit_ingredients);
+        input_instructions = findViewById(R.id.input_edit_steps);
+        input_tags = findViewById(R.id.input_edit_tags);
 
 //        button_image_upload.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -88,9 +88,9 @@ public class CreateRecipeActivity extends AppCompatActivity {
 //            ;
 //        });
 
-        button_post.setOnClickListener(new View.OnClickListener() {
+        button_update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                postRecipe();
+                updateRecipe();
             }
         });
     }
@@ -98,7 +98,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
     /**
      * Volley request to post a recipe to the server
      */
-    private void postRecipe() {
+    private void updateRecipe() {
         JSONObject postBody = new JSONObject();
         try {
             postBody.put("title", input_title.getText().toString());
@@ -112,7 +112,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
         }
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
+                Request.Method.PUT,
                 URL_JSON_OBJ,
                 postBody,
                 new Response.Listener<JSONObject>() {

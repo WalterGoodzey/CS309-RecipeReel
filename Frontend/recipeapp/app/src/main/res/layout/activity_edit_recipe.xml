@@ -13,7 +13,7 @@
         tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_title"
+            android:id="@+id/input_edit_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Recipe Title"
@@ -27,7 +27,7 @@
         tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_description"
+            android:id="@+id/input_edit_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Description"
@@ -41,7 +41,7 @@
         tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_ingredients"
+            android:id="@+id/input_edit_ingredients"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Ingredients"
@@ -55,7 +55,7 @@
         tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_steps"
+            android:id="@+id/input_edit_steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Steps"
@@ -69,7 +69,7 @@
         tools:layout_editor_absoluteY="34dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_tags"
+            android:id="@+id/input_edit_tags"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Tags"
@@ -77,10 +77,10 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button_post"
+        android:id="@+id/button_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
+        android:text="Update"
         tools:layout_editor_absoluteX="259dp"
         tools:layout_editor_absoluteY="647dp" />
 
