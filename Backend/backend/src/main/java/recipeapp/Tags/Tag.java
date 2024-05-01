@@ -1,14 +1,17 @@
 package recipeapp.Tags;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.NonNull;
 import recipeapp.Recipes.*;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,4 +28,12 @@ public class Tag {
 
     @NonNull
     private String tagName;
+
+    @JsonIgnore
+    @ManyToMany
+    private List<Recipe> recipes = new ArrayList<>();
+
+    public void addRecipe(Recipe recipe){
+        this.recipes.add(recipe);
+    }
 }

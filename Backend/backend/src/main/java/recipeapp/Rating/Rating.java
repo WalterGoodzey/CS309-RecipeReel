@@ -21,7 +21,6 @@ public class Rating {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-
     private Recipe recipe;
 
     @ManyToOne
@@ -29,11 +28,9 @@ public class Rating {
 
     private Users user;
 
-
     private int rating = 0;
     public Rating(Recipe rec, int rat) {
         recipe = rec;
         rating = rat;
     }
-
 }

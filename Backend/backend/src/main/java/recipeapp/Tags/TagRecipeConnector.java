@@ -1,17 +1,15 @@
 package recipeapp.Tags;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import recipeapp.Recipes.Recipe;
 
 @Entity
 @Getter
 @Setter
-public class TagRecipeConnecter {
+public class TagRecipeConnector {
 
     /*
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -22,8 +20,14 @@ public class TagRecipeConnecter {
     private int id;
 
     @NonNull
-    private int recipeId;
+    @ManyToOne
+    @MapsId("recipeId")
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 
     @NonNull
-    private int tagId;
+    @ManyToOne
+    @MapsId("tagId")
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 }
