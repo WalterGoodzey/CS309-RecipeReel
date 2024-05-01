@@ -1,6 +1,7 @@
 package recipeapp.Users;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.catalina.User;
@@ -229,6 +230,17 @@ public class UserController {
 //        return out;
 
         return u.getFollowedUsers();
+    }
+
+    @GetMapping(path = "/users/{id}/following-recipes")
+    List<Recipe> getFollowingUsersRecipes(@PathVariable int id){
+        List<Users> friends = userRepository.findById(id).getFollowedUsers();
+        List<Recipe> allFriendsRecipes = new ArrayList<>();
+        for (Users u : friends) {
+            allFriendsRecipes.addAll(u.getRecipes());
+        }
+        allFriendsRecipes.sort(Comparator.comparingInt(Recipe::getId).reversed());
+        return allFriendsRecipes;
     }
 
     @PostMapping(path = "/users/{id}/following/{followId}")
