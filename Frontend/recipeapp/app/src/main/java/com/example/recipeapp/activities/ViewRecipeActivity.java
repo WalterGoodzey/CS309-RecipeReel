@@ -114,6 +114,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             recipeId = extras.getInt("id");
+//            recipeId = 15; // used for testing
         }
         //initializing our shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
@@ -191,24 +192,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
             startActivity(intent);
             return true;
         } else if (itemId == R.id.view_delete_recipe) {
-
+            deleteRecipe();
             return true;
-
-
-            // need this for later viewing and making comments, updating recipe
-//        } else if (itemId == R.id.profile_options_logout) {
-//            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
-//            // getting the data which is stored in shared preferences.
-//            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
-//            //make editor for shared preferences
-//            SharedPreferences.Editor editor = saved_values.edit();
-//            //clear and save shared preferences
-//            editor.clear();
-//            editor.apply();
-//            //go to EntryActivity
-////            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
-//            return true;
-//
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -380,6 +365,18 @@ public class ViewRecipeActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                     updateUI(response);
+                }, error -> Log.e("GetRecipe", "Error Response", error));
+
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void deleteRecipe() {
+        String url = URL_SERVER + "recipes/" + recipeId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE,
+                url,
+                null,
+                response -> {
                 }, error -> Log.e("GetRecipe", "Error Response", error));
 
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);

@@ -106,19 +106,19 @@ public class EditRecipeActivity extends AppCompatActivity {
 //            ;
 //        });
 
-//        getRecipe();
+        getRecipe();
         button_update.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 updateRecipe();
             }
         });
 
-//        button_cancel.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent intent = new Intent(EditRecipeActivity.this, MyProfileActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(EditRecipeActivity.this, MyProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

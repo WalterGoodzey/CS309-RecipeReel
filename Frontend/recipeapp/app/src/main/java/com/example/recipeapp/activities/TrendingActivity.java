@@ -42,7 +42,8 @@ public class TrendingActivity extends AppCompatActivity {
     /** ListView to store list of RecipeItemObjects */
     private ListView listView;
     /** URL for user Volley requests for trending recipes */
-    private String URL_TRENDING = "http://coms-309-018.class.las.iastate.edu:8080/trending";
+    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+//    private String URL_TRENDING = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/";
 
     /**
      * onCreate method for TrendingActivity
@@ -127,7 +128,7 @@ public class TrendingActivity extends AppCompatActivity {
     private void makeRecipeListReq() {
         JsonArrayRequest recipeListReq = new JsonArrayRequest(
                 Request.Method.GET,
-                URL_TRENDING,
+                URL_SERVER + "trending",
                 null, // Pass null as the request body since it's a GET request
                 new Response.Listener<JSONArray>() {
                     @Override
