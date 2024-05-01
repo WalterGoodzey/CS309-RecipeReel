@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import recipeapp.Tags.TagRecipeConnectorRepository;
-import recipeapp.Tags.TagRepository;
+import recipeapp.Tags.*;
 import recipeapp.Users.Users;
 import recipeapp.Users.UserRepository;
 
@@ -36,7 +35,7 @@ public class RecipeController {
     TagRepository tagRepository;
 
     @Autowired
-    TagRecipeConnectorRepository tagRecipeConnecterRepository;
+    TagRecipeConnectorRepository tagRecipeConnectorRepository;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -75,16 +74,13 @@ public class RecipeController {
 
     @GetMapping(path = "recipes/search/tag/{tagName}")
     List<Recipe> searchRecipesByTag(@PathVariable String tagName){
-//        Tag tag = tagRepository.findByTagName(tagName);
-//        List<TagRecipeConnecter> connectors = tagRecipeConnecterRepository.findByTagId(tag.getId());
-//        List<Recipe> out = null;
-//        for(TagRecipeConnecter trc : connectors){
-//            if(recipeRepository.findById(trc.getRecipeId()) != null){
-//                out.add(recipeRepository.findById(trc.getRecipeId()));
-//            }
-//        }
-//        return out;
-        return recipeRepository.findByTagsContaining(tagName);
+          Tag tag = tagRepository.findByTagName(tagName);
+          List<TagRecipeConnector> connectors = tagRecipeConnectorRepository.findByTag(tag);
+          List<Recipe> out = null;
+          for(TagRecipeConnector trc : connectors){
+                  out.add(trc.getRecipe());
+          }
+          return out;
     }
 
 
