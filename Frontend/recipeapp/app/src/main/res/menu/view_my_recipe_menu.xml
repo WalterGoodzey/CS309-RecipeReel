@@ -23,7 +23,7 @@
             <item
                 android:id="@+id/view_delete_recipe"
                 android:orderInCategory="6"
-                android:title="Edit Recipe"
+                android:title="Delete Recipe"
                 app:showAsAction="never"/>
         </menu>
     </item>

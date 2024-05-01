@@ -1,12 +1,14 @@
 package com.example.recipeapp.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +36,8 @@ public class CreateRecipeActivity extends AppCompatActivity {
     private int userId;
     /** Button to post new created recipe (initiates Volley request) */
     private Button button_post;
+    /** Button to cancel the creation of a recipe */
+    private Button button_cancel;
 //    private Button button_image_upload;
     /** EditText to input recipe's title */
     private EditText input_title;
@@ -72,6 +76,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
 
         button_post = findViewById(R.id.button_post);
+        button_cancel = findViewById(R.id.button_post_back);
 //        button_image_upload = findViewById(R.id.button_image_upload);
 
         input_title = findViewById(R.id.input_title);
@@ -91,6 +96,13 @@ public class CreateRecipeActivity extends AppCompatActivity {
         button_post.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 postRecipe();
+            }
+        });
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateRecipeActivity.this, MyProfileActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -118,13 +130,13 @@ public class CreateRecipeActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        server_response.setText(response.toString());
+                        Toast.makeText(getApplicationContext(), "Post Successful", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        server_response.setText(error.getMessage());
+                        Toast.makeText(getApplicationContext(), "Post Unsuccessful (VolleyError)", Toast.LENGTH_LONG).show();
                     }
                 }
         ) {

@@ -183,6 +183,18 @@ public class ViewRecipeActivity extends AppCompatActivity {
             //start ChatActivity
             startActivity(intent);
             return true;
+        } else if (itemId == R.id.view_edit_recipe) {
+            //intent to selected chatroom
+            Intent intent = new Intent(ViewRecipeActivity.this, EditRecipeActivity.class);
+            intent.putExtra("id", recipeId);
+            //start EditRecipeActivity
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.view_delete_recipe) {
+
+            return true;
+
+
             // need this for later viewing and making comments, updating recipe
 //        } else if (itemId == R.id.profile_options_logout) {
 //            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */

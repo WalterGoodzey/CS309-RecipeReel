@@ -83,6 +83,13 @@
         android:text="Update"
         tools:layout_editor_absoluteX="259dp"
         tools:layout_editor_absoluteY="647dp" />
+    <Button
+        android:id="@+id/button_edit_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        tools:layout_editor_absoluteX="259dp"
+        tools:layout_editor_absoluteY="647dp" />
 
     <!--    <Button-->
 <!--        android:id="@+id/button_image_upload"-->

@@ -110,7 +110,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 //intent to view single recipe
                 Intent intent = new Intent(MyProfileActivity.this, ViewRecipeActivity.class);
                 intent.putExtra("id", adapter.getItem(i).getRecipeId());
-                //start ViewRecipeActivity
+                //start EditRecipeActivity
                 startActivity(intent);
             }
         });
