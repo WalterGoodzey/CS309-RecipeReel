@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import recipeapp.Recipes.Recipe;
 import recipeapp.Recipes.RecipeRepository;
-
+import java.util.Collections;
+import java.util.Comparator;
 /**
  * Controller class for managing users in the recipe sharing app.
  * This class handles HTTP requests related to users.
@@ -231,16 +232,15 @@ public class UserController {
         return u.getFollowedUsers();
     }
 
-    /**
-     * I WAS WORKING ON THIS
-     * @param id
-     * @return
-     */
     @GetMapping(path = "/users/{id}/following-recipes")
     List<Recipe> getFollowingUsersRecipes(@PathVariable int id){
         List<Users> friends = userRepository.findById(id).getFollowedUsers();
-        List<Recipe> r = friends.get(1).getRecipes();
-        return r;
+        List<Recipe> allFriendsRecipes = new ArrayList<>();
+        for (Users u : friends) {
+            allFriendsRecipes.addAll(u.getRecipes());
+        }
+        allFriendsRecipes.sort(Comparator.comparingInt(Recipe::getId).reversed());
+        return allFriendsRecipes;
     }
 
     @PostMapping(path = "/users/{id}/following/{followId}")
