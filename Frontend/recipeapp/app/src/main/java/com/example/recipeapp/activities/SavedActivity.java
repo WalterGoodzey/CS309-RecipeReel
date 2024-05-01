@@ -3,10 +3,12 @@ package com.example.recipeapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.recipeapp.adapters.RecipeAdapter;
 import com.example.recipeapp.objects.RecipeItemObject;
@@ -43,6 +46,9 @@ public class SavedActivity extends AppCompatActivity {
     /** Base URL for Volley GET request with Volley server (TODO - Update to our server)*/
 //    private static final String URL_SERVER = "https://1ee86d94-b706-4d14-85a5-df75cbea2fcb.mock.pstmn.io/";
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+
+    /** photo bitmap of current item */
+    private Bitmap itemPhotoBitmap;
 
     /** Local user's specific URL for Volley GET request with Volley server (TODO - Update to our server)*/
 
@@ -153,16 +159,7 @@ public class SavedActivity extends AppCompatActivity {
                         // Parse the JSON array and add data to the adapter
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
+                                makeItemRequestAndAdd(response.getJSONObject(i));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -194,5 +191,55 @@ public class SavedActivity extends AppCompatActivity {
 
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+    }
+    /**
+     * Making image request for the current item and adding the finished item to the adapter
+     * */
+    private void makeItemRequestAndAdd(JSONObject recipeObj) {
+        long photoID = -2L;
+        try{
+            photoID = recipeObj.getLong("photoID");
+        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+        }
+
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        try {
+                            int recipeId = recipeObj.getInt("id");
+                            String title = recipeObj.getString("title");
+                            String author = recipeObj.getString("username");
+                            String description = recipeObj.getString("description");
+                            // Create a ListItemObject and add it to the adapter
+                            RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, recipeObj, response);
+                            adapter.add(item);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        itemPhotoBitmap = response;
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
 }

@@ -132,23 +132,29 @@ public class ImageUploadActivity extends AppCompatActivity {
 
                     Log.d("Upload", "Response: " + response);
 
+                    //TODO - check that this works when we fix edit/create recipes
+                    putPhotoID();
 
-                    //return to previous activity
-                    if(recipeId > 0){
-                        Intent intent = new Intent();
-                        intent.putExtra("photoID", photoID);
-                        finish();
-                    } else if (userId > 0){
-                        putPhotoID();
-                        Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
-                        //if(photoID > 0) {
-                        intent.putExtra("photoID", photoID);
-                        //}
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
+                    //return to previous activity with photoID stored in intent
+                    Intent intent = new Intent();
+                    intent.putExtra("photoID", photoID);
+                    finish();
+//                    //return to previous activity
+//                    if(recipeId > 0){
+//                        Intent intent = new Intent();
+//                        intent.putExtra("photoID", photoID);
+//                        finish();
+//                    } else if (userId > 0){
+//                        putPhotoID();
+//                        Intent intent = new Intent(ImageUploadActivity.this, EditProfileActivity.class);
+//                        //if(photoID > 0) {
+//                        intent.putExtra("photoID", photoID);
+//                        //}
+//                        startActivity(intent);
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Odd cancel case", Toast.LENGTH_LONG).show();
+//                        finish();
+//                    }
                 },
                 error -> {
                     // Handle error

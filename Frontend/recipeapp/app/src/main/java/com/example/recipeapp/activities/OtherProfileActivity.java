@@ -64,6 +64,7 @@ public class OtherProfileActivity extends AppCompatActivity {
     private String emailAddress;
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
 
+
     /**
      * onCreate method for ProfileActivity
      *
@@ -246,19 +247,10 @@ public class OtherProfileActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
 
-                        // Parse the JSON array and add data to the adapter
+                        // Parse the JSON array and add data to the adapter using makeItemRequestAndAdd
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
+                                makeItemRequestAndAdd(response.getJSONObject(i));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -318,6 +310,56 @@ public class OtherProfileActivity extends AppCompatActivity {
                         Log.e("Volley Error", error.toString());
                         //Display default image
                         profilePictureView.setImageDrawable(getDrawable(R.drawable.ic_launcher_foreground));
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
+
+    /**
+     * Making image request for the current item and adding the finished item to the adapter
+     * */
+    private void makeItemRequestAndAdd(JSONObject recipeObj) {
+        long photoID = -2L;
+        try{
+            photoID = recipeObj.getLong("photoID");
+        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+        }
+
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        try {
+                            int recipeId = recipeObj.getInt("id");
+                            String title = recipeObj.getString("title");
+                            String author = recipeObj.getString("username");
+                            String description = recipeObj.getString("description");
+                            // Create a ListItemObject and add it to the adapter
+                            RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, recipeObj, response);
+                            adapter.add(item);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+
                     }
                 }
         );

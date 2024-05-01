@@ -77,7 +77,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
 
-
     /**
      * onCreate method for ProfileActivity
      *
@@ -278,19 +277,10 @@ public class MyProfileActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("Volley Response", response.toString());
 
-                        // Parse the JSON array and add data to the adapter
+                        // Parse the JSON array and add data to the adapter using makeItemRequestAndAdd
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
+                                makeItemRequestAndAdd(response.getJSONObject(i));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -357,60 +347,53 @@ public class MyProfileActivity extends AppCompatActivity {
         // Adding request to request queue
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
+    /**
+     * Making image request for the current item and adding the finished item to the adapter
+     * */
+    private void makeItemRequestAndAdd(JSONObject recipeObj) {
+        long photoID = -2L;
+        try{
+            photoID = recipeObj.getLong("photoID");
+        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+        }
 
-//    /**
-//     * Volley GET request to get the local user's profile information
-//     */
-//    private void getUserInfoReq() {
-//        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.GET,
-//                URL_THIS_USER,
-//                null, // Pass null as the request body since it's a GET request
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.d("Volley Response", response.toString());
-////                        Toast.makeText(getApplicationContext(), "Volley Received Response", Toast.LENGTH_LONG).show();
-//
-//                        String usernameResponse = "testusername";
-//                        String emailResponse = "testemail";
-//                        try{
-//                            usernameResponse = response.getString("username");
-//                            emailResponse = response.getString("emailAddress");
-//                        }catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        usernameText.setText(usernameResponse);
-//                        descriptionText.setText(emailResponse);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getApplicationContext(), "Volley Error Response", Toast.LENGTH_LONG).show();
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-////                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("username", "value1");
-////                params.put("param2", "value2");
-//                return params;
-//            }
-//        };
-//
-////        Toast.makeText(getApplicationContext(), "Adding request to Volley Queue", Toast.LENGTH_LONG).show();
-//        // Adding request to request queue
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
-//    }
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
 
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        try {
+                            int recipeId = recipeObj.getInt("id");
+                            String title = recipeObj.getString("title");
+                            String author = recipeObj.getString("username");
+                            String description = recipeObj.getString("description");
+                            // Create a ListItemObject and add it to the adapter
+                            RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, recipeObj, response);
+                            adapter.add(item);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
 
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
+                        Log.e("Volley Error", error.toString());
+
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
+    }
 }

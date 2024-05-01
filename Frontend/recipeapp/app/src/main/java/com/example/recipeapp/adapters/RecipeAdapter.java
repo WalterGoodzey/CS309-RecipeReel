@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.recipeapp.R;
@@ -19,6 +20,10 @@ import java.util.List;
  * @author Ryan McFadden
  */
 public class RecipeAdapter extends ArrayAdapter<RecipeItemObject> {
+    /** Base URL for Volley requests with server */
+    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+
+
     /**
      * Constructor for RecipeAdapter
      * @param context application's current context
@@ -56,11 +61,14 @@ public class RecipeAdapter extends ArrayAdapter<RecipeItemObject> {
         TextView itemTitle = convertView.findViewById(R.id.itemTitle);
         TextView itemAuthor = convertView.findViewById(R.id.itemAuthor);
         TextView itemDescription = convertView.findViewById(R.id.itemDescription);
+        ImageView imageView = convertView.findViewById(R.id.item_recipe_image);
 
         // Populate the data into the template view using the data object
         itemTitle.setText(item.getTitle());
         itemAuthor.setText(item.getAuthor());
         itemDescription.setText(item.getDescription());
+        imageView.setImageBitmap(item.getPhotoBitmap());
+
 
         // Return the completed view to render on screen
         return convertView;
@@ -70,6 +78,7 @@ public class RecipeAdapter extends ArrayAdapter<RecipeItemObject> {
 //    public ListItemObject getItem(int position){
 //        return items.get(position);
 //    }
+
 }
 
 
