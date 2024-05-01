@@ -193,6 +193,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.view_delete_recipe) {
             deleteRecipe();
+            finish();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -376,9 +377,34 @@ public class ViewRecipeActivity extends AppCompatActivity {
                 Request.Method.DELETE,
                 url,
                 null,
-                response -> {
-                }, error -> Log.e("GetRecipe", "Error Response", error));
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Volley Received Response, Recipe Deleted",
+                                Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Delete Unsuccessful (Volley Error)",
+                                Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
 
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 

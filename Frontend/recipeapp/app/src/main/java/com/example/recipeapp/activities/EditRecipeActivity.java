@@ -89,7 +89,7 @@ public class EditRecipeActivity extends AppCompatActivity {
 
 
         button_update = findViewById(R.id.button_update);
-//        button_cancel = findViewById(R.id.button_edit_back);
+        button_cancel = findViewById(R.id.button_edit_back);
 //        button_image_upload = findViewById(R.id.button_image_upload);
 
         input_title = findViewById(R.id.input_edit_title);
@@ -115,8 +115,7 @@ public class EditRecipeActivity extends AppCompatActivity {
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(EditRecipeActivity.this, MyProfileActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -127,23 +126,34 @@ public class EditRecipeActivity extends AppCompatActivity {
     private void updateRecipe() {
         JSONObject postBody = new JSONObject();
         try {
+            postBody.put("id", recipeId);
+            postBody.put("creatorUserId", userId);
+            postBody.put("username", fullRecipeJSON.get("username"));
+            postBody.put("photoID", fullRecipeJSON.get("photoID"));
+            postBody.put("rating", fullRecipeJSON.get("rating"));
+            postBody.put("recipeRating", fullRecipeJSON.get("recipeRating"));
+            postBody.put("ratingCount", fullRecipeJSON.get("ratingCount"));
+            postBody.put("totalRating", fullRecipeJSON.get("totalRating"));
+            postBody.put("tags", fullRecipeJSON.get("tags"));
+
             postBody.put("title", input_title.getText().toString());
             postBody.put("description", input_description.getText().toString());
             postBody.put("ingredients", input_ingredients.getText().toString());
             postBody.put("instructions", input_instructions.getText().toString());
-            postBody.put("tags", input_tags.getText().toString());
+//            postBody.put("tags", input_tags.getText().toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
-                URL_SERVER + "recipes/",
+                URL_SERVER + "recipes/" + recipeId,
                 postBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Recipe Updated", Toast.LENGTH_LONG).show();
+
                     }
                 },
                 new Response.ErrorListener() {

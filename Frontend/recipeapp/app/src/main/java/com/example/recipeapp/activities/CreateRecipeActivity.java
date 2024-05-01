@@ -34,6 +34,8 @@ import java.util.Map;
 public class CreateRecipeActivity extends AppCompatActivity {
     /** Local user's userId */
     private int userId;
+    /** Local user's username */
+    private String username;
     /** Button to post new created recipe (initiates Volley request) */
     private Button button_post;
     /** Button to cancel the creation of a recipe */
@@ -49,9 +51,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
     private EditText input_instructions;
     /** EditText to input recipe's tags */
     private EditText input_tags;
+    /** photoID received from uploading photo */
+    private long photoID;
     /** Base URL for making recipe JSONObject POST requests to the server */
-    private static final String URL_JSON_OBJ =
-            "http://coms-309-018.class.las.iastate.edu:8080/recipes";
+    private static final String URL_SERVER =
+            "http://coms-309-018.class.las.iastate.edu:8080/";
 //            "https://jsonplaceholder.typicode.com/users/1";
 
     /**
@@ -73,7 +77,9 @@ public class CreateRecipeActivity extends AppCompatActivity {
         //get userId from shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
-
+        username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
+        //default image, to be changed later if they upload a photo
+        photoID = -2;
 
         button_post = findViewById(R.id.button_post);
         button_cancel = findViewById(R.id.button_post_back);
@@ -101,8 +107,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(CreateRecipeActivity.this, MyProfileActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
@@ -115,9 +120,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
         try {
             postBody.put("title", input_title.getText().toString());
             postBody.put("creatorUserId", userId);
+            postBody.put("username", username);
             postBody.put("description", input_description.getText().toString());
             postBody.put("ingredients", input_ingredients.getText().toString());
             postBody.put("instructions", input_instructions.getText().toString());
+            postBody.put("photoID", photoID);
             postBody.put("tags", input_tags.getText().toString());
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -125,12 +132,13 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.POST,
-                URL_JSON_OBJ,
+                URL_SERVER + "recipes",
                 postBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Toast.makeText(getApplicationContext(), "Post Successful", Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {
@@ -148,8 +156,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                //                params.put("param1", "value1");
-                //                params.put("param2", "value2");
                 return params;
             }
         };
