@@ -10,6 +10,7 @@ import recipeapp.Tags.*;
 import recipeapp.Users.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -60,14 +61,20 @@ public class Recipe {
 
     private Long photoID = (long) -2;
 
+
+    private String tags;
+
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     @ManyToMany
-    private List<Tag> tags = new ArrayList<>();
+    private List<Tag> actualTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "recipe")
-    private Set<TagRecipeConnector> tagConnectorSet;
+    public void addTag(Tag tag){
+        this.actualTags.add(tag);
+    }
 
 
+
+    private int rating = 0;
     /** The rating of the recipe given by users. */
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)

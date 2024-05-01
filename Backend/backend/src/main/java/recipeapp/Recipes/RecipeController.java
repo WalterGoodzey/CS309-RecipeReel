@@ -1,5 +1,6 @@
 package recipeapp.Recipes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,13 +75,19 @@ public class RecipeController {
 
     @GetMapping(path = "recipes/search/tag/{tagName}")
     List<Recipe> searchRecipesByTag(@PathVariable String tagName){
-          Tag tag = tagRepository.findByTagName(tagName);
-          List<TagRecipeConnector> connectors = tagRecipeConnectorRepository.findByTag(tag);
-          List<Recipe> out = null;
-          for(TagRecipeConnector trc : connectors){
-                  out.add(trc.getRecipe());
-          }
-          return out;
+        Tag tag = tagRepository.findByTagName(tagName);
+        if(tag == null){
+            return null;
+        }
+        return tag.getRecipes();
+    }
+
+    @GetMapping(path="recipes/search/both/{searchString}/{tagName}")
+    List<Recipe> searchRecipesByBoth(@PathVariable String searchString, @PathVariable String tagName){
+        List<Recipe> titleList = searchRecipesByTitle(searchString);
+        List<Recipe> tagList = searchRecipesByTitle(searchString);
+        titleList.retainAll(tagList);
+        return titleList;
     }
 
 
@@ -94,8 +101,19 @@ public class RecipeController {
         if (recipe == null)
             return failure;
         recipe.setUsername(userRepository.findById(recipe.getCreatorUserId()).getUsername());
+
+        String[] userIn = recipe.getTags().split(" ");
+        for(String tagName : userIn){
+            Tag tag = tagRepository.findByTagName(tagName);
+            if(tag != null){
+                recipe.addTag(tag);
+                tag.addRecipe(recipe);
+            }
+        }
+
         Users u = userRepository.findByUsername(recipe.getUsername());
         u.addRecipe(recipe);
+
         recipeRepository.save(recipe);
         return success;
     }
