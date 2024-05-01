@@ -2,7 +2,9 @@ package com.example.recipeapp.activities;
 
 import static java.lang.Long.parseLong;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,7 +70,7 @@ public class ImageUploadActivity extends AppCompatActivity {
         if(extras != null){
             userId = extras.getInt("userId", -1);
             recipeId = extras.getInt("recipeId", -1);
-            photoID = extras.getLong("photoID", -1);
+            photoID = extras.getLong("photoID", -1L);
         }
         //fill image view with current photo
         makeImageRequest();
@@ -132,12 +134,20 @@ public class ImageUploadActivity extends AppCompatActivity {
 
                     Log.d("Upload", "Response: " + response);
 
-                    //TODO - check that this works when we fix edit/create recipes
-                    putPhotoID();
+                    //putPhotoID();
 
-                    //return to previous activity with photoID stored in intent
-                    Intent intent = new Intent();
-                    intent.putExtra("photoID", photoID);
+                    //return to previous activity with photoID stored in shared preferences
+                    // getting the data which is stored in shared preferences.
+                    SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                    //make editor for sharedPreferences
+                    SharedPreferences.Editor editor = saved_values.edit();
+                    // put values into sharedPreferences
+                    editor.putLong(getString(R.string.CURRENT_PHOTOID_KEY), photoID);
+                    editor.putString(getString(R.string.CURRENT_PHOTOID_BOOLEAN_KEY), "true");
+                    // to save our new key-value data
+                    editor.apply();
+//                    Intent intent = new Intent();
+//                    intent.putExtra("photoID", photoID);
                     finish();
 //                    //return to previous activity
 //                    if(recipeId > 0){

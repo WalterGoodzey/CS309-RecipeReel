@@ -107,6 +107,20 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         button_post.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //get current photoID from shared preferences
+                //initializing our shared preferences
+                SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                String editedBooleanStr = saved_values.getString(getString(R.string.CURRENT_PHOTOID_BOOLEAN_KEY), "default");
+                if(editedBooleanStr.equals("true")) {
+                    photoID = saved_values.getLong(getString(R.string.CURRENT_PHOTOID_KEY), -1);
+                    //switch boolean in shared pref to false
+                    //make editor for sharedPreferences
+                    SharedPreferences.Editor editor = saved_values.edit();
+                    // put values into sharedPreferences
+                    editor.putString(getString(R.string.CURRENT_PHOTOID_BOOLEAN_KEY), "false");
+                    // to save our new key-value data
+                    editor.apply();
+                }
                 postRecipe();
             }
         });
@@ -119,6 +133,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
      */
     private void postRecipe() {
         JSONObject postBody = new JSONObject();
+
         try {
             postBody.put("title", input_title.getText().toString());
             postBody.put("creatorUserId", userId);
@@ -140,6 +155,7 @@ public class CreateRecipeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 //                        server_response.setText(response.toString());
+                        finish();
                     }
                 },
                 new Response.ErrorListener() {

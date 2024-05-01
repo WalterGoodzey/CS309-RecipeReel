@@ -34,4 +34,7 @@
     <string name="PASSWORD_KEY">password_key</string>
     <string name="RECIPES_KEY">recipes_key</string>
     <string name="SAVED_RECIPES_KEY">saved_recipes_key</string>
+    <string name="CURRENT_PHOTOID_KEY">current_photoID_key</string>
+    <string name="CURRENT_PHOTOID_BOOLEAN_KEY">current_photoID_boolean_key</string>
+
 </resources>

@@ -122,7 +122,7 @@ public class EditProfileActivity extends AppCompatActivity {
         username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
         emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
         password = saved_values.getString(getString(R.string.PASSWORD_KEY), null);
-        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1);
+        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1L);
 
 
         usernameEditText.setText(username);
@@ -143,6 +143,24 @@ public class EditProfileActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
+
+
+                //get current photoID from shared
+                //initializing our shared preferences
+                SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
+                String editedBooleanStr = saved_values.getString(getString(R.string.CURRENT_PHOTOID_BOOLEAN_KEY), "default");
+                if(editedBooleanStr.equals("true")) {
+                    photoID = saved_values.getLong(getString(R.string.CURRENT_PHOTOID_KEY), -1L);
+                    //switch boolean in shared pref to false
+                    //make editor for sharedPreferences
+                    SharedPreferences.Editor editor = saved_values.edit();
+                    // put values into sharedPreferences
+                    editor.putLong(getString(R.string.PHOTOID_KEY), photoID);
+                    editor.putString(getString(R.string.CURRENT_PHOTOID_BOOLEAN_KEY), "false");
+
+                    // to save our new key-value data
+                    editor.apply();
+                }
 
                 /* if passwords match and meet requirements, make volley edit profile request */
                 if (password.equals(confirm)){
@@ -291,7 +309,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = saved_values.edit();
                             // put values into sharedPreferences
                             editor.putInt(getString(R.string.USERID_KEY), response.getInt("id"));
-                            editor.putLong(getString(R.string.PHOTOID_KEY), response.getInt("photoID"));
+//                            editor.putLong(getString(R.string.PHOTOID_KEY), response.getLong("photoID"));
                             editor.putString(getString(R.string.USERNAME_KEY), response.getString("username"));
                             editor.putString(getString(R.string.EMAIL_KEY), response.getString("emailAddress"));
                             editor.putString(getString(R.string.PASSWORD_KEY), response.getString("password"));

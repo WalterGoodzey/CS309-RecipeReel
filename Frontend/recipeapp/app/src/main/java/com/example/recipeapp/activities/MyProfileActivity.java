@@ -100,7 +100,7 @@ public class MyProfileActivity extends AppCompatActivity {
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
 
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
-        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1);
+        photoID = saved_values.getLong(getString(R.string.PHOTOID_KEY), -1L);
         username = saved_values.getString(getString(R.string.USERNAME_KEY), null);
         emailAddress = saved_values.getString(getString(R.string.EMAIL_KEY), null);
 
