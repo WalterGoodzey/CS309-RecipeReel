@@ -63,6 +63,7 @@ public class Recipe {
 
 
     private String tags;
+    private int rating = 0;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
     @ManyToMany
@@ -71,10 +72,6 @@ public class Recipe {
     public void addTag(Tag tag){
         this.actualTags.add(tag);
     }
-
-
-
-    private int rating = 0;
     /** The rating of the recipe given by users. */
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)

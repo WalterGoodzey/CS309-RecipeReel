@@ -25,10 +25,12 @@ public class RatingController {
         recipeToRate.setTotalRating(recipeToRate.getTotalRating() + rating);
         int newTotalRating = recipeToRate.getTotalRating() + rating;
         double newRatingDouble = (double) newTotalRating / newCount;
+        int newRatingInt = newTotalRating / newCount;
         recipeToRate.setRecipeRating(newRatingDouble);
 
         /* Adds Rating Object to List in Recipe */
         recipeToRate.getRatings().add(ratingObj);
+        recipeToRate.setRating(newRatingInt);
         recipeRepository.save(recipeToRate);
 
         return success;

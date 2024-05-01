@@ -12,6 +12,7 @@ import recipeapp.Users.Users;
 @Getter
 @Setter
 @Table(name = "rating")
+
 @NoArgsConstructor
 public class Rating {
     @Id
@@ -28,7 +29,6 @@ public class Rating {
     private Users user;
 
     private int rating = 0;
-
     public Rating(Recipe rec, int rat) {
         recipe = rec;
         rating = rat;
