@@ -68,6 +68,8 @@ public class Users {
         this.recipes.add(r);
     }
 
+    public void deleteRecipe(Recipe r) {this.recipes.remove(r);}
+
     /**
      * Deletes a recipe from the list of saved recipes.
      * @param r The recipe to delete.

@@ -36,4 +36,6 @@ public class Tag {
     public void addRecipe(Recipe recipe){
         this.recipes.add(recipe);
     }
+
+    public void removeRecipe(Recipe recipe) {this.recipes.remove(recipe);}
 }
