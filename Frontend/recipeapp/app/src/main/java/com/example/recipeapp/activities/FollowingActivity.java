@@ -128,22 +128,75 @@ public class FollowingActivity extends AppCompatActivity {
 //        makeRecipeListReq();
 
         //for example
-        for(int i = 0; i < 5; i++){
-            String title = "Example" + i;
-            //long itemPhotoID = jsonObject.getLong("photoID");
-            long itemPhotoID = -2L;
-            //will set itemPhotoBitmap to the current item's photo
-            makeImageItemRequest(itemPhotoID);
-            // Create a RecipeItemObject and add it to the adapter
-            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null, itemPhotoBitmap);
-            adapter.add(item);
-        }
-//        makeRecipeListReq();
+
+//        for(int i = 0; i < 5; i++){
+//            String title = "Example" + i;
+//            //long itemPhotoID = jsonObject.getLong("photoID");
+//            long itemPhotoID = -2L;
+//            //will set itemPhotoBitmap to the current item's photo
+//            makeImageItemRequest(itemPhotoID);
+//            // Create a RecipeItemObject and add it to the adapter
+//            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null, itemPhotoBitmap);
+//            adapter.add(item);
+//        }
+        makeRecipeListReq();
     }
+
+    private void makeRecipeListReq() {
+        JsonArrayRequest recipeListReq = new JsonArrayRequest(
+                Request.Method.GET,
+                URL_SERVER + "users/" + userId + "/following-recipes",
+                null, // Pass null as the request body since it's a GET request
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("Volley Response", response.toString());
+
+                        // Parse the JSON array and add data to the adapter using makeItemRequestAndAdd
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                makeItemRequestAndAdd(response.getJSONObject(i));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+//                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+//                params.put("param1", "value1");
+//                params.put("param2", "value2");
+                return params;
+            }
+        };
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+    }
+
     /**
      * Making image request for the current item
      * */
-    private void makeImageItemRequest(long photoID) {
+    private void makeItemRequestAndAdd(JSONObject recipeObj) {
+        long photoID = -2L;
+        try{
+            photoID = recipeObj.getLong("photoID");
+        } catch (JSONException e) {
+//            throw new RuntimeException(e);
+        }
 
         ImageRequest imageRequest = new ImageRequest(
                 URL_SERVER + "image/" + photoID,
@@ -152,7 +205,17 @@ public class FollowingActivity extends AppCompatActivity {
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap response) {
-                        itemPhotoBitmap = response;
+                        try {
+                            int recipeId = recipeObj.getInt("id");
+                            String title = recipeObj.getString("title");
+                            String author = recipeObj.getString("username");
+                            String description = recipeObj.getString("description");
+                            // Create a ListItemObject and add it to the adapter
+                            RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, recipeObj, response);
+                            adapter.add(item);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 0, // Width, set to 0 to get the original width

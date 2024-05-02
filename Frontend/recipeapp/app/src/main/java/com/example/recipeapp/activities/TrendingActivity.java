@@ -48,10 +48,6 @@ public class TrendingActivity extends AppCompatActivity {
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
 //    private String URL_TRENDING = "https://ae827564-7ce7-4ae9-bb71-dd282e411c72.mock.pstmn.io/";
 
-    /** Base URL for Volley requests with server */
-    private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
-
-
     /**
      * onCreate method for TrendingActivity
      *
