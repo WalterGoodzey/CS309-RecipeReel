@@ -155,6 +155,14 @@ public class RecipeController {
         if(recipe == null){
             return failure;
         }
+        Users u = userRepository.findById(recipe.getCreatorUserId());
+        if(u != null) {
+            u.deleteSavedRecipe(recipe);
+            u.deleteRecipe(recipe);
+        }
+        for(Tag tag : recipe.getActualTags()){
+            tag.removeRecipe((recipe));
+        }
         recipeRepository.delete(recipe);
         return success;
     }

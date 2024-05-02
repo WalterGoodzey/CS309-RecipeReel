@@ -123,10 +123,27 @@ public class UserController {
      * @param r The recipe to add.
      * @return A success message if the addition is successful, otherwise a failure message.
      */
-    @PostMapping(path="/users/{id}/savedrecipes")
-    String addSavedRecipe(@PathVariable int id, @RequestBody Recipe r) {
+    @PostMapping(path="/users/{id}/savedrecipes/{recipeId}")
+    String addSavedRecipe(@PathVariable int id, @PathVariable int recipeId) {
         Users u = userRepository.findById(id);
+        Recipe r = recipeRepository.findById(recipeId);
+        if(u == null || r == null){
+            return failure;
+        }
         u.addSavedRecipe(r);
+        userRepository.save(u);
+        return success;
+    }
+
+    @DeleteMapping(path="users/{id}/savedrecipes/{recipeId}")
+    String removeSavedRecipe(@PathVariable int id, @PathVariable int recipeId){
+        Users u = userRepository.findById(id);
+        Recipe r = recipeRepository.findById(recipeId);
+        if(u == null){
+            return failure;
+        }
+        u.deleteSavedRecipe(r);
+        userRepository.save(u);
         return success;
     }
     /**

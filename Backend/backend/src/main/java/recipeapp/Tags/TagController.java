@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import recipeapp.Recipes.Recipe;
 
 @RestController
 public class TagController {
@@ -52,6 +53,9 @@ public class TagController {
         Tag tag = tagRepository.findById(id);
         if(tag == null)
             return failure;
+        for(Recipe recipe : tag.getRecipes()){
+            recipe.removeTag(tag);
+        }
         tagRepository.delete(tag);
         return success;
     }

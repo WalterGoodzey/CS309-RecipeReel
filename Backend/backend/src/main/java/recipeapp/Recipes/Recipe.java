@@ -72,6 +72,8 @@ public class Recipe {
     public void addTag(Tag tag){
         this.actualTags.add(tag);
     }
+
+    public void removeTag(Tag tag) {this.actualTags.remove(tag);}
     /** The rating of the recipe given by users. */
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
