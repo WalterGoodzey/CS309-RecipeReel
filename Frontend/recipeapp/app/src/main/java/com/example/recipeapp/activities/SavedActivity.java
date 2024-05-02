@@ -113,21 +113,6 @@ public class SavedActivity extends AppCompatActivity {
         adapter = new RecipeAdapter(this, new ArrayList<>());
         listView.setAdapter(adapter);
 
-//        //make JSON array request on opening
-//        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
-//        makeRecipeListReq();
-
-        //for example
-//        for(int i = 0; i < 5; i++){
-//            String title = "Example" + i;
-//            // Create a ListItemObject and add it to the adapter
-//            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
-//            adapter.add(item);
-//        }
-
-        makeRecipeListReq();
-
-
         //Added to go to ViewRecipeActivity when an item in listview is clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -141,6 +126,7 @@ public class SavedActivity extends AppCompatActivity {
             }
         });
 
+        makeRecipeListReq();
     }
 
     /**
@@ -221,7 +207,6 @@ public class SavedActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        itemPhotoBitmap = response;
                     }
                 },
                 0, // Width, set to 0 to get the original width

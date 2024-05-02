@@ -52,10 +52,6 @@ public class SearchActivity extends AppCompatActivity {
      */
     private Button searchButton;
     /**
-     * Button to send Search request
-     */
-    private Button searchTagsButton;
-    /**
      * ListView to store list of RecipeItemObjects
      */
     private ListView searchList;
@@ -70,7 +66,7 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * Base URL for Volley Get request with Volley server
      */
-    private static final String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080";
+    private static final String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
 
     /**
      * String for concat with server url
@@ -91,7 +87,6 @@ public class SearchActivity extends AppCompatActivity {
 
         searchButton = findViewById(R.id.search_button);
         searchString = findViewById(R.id.search_bar);
-        searchTagsButton = findViewById(R.id.tag_search_button);
         searchTags = findViewById(R.id.search_tag);
 
         searchList = findViewById(R.id.search_results);
@@ -115,18 +110,26 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String searchTerm = searchString.getText().toString();
-                String searchUrl = URL_SERVER + "/recipes/search/string/" + searchTerm;
-                makeRecipeListReq(searchUrl);
-            }
-        });
+                String searchTagsTerm = searchTags.getText().toString();
 
+                // Build the search URL based on filled fields
+                String searchUrl;
+                if (!searchTerm.isEmpty() && !searchTagsTerm.isEmpty()) {
+                    // Search by both name and tags
+                    searchUrl = URL_SERVER + "recipes/search/both/" + searchTerm + "/" + searchTagsTerm;
+                } else if (!searchTerm.isEmpty()) {
+                    // Search by name
+                    searchUrl = URL_SERVER + "recipes/search/string/" + searchTerm;
+                } else if (!searchTagsTerm.isEmpty()) {
+                    // Search by tags
+                    searchUrl = URL_SERVER + "recipes/search/tag/" + searchTagsTerm;
+                } else {
+                    // Notify user to enter a search term
+                    Toast.makeText(SearchActivity.this, "Please enter a search term", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-        /* click listener on search tags button pressed */
-        searchTagsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String searchTerm = searchTags.getText().toString();
-                String searchUrl = URL_SERVER + "/recipes/search/tag/" + searchTerm;
+                // Make the recipe list request
                 makeRecipeListReq(searchUrl);
             }
         });
