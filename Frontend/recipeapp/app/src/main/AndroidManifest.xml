@@ -52,6 +52,9 @@
             android:name=".activities.ViewRecipeActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.EditRecipeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.TrendingActivity"
             android:exported="false" />
         <activity

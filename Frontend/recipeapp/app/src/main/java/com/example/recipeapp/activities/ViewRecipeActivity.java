@@ -122,6 +122,7 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             recipeId = extras.getInt("id");
+//            recipeId = 15; // used for testing
         }
         //initializing our shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
@@ -191,20 +192,17 @@ public class ViewRecipeActivity extends AppCompatActivity {
             //start ChatActivity
             startActivity(intent);
             return true;
-            // need this for later viewing and making comments, updating recipe
-//        } else if (itemId == R.id.profile_options_logout) {
-//            /* when logout button is pressed, clear sharedPreferences (logging user out) and use intent to switch to Entry Activity */
-//            // getting the data which is stored in shared preferences.
-//            SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
-//            //make editor for shared preferences
-//            SharedPreferences.Editor editor = saved_values.edit();
-//            //clear and save shared preferences
-//            editor.clear();
-//            editor.apply();
-//            //go to EntryActivity
-////            startActivity(new Intent(ProfileActivity.this, EntryActivity.class));
-//            return true;
-//
+        } else if (itemId == R.id.view_edit_recipe) {
+            //intent to selected chatroom
+            Intent intent = new Intent(ViewRecipeActivity.this, EditRecipeActivity.class);
+            intent.putExtra("id", recipeId);
+            //start EditRecipeActivity
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.view_delete_recipe) {
+            deleteRecipe();
+            finish();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -378,6 +376,43 @@ public class ViewRecipeActivity extends AppCompatActivity {
                     updateUI(response);
                 }, error -> Log.e("GetRecipe", "Error Response", error));
 
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void deleteRecipe() {
+        String url = URL_SERVER + "recipes/" + recipeId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Volley Received Response, Recipe Deleted",
+                                Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Delete Unsuccessful (Volley Error)",
+                                Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
         VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
     }
 
