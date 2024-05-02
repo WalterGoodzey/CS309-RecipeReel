@@ -3,10 +3,12 @@ package com.example.recipeapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.ImageRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
 import com.example.recipeapp.adapters.RecipeAdapter;
@@ -42,8 +45,11 @@ public class FollowingActivity extends AppCompatActivity {
     /** ListView to store list of RecipeItemObjects */
     private ListView listView;
 
-    /** Server link*/
+    /** Base URL for Volley requests with server */
     private String URL_SERVER = "http://coms-309-018.class.las.iastate.edu:8080/";
+
+    /** photo bitmap of current item */
+    private Bitmap itemPhotoBitmap;
     /**
      * onCreate method for FollowingActivity
      *
@@ -122,67 +128,104 @@ public class FollowingActivity extends AppCompatActivity {
 //        makeRecipeListReq();
 
         //for example
-//        for(int i = 0; i < 5; i++){
-//            String title = "Example" + i;
-//            // Create a RecipeItemObject and add it to the adapter
-//            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null);
-//            adapter.add(item);
-//        }
-        makeRecipeListReq();
+        for(int i = 0; i < 5; i++){
+            String title = "Example" + i;
+            //long itemPhotoID = jsonObject.getLong("photoID");
+            long itemPhotoID = -2L;
+            //will set itemPhotoBitmap to the current item's photo
+            makeImageItemRequest(itemPhotoID);
+            // Create a RecipeItemObject and add it to the adapter
+            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null, itemPhotoBitmap);
+            adapter.add(item);
+        }
+//        makeRecipeListReq();
     }
+    /**
+     * Making image request for the current item
+     * */
+    private void makeImageItemRequest(long photoID) {
 
-    private void makeRecipeListReq() {
-        JsonArrayRequest recipeListReq = new JsonArrayRequest(
-                Request.Method.GET,
-                URL_SERVER + "users/" + userId + "/following-recipes",
-                null, // Pass null as the request body since it's a GET request
-                new Response.Listener<JSONArray>() {
+        ImageRequest imageRequest = new ImageRequest(
+                URL_SERVER + "image/" + photoID,
+                //"http://sharding.org/outgoing/temp/testimg3.jpg", //for testing only!
+
+                new Response.Listener<Bitmap>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d("Volley Response", response.toString());
-
-                        // Parse the JSON array and add data to the adapter
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                JSONObject jsonObject = response.getJSONObject(i);
-                                int recipeId = jsonObject.getInt("id");
-                                String title = jsonObject.getString("title");
-                                String author = jsonObject.getString("username");
-                                String description = jsonObject.getString("description");
-
-                                // Create a ListItemObject and add it to the adapter
-                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-                                adapter.add(item);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                    public void onResponse(Bitmap response) {
+                        itemPhotoBitmap = response;
                     }
                 },
+                0, // Width, set to 0 to get the original width
+                0, // Height, set to 0 to get the original height
+                ImageView.ScaleType.FIT_XY, // ScaleType
+                Bitmap.Config.RGB_565, // Bitmap config
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        // Handle errors here
                         Log.e("Volley Error", error.toString());
+
                     }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-//                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-//                params.put("param1", "value1");
-//                params.put("param2", "value2");
-                return params;
-            }
-        };
+                }
+        );
+
         // Adding request to request queue
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
+
+//    private void makeRecipeListReq() {
+//        JsonArrayRequest recipeListReq = new JsonArrayRequest(
+//                Request.Method.GET,
+//                SERVER_URL + "saved/" + userId,
+//                null, // Pass null as the request body since it's a GET request
+//                new Response.Listener<JSONArray>() {
+//                    @Override
+//                    public void onResponse(JSONArray response) {
+//                        Log.d("Volley Response", response.toString());
+//
+//                        // Parse the JSON array and add data to the adapter
+//                        for (int i = 0; i < response.length(); i++) {
+//                            try {
+//                                JSONObject jsonObject = response.getJSONObject(i);
+//                                int recipeId = jsonObject.getInt("id");
+//                                String title = jsonObject.getString("title");
+//                                String author = jsonObject.getString("username");
+//                                String description = jsonObject.getString("description");
+//
+//                                // Create a ListItemObject and add it to the adapter
+//                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
+//                                adapter.add(item);
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e("Volley Error", error.toString());
+//                    }
+//                }) {
+//            @Override
+//            public Map<String, String> getHeaders() {
+//                Map<String, String> headers = new HashMap<>();
+////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
+////                headers.put("Content-Type", "application/json");
+//                return headers;
+//            }
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+////                params.put("param1", "value1");
+////                params.put("param2", "value2");
+//                return params;
+//            }
+//        };
+//        // Adding request to request queue
+//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
+//    }
 
 }

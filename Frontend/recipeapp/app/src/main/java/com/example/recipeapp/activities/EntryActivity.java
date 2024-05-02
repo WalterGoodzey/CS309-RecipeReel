@@ -80,8 +80,8 @@ public class EntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /* when continue as guest button is pressed, use intent to switch to ProfileActivity without pass a user as an extra*/
-                Intent intent = new Intent(EntryActivity.this, MyProfileActivity.class);
+                /* when continue as guest button is pressed, use intent to switch to TrendingActivity without pass a user as an extra*/
+                Intent intent = new Intent(EntryActivity.this, TrendingActivity.class);
                 startActivity(intent);
             }
         });

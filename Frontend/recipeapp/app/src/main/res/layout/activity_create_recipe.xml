@@ -77,12 +77,19 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/create_upload_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Image"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp" />
+    <Button
         android:id="@+id/button_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
-        tools:layout_editor_absoluteX="259dp"
-        tools:layout_editor_absoluteY="647dp" />
+        android:text="Post Recipe"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"  />
     <Button
         android:id="@+id/button_post_back"
         android:layout_width="wrap_content"
@@ -90,6 +97,7 @@
         android:text="Cancel"
         tools:layout_editor_absoluteX="259dp"
         tools:layout_editor_absoluteY="647dp" />
+
 
     <!--    <Button-->
 <!--        android:id="@+id/button_image_upload"-->

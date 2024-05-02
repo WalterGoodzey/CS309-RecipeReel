@@ -6,10 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 import recipeapp.Rating.Rating;
-import recipeapp.Tags.Tag;
+import recipeapp.Tags.*;
 import recipeapp.Users.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a recipe in the recipe sharing app.
@@ -56,12 +59,19 @@ public class Recipe {
     @NonNull
     private String instructions;
 
-    private Long photoID = (long) -1;
+    private Long photoID = (long) -2;
+
+
+    private String tags;
+    private int rating = 0;
 
     /** The tags associated with the recipe (e.g., vegetarian, vegan, gluten-free). */
-    private String tags;
+    @ManyToMany
+    private List<Tag> actualTags = new ArrayList<>();
 
-
+    public void addTag(Tag tag){
+        this.actualTags.add(tag);
+    }
     /** The rating of the recipe given by users. */
     @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)

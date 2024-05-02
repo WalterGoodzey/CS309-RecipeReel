@@ -12,7 +12,7 @@ import recipeapp.Users.Users;
 @Getter
 @Setter
 @Table(name = "rating")
-@RequiredArgsConstructor
+
 @NoArgsConstructor
 public class Rating {
     @Id
@@ -21,7 +21,6 @@ public class Rating {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-    @NonNull
     private Recipe recipe;
 
     @ManyToOne
@@ -29,7 +28,9 @@ public class Rating {
 
     private Users user;
 
-    @NonNull
-    private int rating;
-
+    private int rating = 0;
+    public Rating(Recipe rec, int rat) {
+        recipe = rec;
+        rating = rat;
+    }
 }

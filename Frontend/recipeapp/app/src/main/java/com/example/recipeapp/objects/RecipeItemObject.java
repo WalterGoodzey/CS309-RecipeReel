@@ -1,5 +1,7 @@
 package com.example.recipeapp.objects;
 
+import android.graphics.Bitmap;
+
 import org.json.JSONObject;
 /**
  *  Class to model a single recipe preview object and it's data
@@ -9,7 +11,8 @@ import org.json.JSONObject;
 public class RecipeItemObject {
     /** recipe id */
     private int recipeId;
-
+    /** recipe's photo Bitmap */
+    private Bitmap photoBitmap;
     /** title of the recipe */
     private String title;
     /** author of the recipe */
@@ -26,12 +29,13 @@ public class RecipeItemObject {
      * @param description description of recipe
      * @param fullRecipe JSONObject which stores the full recipe
      */
-    public RecipeItemObject(int recipeId, String title, String author, String description, JSONObject fullRecipe) {
+    public RecipeItemObject(int recipeId, String title, String author, String description, JSONObject fullRecipe, Bitmap photoBitmap) {
         this.recipeId = recipeId;
         this.title = title;
         this.author = author;
         this.description = description;
         this.fullRecipe = fullRecipe;
+        this.photoBitmap = photoBitmap;
     }
 
     /**
@@ -61,4 +65,10 @@ public class RecipeItemObject {
      * @return fullRecipe
      */
     public JSONObject getFullRecipe() { return fullRecipe; }
+    /**
+     * Getter for the photo Bitmap of the RecipeItemObject
+     * @return photoBitmap
+     */
+    public Bitmap getPhotoBitmap() { return photoBitmap; }
+
 }
