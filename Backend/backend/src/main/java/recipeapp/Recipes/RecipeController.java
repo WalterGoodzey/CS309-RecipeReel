@@ -156,8 +156,10 @@ public class RecipeController {
             return failure;
         }
         Users u = userRepository.findById(recipe.getCreatorUserId());
-        u.deleteSavedRecipe(recipe);
-        u.deleteRecipe(recipe);
+        if(u != null) {
+            u.deleteSavedRecipe(recipe);
+            u.deleteRecipe(recipe);
+        }
         for(Tag tag : recipe.getActualTags()){
             tag.removeRecipe((recipe));
         }

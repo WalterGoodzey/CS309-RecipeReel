@@ -127,6 +127,7 @@ public class UserController {
     String addSavedRecipe(@PathVariable int id, @RequestBody Recipe r) {
         Users u = userRepository.findById(id);
         u.addSavedRecipe(r);
+        userRepository.save(u);
         return success;
     }
     /**
