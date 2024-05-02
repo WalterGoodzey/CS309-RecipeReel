@@ -123,22 +123,6 @@ public class FollowingActivity extends AppCompatActivity {
             }
         });
 
-//        //make JSON array request on opening
-//        URL_SAVED_ARRAY = URL_SERVER + userId + "/savedrecipes";
-//        makeRecipeListReq();
-
-        //for example
-
-//        for(int i = 0; i < 5; i++){
-//            String title = "Example" + i;
-//            //long itemPhotoID = jsonObject.getLong("photoID");
-//            long itemPhotoID = -2L;
-//            //will set itemPhotoBitmap to the current item's photo
-//            makeImageItemRequest(itemPhotoID);
-//            // Create a RecipeItemObject and add it to the adapter
-//            RecipeItemObject item = new RecipeItemObject(i, title, "author", "description", null, itemPhotoBitmap);
-//            adapter.add(item);
-//        }
         makeRecipeListReq();
     }
 
@@ -237,58 +221,5 @@ public class FollowingActivity extends AppCompatActivity {
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);
     }
 
-//    private void makeRecipeListReq() {
-//        JsonArrayRequest recipeListReq = new JsonArrayRequest(
-//                Request.Method.GET,
-//                SERVER_URL + "saved/" + userId,
-//                null, // Pass null as the request body since it's a GET request
-//                new Response.Listener<JSONArray>() {
-//                    @Override
-//                    public void onResponse(JSONArray response) {
-//                        Log.d("Volley Response", response.toString());
-//
-//                        // Parse the JSON array and add data to the adapter
-//                        for (int i = 0; i < response.length(); i++) {
-//                            try {
-//                                JSONObject jsonObject = response.getJSONObject(i);
-//                                int recipeId = jsonObject.getInt("id");
-//                                String title = jsonObject.getString("title");
-//                                String author = jsonObject.getString("username");
-//                                String description = jsonObject.getString("description");
-//
-//                                // Create a ListItemObject and add it to the adapter
-//                                RecipeItemObject item = new RecipeItemObject(recipeId, title, author, description, jsonObject);
-//                                adapter.add(item);
-//
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e("Volley Error", error.toString());
-//                    }
-//                }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-////                headers.put("Authorization", "Bearer YOUR_ACCESS_TOKEN");
-////                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-////                params.put("param1", "value1");
-////                params.put("param2", "value2");
-//                return params;
-//            }
-//        };
-//        // Adding request to request queue
-//        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(recipeListReq);
-//    }
 
 }

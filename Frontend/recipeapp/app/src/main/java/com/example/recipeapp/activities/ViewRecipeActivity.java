@@ -23,10 +23,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.recipeapp.R;
 import com.example.recipeapp.VolleySingleton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,6 +100,8 @@ public class ViewRecipeActivity extends AppCompatActivity {
      */
     private TextView popupRatingMessage;
 
+    private boolean saved = false;
+
     /**
      * onCreate for ViewRecipeActivity
      *
@@ -122,8 +126,9 @@ public class ViewRecipeActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             recipeId = extras.getInt("id");
-//            recipeId = 15; // used for testing
         }
+        checkIfSaved();
+
         //initializing our shared preferences
         SharedPreferences saved_values = getSharedPreferences(getString(R.string.PREF_KEY), Context.MODE_PRIVATE);
         userId = saved_values.getInt(getString(R.string.USERID_KEY), -1);
@@ -168,7 +173,12 @@ public class ViewRecipeActivity extends AppCompatActivity {
         // Handle item selection.
         int itemId = item.getItemId();
         if (itemId == R.id.view_options_save_recipe) {
-            saveRecipe();
+                checkIfSaved();
+//                if (saved) {
+//                    unsaveRecipe();
+//                } else {
+//                    saveRecipe();
+//                }
             return true;
         } else if (itemId == R.id.view_options_comments) {
             // TODO - implement new activity to view comments
@@ -212,11 +222,11 @@ public class ViewRecipeActivity extends AppCompatActivity {
      * TODO - add documentation for saveRecipe
      */
     private void saveRecipe() {
-        // TODO - implement save recipe
-        String url = URL_SERVER + "users/" + userId + "/savedrecipes";
-        JsonObjectRequest userReq = new JsonObjectRequest(Request.Method.PUT,
+        String url = URL_SERVER + "users/" + userId + "/savedrecipes/" + recipeId;
+        JsonObjectRequest userReq = new JsonObjectRequest(
+                Request.Method.POST,
                 url,
-                fullRecipeJSON, // request body for PUT request
+                null, // request body for PUT request
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -244,6 +254,79 @@ public class ViewRecipeActivity extends AppCompatActivity {
             }
         };
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+    }
+
+    private void unsaveRecipe() {
+        String url = URL_SERVER + "users/" + userId + "/savedrecipes/" + recipeId;
+        JsonObjectRequest userReq = new JsonObjectRequest(
+                Request.Method.DELETE,
+                url,
+                null, // request body for PUT request
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Volley Response", response.toString());
+                        Toast.makeText(getApplicationContext(), "Recipe Unsaved", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Unsaving Unsuccessful (Volley Error)", Toast.LENGTH_LONG).show();
+                        Log.e("Volley Error", error.toString());
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                return headers;
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(userReq);
+    }
+
+    private void checkIfSaved() {
+        JsonArrayRequest followingReq = new JsonArrayRequest(
+                Request.Method.GET,
+                URL_SERVER + "users/" + userId + "/savedrecipes",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        boolean isSaved = false;
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject recipe = response.getJSONObject(i);
+                                int savedRecipeId = recipe.getInt("id");
+                                if (savedRecipeId == recipeId) {
+                                    isSaved = true;
+                                    break;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (isSaved) {
+                            unsaveRecipe();
+                        } else {
+                            saveRecipe();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(followingReq);
     }
 
     /**
